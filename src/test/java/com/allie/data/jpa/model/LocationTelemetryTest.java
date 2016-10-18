@@ -1,6 +1,6 @@
 package com.allie.data.jpa.model;
 
-import org.bson.types.BSONTimestamp;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.util.Assert;
@@ -14,16 +14,22 @@ public class LocationTelemetryTest {
     @Before
     public void init() {
         String allieId = "test";
-        double[] location = {1.23456789, -9.87654321};
-        BSONTimestamp timestamp = new BSONTimestamp(998772211, 10);
+        double[] location = new double[2];
+        location[0] = 1.23456789;
+        location[1] = -9.87654321;
+        DateTime timestamp = new DateTime("2012-04-23T18:25:43.511Z");
         lt = new LocationTelemetry(allieId, location, timestamp);
     }
 
     @Test
     public void testLocationsTelemetryConstructor() {
-        double[] test = {1.23456789, -9.87654321};
+        double[] test  = new double[2];
+        test[0] = 1.23456789;
+        test[1] = -9.87654321;
 
-        //Assert.state(lt.allieId.equals("test") && lt.location == test && lt.timestamp.equals(new BSONTimestamp(998772211, 10)), "Constructor must set values for allieId, location, and timestamp");
+        Assert.state(lt.allieId.equals("test"),"Constructor must set value for allieId");
+        Assert.state((lt.location.length == test.length && lt.location.length == 2 && lt.location[0] == test[0] && lt.location[1] == test[1]), "Constructor must set value for location");
+        Assert.state(lt.timestamp.equals(new DateTime("2012-04-23T18:25:43.511Z")), "Constructor must set value for timestamp");
     }
 
     public void testGetAllieId() {
@@ -37,6 +43,6 @@ public class LocationTelemetryTest {
     }
 
     public void testGetTimeStamp() {
-        Assert.state(lt.getTimestamp().equals(new BSONTimestamp(998772211, 10)));
+        Assert.state(lt.getTimestamp().equals(new DateTime("2012-04-23T18:25:43.511Z")));
     }
 }
