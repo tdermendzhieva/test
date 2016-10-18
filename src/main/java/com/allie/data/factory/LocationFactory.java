@@ -16,7 +16,7 @@ public class LocationFactory {
         locationTelemetry.setAllieId(userLocation.getAllieId());
         //todo-update
         locationTelemetry.setTimestamp(new BSONTimestamp());
-        if(userLocation.getLocation() == null) {
+        if(userLocation.getLocation() != null) {
             double[] location = {userLocation.getLocation().getLatitude(), userLocation.getLocation().getLongitude()};
             locationTelemetry.setLocation(location);
 
