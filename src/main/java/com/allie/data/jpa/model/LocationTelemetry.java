@@ -1,8 +1,10 @@
 package com.allie.data.jpa.model;
 
-import org.bson.types.BSONTimestamp;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.joda.time.DateTime;
+
+import java.util.Date;
 
 @Document(collection="LocationTelemetryRecords")
 public class LocationTelemetry {
@@ -11,11 +13,11 @@ public class LocationTelemetry {
 	
 	public String allieId;
 	public double[] location;
-	public BSONTimestamp timestamp;
+	public DateTime timestamp;
 	
 	public LocationTelemetry() {}
 	
-	public LocationTelemetry(String allieId, double[] location, BSONTimestamp timestamp) {
+	public LocationTelemetry(String allieId, double[] location, DateTime timestamp) {
 		this.allieId = allieId;
 		this.location = location;
 		this.timestamp = timestamp;
@@ -30,8 +32,8 @@ public class LocationTelemetry {
 	public double[] getLocation() {return location;}
 	public void setLocation(double[] location) {this.location = location;}
 	
-	public BSONTimestamp getTimestamp() {return timestamp;}
-	public void setTimestamp(BSONTimestamp timestamp) {this.timestamp = timestamp;}
+	public DateTime getTimestamp() {return timestamp;}
+	public void setTimestamp(DateTime timestamp) {this.timestamp = timestamp;}
 	
 	
 	

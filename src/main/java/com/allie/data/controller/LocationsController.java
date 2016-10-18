@@ -18,10 +18,12 @@ public class LocationsController {
 
 	@RequestMapping(value="/locations", method=RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public List<LocationTelemetry> postLocationTelemetryList(@RequestBody List<UserLocationDTO> requestList) {
+	public void postLocationTelemetryList(@RequestBody List<UserLocationDTO> requestList) {
 		//might need to thread and respond
-		List<LocationTelemetry> responseList = service.insertLocations(requestList);
-		return responseList;
+		new Thread(() -> {
+			service.insertLocations(requestList);
+		}).start();
+		return;
 	}
 
 }
