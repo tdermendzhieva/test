@@ -1,31 +1,124 @@
+apply from: "artifactory.gradle"
+
 buildscript {
+    ext {
+        springBootVersion = '1.4.1.RELEASE'
+    }
     repositories {
-        mavenCentral()
+        //jfrog artifactory repo
+        jcenter()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        //jfrog dependency
+        classpath(group: 'org.jfrog.buildinfo', name: 'build-info-extractor-gradle', version: '4.4.0')
+
     }
 }
 
+//jfrog artifactory plugin
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'idea'
 apply plugin: 'spring-boot'
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
 
+group = 'com.allie.data'
+version = '1.0'
+archivesBaseName = 'allie'
+
+if (System.env.APP_VERSION) {
+    version = "${System.env.APP_VERSION}"
+}
 jar {
-    baseName = 'MongoTest'
-    version =  '0.1.0'
+    baseName = archivesBaseName
+    version = version + "-SNAPSHOT"
+    manifest {
+        attributes 'Main-Class': 'com.allie.data.MongoConnectionWSConfiguration'
+    }
 }
-
-repositories {
-    mavenCentral()
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-dependencies {
-    compile("org.springframework.boot:spring-boot-starter-data-mongodb")
-    compile("org.springframework.boot:spring-boot-starter-web")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+repositories {
+    jcenter()
 }
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        main(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+        }
+    }
+}
+
+springBoot {
+    executable = true
+}
+
+
+compileJava.dependsOn(processResources)
+uploadArchives.dependsOn bootRepackage
+bootRepackage.dependsOn test
+
+
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+   // compile('org.springframework.boot:spring-boot-starter-data-neo4j')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+
+}
+
+
+task zipAWSArchive(type: Zip) {
+    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}-SNAPSHOT"
+    println artifactName
+    def zip = artifactName + ".zip"
+    def buildPath = 'build/libs/' + artifactName + ".jar";
+    from('ci/') {
+        include '*'
+        include '*/*' //to include contents of a folder
+    }
+    from (buildPath) {
+        include '*'
+        into ('source')
+    }
+    archiveName zip
+    destinationDir(file('dir/'))
+}
+
+task s3Upload(type: Exec, dependsOn: zipAWSArchive){
+    //define location of s3 upload script
+    def s3Upload="automation/s3upload.sh"
+    //defined name of file to be uploaded
+    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}-SNAPSHOT.zip"
+    //define path of project where artifact is located
+    def localDist = "dir/${artifactName}";
+
+    // Moves the distribution file to the right S3 bucket
+    executable "bash"
+    args "-c", "sh ${s3Upload} ${localDist}"
+}
+
+// Deploys a given revision to the test environment
+task deployOnTest(type:Exec) {
+    // Defines the path into the project of the deploy.sh script
+    def deploy = "automation/deploy.sh"
+    // Defines the distribution name based on the jar section
+    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}-SNAPSHOT.zip"
+    // Deploys the given distribution to the test deployment group
+    executable "bash"
+    args "-c", "sh ${deploy} DEV ${artifactName}"
+}
+
+

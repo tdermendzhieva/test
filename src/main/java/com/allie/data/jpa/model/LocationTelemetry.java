@@ -1,4 +1,4 @@
-package allie.data;
+package com.allie.data.jpa.model;
 
 import org.bson.types.BSONTimestamp;
 import org.springframework.data.annotation.Id;

@@ -1,0 +1,19 @@
+--- 
+files: 
+  -
+    source: source
+    destination: /var/allie-data/
+
+hooks:
+  ApplicationStop:
+      -
+        location: deploy_hooks/stop-service.sh
+        runas: root
+        timeout: 3600
+  ApplicationStart:
+    -
+      location: deploy_hooks/symbolic-service.sh
+      runas: root
+      timeout: 3600
+os: linux
+version: 0.0

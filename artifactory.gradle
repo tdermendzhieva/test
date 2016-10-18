@@ -1,0 +1,39 @@
+apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.artifactory'
+apply plugin: 'java'
+
+buildscript {
+    ext {
+        springBootVersion = '1.4.1.RELEASE'
+    }
+    repositories {
+        //jfrog artifactory repo
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        //jfrog dependency
+        classpath(group: 'org.jfrog.buildinfo', name: 'build-info-extractor-gradle', version: '4.4.0')
+
+    }
+}
+
+artifactory {
+    contextUrl = 'http://ec2-52-88-59-224.us-west-2.compute.amazonaws.com:8081/artifactory'
+    resolve {
+        repository {
+            repoKey = 'libs-release'
+        }
+    }
+    publish {
+        repository {
+            repoKey = 'libs-release-local'
+            username = 'admin'
+            password = 'password'
+        }
+        defaults {
+            publications 'main'
+        }
+    }
+
+}
