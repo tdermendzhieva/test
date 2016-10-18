@@ -4,6 +4,8 @@ import com.allie.data.dto.UserLocationDTO;
 import com.allie.data.factory.LocationFactory;
 import com.allie.data.jpa.model.LocationTelemetry;
 import com.allie.data.repository.LocationTelemetryRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import java.util.List;
  */
 @Component
 public class LocationService {
+    private static final Logger logger = LoggerFactory.getLogger(LocationService.class);
+
     private LocationTelemetryRepository repository;
     private LocationFactory locationFactory;
 
@@ -35,6 +39,16 @@ public class LocationService {
             locationTelemetries.add(locationFactory.createLocationTelemetry(userLocation));
         }
         //batch insert
-        return repository.insert(locationTelemetries);
+        List<LocationTelemetry> toReturn = repository.insert(locationTelemetries);
+
+        //logging
+        int initialSize = userLocationDTOs.size();
+        int finalSize = toReturn.size();
+        if(initialSize > finalSize) {
+            logger.info("Failed to insert " + (initialSize - finalSize) + " messages of " + initialSize);
+        } else {
+            logger.info("Successfully inserted " + finalSize + " documents of " + finalSize);
+        }
+        return toReturn;
     }
 }

@@ -4,8 +4,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.joda.time.DateTime;
 
-import java.util.Date;
-
 @Document(collection="LocationTelemetryRecords")
 public class LocationTelemetry {
 	@Id

@@ -20,10 +20,7 @@ public class LocationsController {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public void postLocationTelemetryList(@RequestBody List<UserLocationDTO> requestList) {
 		//might need to thread and respond
-		new Thread(() -> {
-			service.insertLocations(requestList);
-		}).start();
-		return;
+		new Thread(() -> service.insertLocations(requestList)).start();
 	}
 
 }

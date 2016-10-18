@@ -51,21 +51,23 @@ public class LocationsControllerTest {
 
 
     }
-    @Test
-    public void testPostLocationReturnsAccepted() throws Exception {
-
-        userLocationDTOs.add(userLocationDTO);
-        locationTelemetry.setAllieId(allieId);
-        locationTelemetries.add(locationTelemetry);
-
-        given(this.locationService.insertLocations(userLocationDTOs))
-                .willReturn(locationTelemetries);
-
-        this.mvc.perform(post("/allie-data/v1/locations")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userLocationDTOs)))
-                .andExpect(status().isAccepted());
-    }
+////  redundant since response no longer contains data,
+////  renamed other slightly more robust test
+//    @Test
+//    public void testPostLocationReturnsAccepted() throws Exception {
+//
+//        userLocationDTOs.add(userLocationDTO);
+//        locationTelemetry.setAllieId(allieId);
+//        locationTelemetries.add(locationTelemetry);
+//
+//        given(this.locationService.insertLocations(userLocationDTOs))
+//                .willReturn(locationTelemetries);
+//
+//        this.mvc.perform(post("/allie-data/v1/locations")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(asJsonString(userLocationDTOs)))
+//                .andExpect(status().isAccepted());
+//    }
     @Test
     public void testPostLocationReturn404() throws Exception {
 
@@ -83,7 +85,7 @@ public class LocationsControllerTest {
     }
 
     @Test
-    public void testPostLocationReturnsAcceptedAndAllieId() throws Exception {
+    public void testPostLocationReturnsAccepted() throws Exception {
         userLocationDTO.setAllieId(allieId);
         userLocationDTOs.add(userLocationDTO);
         locationTelemetry.setAllieId(allieId);
@@ -96,7 +98,5 @@ public class LocationsControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userLocationDTOs)))
                 .andExpect(status().isAccepted());
-                //and except response contains allieId
     }
-
 }
