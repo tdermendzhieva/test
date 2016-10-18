@@ -10,6 +10,11 @@ hooks:
         location: deploy_hooks/stop-service.sh
         runas: root
         timeout: 3600
+  ApplicationInstall:
+    -
+      location: deploy_hooks/set-environment-variables.sh
+      runas: root
+      timeout: 3600
   ApplicationStart:
     -
       location: deploy_hooks/symbolic-service.sh
