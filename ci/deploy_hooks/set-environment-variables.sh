@@ -1,4 +1,4 @@
 #!/bin/bash
-TEST="$DEPLOYMENT_GROUP_NAME"
-echo $TEST
-sudo export $TEST
+APPENV="$DEPLOYMENT_GROUP_NAME"
+echo APPENV
+sudo export APPENV

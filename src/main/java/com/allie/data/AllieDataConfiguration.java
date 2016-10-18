@@ -13,8 +13,8 @@ public class AllieDataConfiguration {
 	public static void main(String[] args) {
 
 		SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
-		System.setProperty("spring.profiles.active", "DEV");
-		logger.info(System.getenv("SPRING_PROFILES_ACTIVE"));
+		System.setProperty("spring.profiles.active", System.getenv("APPENV"));
+		logger.info(System.getenv("APPENV"));
 		logger.info(String.valueOf(source.containsProperty("spring.profiles.active")));
 		SpringApplication.run(AllieDataConfiguration.class, args);
 	}
