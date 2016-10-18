@@ -1,5 +1,6 @@
 package allie.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class LocationsEndpoint {
 	
 	@Autowired
-	public LocationTelemetryRepository repository;
+	public DBLocationRepository repository;
 	
 	@RequestMapping(value="/locations", method=RequestMethod.POST)
-	public List<LocationTelemetry> postLocationTelemetryList(@RequestBody List<LocationTelemetry> requestList) {
-		List<LocationTelemetry> responseList = repository.insert(requestList);
+	public List<DBLocation> postLocationTelemetryList(@RequestBody List<ReqLocation> requestLocations) {
+		List<DBLocation> dbLocations = new ArrayList<DBLocation>();
+		for (ReqLocation rl : requestLocations) {
+			dbLocations.add(rl.toDBLocation());
+		}
+		
+		List<DBLocation> responseList = repository.insert(dbLocations);
 		return responseList;
 	}
-
 }

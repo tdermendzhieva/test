@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="LocationTelemetryRecords")
-public class LocationTelemetry {
+public class DBLocation {
 	@Id
 	public String id;
 	
@@ -13,9 +13,9 @@ public class LocationTelemetry {
 	public double[] location;
 	public BSONTimestamp timestamp;
 	
-	public LocationTelemetry() {}
+	public DBLocation() {}
 	
-	public LocationTelemetry(String allieId, double[] location, BSONTimestamp timestamp) {
+	public DBLocation(String allieId, double[] location, BSONTimestamp timestamp) {
 		this.allieId = allieId;
 		this.location = location;
 		this.timestamp = timestamp;
