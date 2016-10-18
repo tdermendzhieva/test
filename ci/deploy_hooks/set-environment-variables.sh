@@ -1,4 +1,0 @@
-#!/bin/bash
-
-echo "$DEPLOYMENT_GROUP_NAME"
-export APPENV="$DEPLOYMENT_GROUP_NAME"

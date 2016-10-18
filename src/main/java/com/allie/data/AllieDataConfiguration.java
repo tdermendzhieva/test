@@ -4,16 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 @SpringBootApplication
 public class AllieDataConfiguration {
 	private static final Logger logger = LoggerFactory.getLogger(AllieDataConfiguration.class);
 
 	public static void main(String[] args) {
-
-		SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
-		logger.info(String.valueOf(source.containsProperty("spring.profiles.active")));
+		logger.error(System.getenv("APPENV"));
 		SpringApplication.run(AllieDataConfiguration.class, args);
 	}
 

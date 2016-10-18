@@ -3,6 +3,9 @@ files:
   -
     source: source
     destination: /var/allie-data/
+  -
+    source: config
+    destination: /var/allie-data/config/
 
 hooks:
   ApplicationStop:
@@ -10,9 +13,9 @@ hooks:
         location: deploy_hooks/stop-service.sh
         runas: root
         timeout: 3600
-  ApplicationInstall:
+  AfterInstall:
     -
-      location: deploy_hooks/set-environment-variables.sh
+      location: deploy_hooks/set-environment.py
       runas: root
       timeout: 3600
   ApplicationStart:
