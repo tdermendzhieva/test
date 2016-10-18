@@ -20,7 +20,7 @@ node {
         }
         catch(error){
             err = error
-            status = "Failed"
+            status = "Failed" 
         }
     finally{
           stage 'Send Status Email'

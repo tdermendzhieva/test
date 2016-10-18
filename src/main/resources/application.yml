@@ -1,0 +1,15 @@
+spring:
+  profiles : local
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ALLIE?connectTimeoutMS=10000&socketTimeoutMS=5000
+      #uri: mongodb://${MONGO_USER}:${MONGO_PWD}@lxv1114.allstate.com:27000/UCVDB-ITEST?connectTimeoutMS=10000&socketTimeoutMS=5000
+---
+spring:
+  profiles : DEV
+  data:
+    mongodb:
+      uri: mongodb://ec2-52-39-103-175.us-west-2.compute.amazonaws.com:27017/ALLIE?connectTimeoutMS=10000&socketTimeoutMS=5000
+
+
+
