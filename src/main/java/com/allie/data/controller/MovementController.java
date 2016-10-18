@@ -16,8 +16,7 @@ public class MovementController {
 
     @RequestMapping(value="/movements", method= RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public String postMovementTelemetry() {
+    public void postMovementTelemetry() {
         //might need to thread and respond
-        return "Accepted";
     }
 }
