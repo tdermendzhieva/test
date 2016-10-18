@@ -1,13 +1,13 @@
-package mongo.services;
+package allie.data;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MongoConnectionWSConfiguration {
+public class AllieDataConfiguration {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MongoConnectionWSConfiguration.class, args);
+		SpringApplication.run(AllieDataConfiguration.class, args);
 	}
 
 }
