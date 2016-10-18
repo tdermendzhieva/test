@@ -99,4 +99,20 @@ public class LocationsControllerTest {
                 //and except response contains allieId
     }
 
+    @Test
+    public void testPostLocationNoBodyReturnsIsBadRequest() throws Exception {
+        userLocationDTO.setAllieId(allieId);
+        userLocationDTOs.add(userLocationDTO);
+        locationTelemetry.setAllieId(allieId);
+        locationTelemetries.add(locationTelemetry);
+
+        given(this.locationService.insertLocations(userLocationDTOs))
+                .willReturn(locationTelemetries);
+
+        this.mvc.perform(post("/allie-data/v1/locations")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        //and except response contains allieId
+    }
+
 }
