@@ -1,7 +1,13 @@
 #!/usr/bin/python
-from __future__ import print_function
 import os
 
-print(os.environ['DEPLOYMENT_GROUP_NAME'], file="/var/allie-data/config/application.properties")
+print 'hello'
 
+fo = open('/var/allie-data/config/application.properties','rw+')
 
+print "file name ", fo.name
+
+fo.seek(0,2)
+line = fo.write(os.environ['DEPLOYMENT_GROUP_NAME'])
+
+fo.close()
