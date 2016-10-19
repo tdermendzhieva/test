@@ -20,8 +20,8 @@ public class LocationFactory {
         locationTelemetry.setTimestamp(new DateTime(userLocation.getTimestamp()));
         if(userLocation.getLocation() != null) {
             double[] location = new double[2];
-            location[0] = userLocation.getLocation().getLatitude();
-            location[1] = userLocation.getLocation().getLongitude();
+            location[0] = userLocation.getLocation().getLongitude();
+            location[1] = userLocation.getLocation().getLatitude();
             locationTelemetry.setLocation(location);
         }
         return locationTelemetry;
