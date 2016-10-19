@@ -29,6 +29,20 @@ logging:
     file: "%d %-5level [%thread] %logger : %msg%n"
 ---
 spring:
+  profiles : DEVTEST
+  data:
+    mongodb:
+      uri: mongodb://ec2-52-39-103-175.us-west-2.compute.amazonaws.com:27017/TEST?connectTimeoutMS=10000&socketTimeoutMS=5000
+logging:
+  file: /allie/logs/allie-data.log
+  level:
+    guru.springframework.controllers: DEBUG
+    org.hibernate: DEBUG
+    org.springframework.web: DEBUG
+  pattern:
+    file: "%d %-5level [%thread] %logger : %msg%n"
+---
+spring:
   profiles : TEST
   data:
     mongodb:

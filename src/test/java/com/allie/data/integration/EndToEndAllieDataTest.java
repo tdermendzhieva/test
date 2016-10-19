@@ -5,7 +5,9 @@ import com.allie.data.dto.UserLocationDTO;
 import com.allie.data.factory.LocationFactory;
 import com.allie.data.jpa.model.LocationTelemetry;
 import com.allie.data.repository.LocationTelemetryRepository;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,18 +16,18 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Created by jacob.headlee on 10/18/2016.
  * Tests that request persists correct data to Mongo
  */
-@ActiveProfiles("test")
+@ActiveProfiles("DEVTEST")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EndToEndAllieDataTest {
@@ -65,7 +67,7 @@ public class EndToEndAllieDataTest {
         //template can't be static due to Spring
 
         //Make sure we have the right db
-        assertThat(template.getDb().getName(), equalTo("test"));
+        assertThat(template.getDb().getName(), equalTo("TEST"));
         //Then drop it
         template.getDb().dropDatabase();
     }
