@@ -73,8 +73,7 @@ public class EndToEndAllieDataTest {
     public void sendMixedRequestAndJoin() throws Exception{
         //This sends the request, which persists 10 of 20 items
         //We then wait for the request to complete so we don't get ahead of ourselves
-        List<UserLocationDTO> dtos = new ArrayList<>(userLocationDTOs);
-        dtos.addAll(userLocationDTOs);
+        List<UserLocationDTO> dtos = new ArrayList<UserLocationDTO>(userLocationDTOs);
         for (int i=0; i<10; i++) {
             dtos.add(new UserLocationDTO(null, null, null));
         }

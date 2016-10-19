@@ -35,8 +35,15 @@ public class LocationService {
     public List<LocationTelemetry> insertLocations(List<UserLocationDTO> userLocationDTOs){
         List<LocationTelemetry> locationTelemetries = new ArrayList<>();
         //convert to JPA objects
+        LocationTelemetry lt;
         for(UserLocationDTO userLocation : userLocationDTOs){
-            locationTelemetries.add(locationFactory.createLocationTelemetry(userLocation));
+            lt = locationFactory.createLocationTelemetry(userLocation);
+            if(
+                    lt.getAllieId() != null
+                    && lt.getLocation() != null && lt.getLocation().length == 2
+                    && lt.getTimestamp() != null) {
+                locationTelemetries.add(lt);
+            }
         }
         //batch insert
         List<LocationTelemetry> toReturn = repository.insert(locationTelemetries);
