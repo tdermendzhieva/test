@@ -24,7 +24,7 @@ apply plugin: 'com.jfrog.artifactory'
 
 group = 'com.allie.data'
 version = '1.0'
-archivesBaseName = 'allie'
+archivesBaseName = 'allie-data'
 
 if (System.env.APP_VERSION) {
     version = "${System.env.APP_VERSION}"
