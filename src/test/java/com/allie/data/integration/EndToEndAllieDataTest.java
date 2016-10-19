@@ -170,11 +170,6 @@ public class EndToEndAllieDataTest {
 
     @Test
     public void testTwoGoodServiceCalls () throws Exception {
-        //Due to the interdependent nature of these tests
-        //They need to be written in one mega test
-        //As such I broke the test up into methods that feel
-        //Like more logical test boundaries
-
         sendGoodRequestAndJoin();
         testCollectionLength(1);
         testCollectionMatchesInput(1);
