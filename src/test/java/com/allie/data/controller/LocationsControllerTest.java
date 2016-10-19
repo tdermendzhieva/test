@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -80,6 +81,8 @@ public class LocationsControllerTest {
 
         this.mvc.perform(post("/notfound")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("x-allie-correlation-id", "corr-id")
+                .header("x-allie-request-id", "req-id")
                 .content(asJsonString(userLocationDTOs)))
                 .andExpect(status().isNotFound());
     }
@@ -96,6 +99,8 @@ public class LocationsControllerTest {
 
         this.mvc.perform(post("/allie-data/v1/locations")
                 .contentType(MediaType.APPLICATION_JSON)
+                .header("x-allie-correlation-id", "corr-id")
+                .header("x-allie-request-id", "req-id")
                 .content(asJsonString(userLocationDTOs)))
                 .andExpect(status().isAccepted());
     }
@@ -111,7 +116,24 @@ public class LocationsControllerTest {
                 .willReturn(locationTelemetries);
 
         this.mvc.perform(post("/allie-data/v1/locations")
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("x-allie-correlation-id", "corr-id")
+                .header("x-allie-request-id", "req-id"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testPostLocationNoHeaders() throws Exception {
+        userLocationDTO.setAllieId(allieId);
+        userLocationDTOs.add(userLocationDTO);
+        locationTelemetry.setAllieId(allieId);
+        locationTelemetries.add(locationTelemetry);
+
+        given(this.locationService.insertLocations(userLocationDTOs))
+                .willReturn(locationTelemetries);
+
+        this.mvc.perform(post("/allie-data/v1/locations")
+                .content(asJsonString(userLocationDTOs)))
                 .andExpect(status().isBadRequest());
     }
 }

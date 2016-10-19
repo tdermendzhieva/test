@@ -13,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -82,8 +86,13 @@ public class EndToEndAllieDataTest {
 
         //I don't care about the response
         //that's tested in LocationsControllerTest
-        this.testRestTemplate.postForObject("/allie-data/v1/locations",
-                dtos, Object.class);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<List<UserLocationDTO>> entity = new HttpEntity<>(dtos, headers);
+        this.testRestTemplate.postForLocation("/allie-data/v1/locations", entity);
 
         //wait on the thread that the post spins up
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
@@ -100,8 +109,12 @@ public class EndToEndAllieDataTest {
 
         //I don't care about the response
         //that's tested in LocationsControllerTest
-        this.testRestTemplate.postForObject("/allie-data/v1/locations",
-                userLocationDTOs, Object.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<List<UserLocationDTO>> entity = new HttpEntity<>(userLocationDTOs, headers);
+        this.testRestTemplate.postForLocation("/allie-data/v1/locations", entity);
 
         //wait on the thread that the post spins up
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
@@ -122,8 +135,12 @@ public class EndToEndAllieDataTest {
         badData.add("bad data");
         //I don't care about the response
         //that's tested in LocationsControllerTest
-        this.testRestTemplate.postForObject("/allie-data/v1/locations",
-               badData, Object.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<List<Object>> entity = new HttpEntity<>(badData, headers);
+        this.testRestTemplate.postForLocation("/allie-data/v1/locations", entity);
 
         //wait on the thread that the post spins up
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
@@ -238,4 +255,5 @@ public class EndToEndAllieDataTest {
         testCollectionMatchesInput(1);
 
     }
+
 }

@@ -11,7 +11,7 @@ logging:
     org.springframework.web: DEBUG
   pattern:
     console: "%d %-5level %logger : %msg%n"
-    file: "%d %-5level [%thread] %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger [correlation-id:%X{correlation-id}] [request-id:%X{request-id}]: %msg%n"
 ---
 spring:
   profiles : DEV
@@ -25,7 +25,7 @@ logging:
     org.hibernate: DEBUG
     org.springframework.web: DEBUG
   pattern:
-    file: "%d %-5level [%thread] %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger [correlation-id:%X{correlation-id}] [request-id:%X{request-id}]: %msg%n"
 ---
 spring:
   profiles : DEVTEST
@@ -39,7 +39,7 @@ logging:
     org.hibernate: DEBUG
     org.springframework.web: DEBUG
   pattern:
-    file: "%d %-5level [%thread] %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger [correlation-id:%X{correlation-id}] [request-id:%X{request-id}]: %msg%n"
 ---
 spring:
   profiles : TEST
@@ -55,5 +55,5 @@ logging:
     org.springframework.web: DEBUG
   pattern:
     console: "%d %-5level %logger : %msg%n"
-    file: "%d %-5level [%thread] %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger [correlation-id:%X{correlation-id}] [request-id:%X{request-id}]: %msg%n"
 
