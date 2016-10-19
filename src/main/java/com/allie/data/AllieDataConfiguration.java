@@ -10,7 +10,6 @@ public class AllieDataConfiguration {
 	private static final Logger logger = LoggerFactory.getLogger(AllieDataConfiguration.class);
 
 	public static void main(String[] args) {
-		logger.error(System.getenv("APPENV"));
 		SpringApplication.run(AllieDataConfiguration.class, args);
 	}
 
