@@ -46,7 +46,6 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/test?connectTimeoutMS=10000&socketTimeoutMS=5000
-      #uri: mongodb://${MONGO_USER}:${MONGO_PWD}@lxv1114.allstate.com:27000/UCVDB-ITEST?connectTimeoutMS=10000&socketTimeoutMS=5000
 logging:
   file: C:\allie\logs\dev_app.log
   level:
