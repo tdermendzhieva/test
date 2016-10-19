@@ -2,12 +2,11 @@ package com.allie.data.persistence;
 
 import com.allie.data.dto.Location;
 import com.allie.data.dto.UserLocationDTO;
+import com.allie.data.factory.LocationFactory;
 import com.allie.data.jpa.model.LocationTelemetry;
 import com.allie.data.repository.LocationTelemetryRepository;
 import com.allie.data.service.LocationService;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,58 +24,121 @@ import java.util.Set;
 
 /**
  * Created by jacob.headlee on 10/18/2016.
+ * Tests that request persists correct data to Mongo
  */
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PersistenceTest {
     @Autowired
-    TestRestTemplate testRestTemplate;
+    private TestRestTemplate testRestTemplate;
 
     @Autowired
-    MongoTemplate template;
+    private MongoTemplate template;
 
     @Autowired
-    LocationService locationService;
+    private LocationTelemetryRepository repository;
 
-    @Autowired
-    LocationTelemetryRepository repository;
+    private static List<UserLocationDTO> userLocationDTOs;
 
-    @Before
-    public void setup() {
-        if(template.getDb().getName().equals("test")){
-            template.getDb().dropDatabase();
+    private LocationFactory locationFactory = new LocationFactory();
+
+    @BeforeClass
+    public static void setup() {
+        //Building a list of dtos to pass to the controller
+        //Doesn't could go in first test but is static
+        //and non-essential to what we're testing
+        userLocationDTOs = new ArrayList<UserLocationDTO>();
+        UserLocationDTO userLocationDTO;
+        for (int i=0; i<10; i++) {
+            //make sure we pass a valid date
+            //would use "0" + i but 00 isn't date
+            String string = "1" + i;
+            userLocationDTO = new UserLocationDTO("2010-10-" + string + "T00:00:00.000Z",
+                    new Location(i * 10, i - 50), "test" + i);
+            userLocationDTOs.add(userLocationDTO);
         }
     }
 
-    @Test
-    public void testControllerToPersistence () throws Exception {
-        List<UserLocationDTO> userLocationDTOs = new ArrayList<UserLocationDTO>();
-        UserLocationDTO userLocationDTO;
-        for (int i=0; i<10; i++) {
-            String istring = "1" + i;
-            userLocationDTO = new UserLocationDTO("2010-10-" + istring + "T00:00:00.000Z", new Location(i * 10, i - 50), "test" + i);
-            userLocationDTOs.add(userLocationDTO);
-        }
-        Object throwaway = this.testRestTemplate.postForObject("/allie-data/v1/locations", userLocationDTOs, Object.class);
-        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+    public void dropDB() {
+        //This needs to happen before/after any of the tests
+        //would put in @Before/AfterClass but method needs to be static
+        //template can't be static due to Spring
 
+        //Make sure we have the right db
+        assertThat(template.getDb().getName(), equalTo("test"));
+        //Then drop it
+        template.getDb().dropDatabase();
+    }
+
+    public void sendRequestAndJoin() throws Exception{
+        //This sends the request, which hopefuly persists
+        //We then wait for the request to complete so we don't get ahead of ourselves
+
+        //I don't care about the response
+        //that's tested in LocationsControllerTest
+        this.testRestTemplate.postForObject("/allie-data/v1/locations",
+                userLocationDTOs, Object.class);
+
+        //wait on the thread that the post spins up
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
         for (Thread thread: threadSet) {
             if(thread.isAlive() && thread.getName().equals("insert-location")) {
                 thread.join(5 * 1000);
             }
         }
-
-
-        Thread.sleep(10 * 1000);
-        List<LocationTelemetry> fromDB = repository.findAll();
-        assertThat(fromDB.size(), equalTo(10));
     }
 
-    @After
-    public void unset() {
-        if(template.getDb().getName().equals("test")){
-            template.getDb().dropDatabase();
+    public void testCollectionLength(int i) {
+        //make sure that all ten records per i requests made their way to the db
+        List<LocationTelemetry> fromDB = repository.findAll();
+        assertThat("Must have 10 records for each of " + i +" requests"
+                , fromDB.size(), equalTo(i * 10));
+    }
+
+    public void testCollectionMatchesInput(int i) {
+        List<LocationTelemetry> lts = new ArrayList<LocationTelemetry>();
+        for (UserLocationDTO dto : userLocationDTOs) {
+            lts.add(locationFactory.createLocationTelemetry(dto));
+        }
+        boolean failed = false;
+        List<LocationTelemetry> fromDB = repository.findAll();
+
+        for (LocationTelemetry ltGen : lts) {
+            if(!failed) {
+                int matches = 0;
+                for (LocationTelemetry ltDB : fromDB) {
+                    if (ltDB.getAllieId().equals(ltGen.getAllieId())) {
+                        assertThat("Where allieId matches so must ts",
+                                ltDB.getTimestamp(),
+                                equalTo(ltGen.getTimestamp()));
+                        assertThat("Where allieId matches so must log",
+                                ltDB.getLocation(),
+                                equalTo(ltGen.getLocation()));
+                        matches++;
+                    }
+                }
+                assertThat("A record should be recorded for each allieId no match found for", matches == i);
+            }
         }
     }
+
+    @Test
+    public void testLocationsControllerToPersistence () throws Exception {
+        //Due to the interdependent nature of these tests
+        //They need to be written in one mega test
+        //As such I broke the test up into methods that feel
+        //Like more logical test boundaries
+
+        dropDB();
+        sendRequestAndJoin();
+        testCollectionLength(1);
+        testCollectionMatchesInput(1);
+        sendRequestAndJoin();
+        testCollectionLength(2);
+        testCollectionMatchesInput(2);
+        dropDB();
+
+    }
+
 }
