@@ -1,11 +1,10 @@
-package com.allie.data.persistence;
+package com.allie.data.integration;
 
 import com.allie.data.dto.Location;
 import com.allie.data.dto.UserLocationDTO;
 import com.allie.data.factory.LocationFactory;
 import com.allie.data.jpa.model.LocationTelemetry;
 import com.allie.data.repository.LocationTelemetryRepository;
-import com.allie.data.service.LocationService;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ import java.util.Set;
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PersistenceTest {
+public class EndToEndAllieDataTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
@@ -43,10 +42,9 @@ public class PersistenceTest {
 
     private LocationFactory locationFactory = new LocationFactory();
 
-    @BeforeClass
-    public static void setup() {
+    @Before
+    public void setup() {
         //Building a list of dtos to pass to the controller
-        //Doesn't could go in first test but is static
         //and non-essential to what we're testing
         userLocationDTOs = new ArrayList<UserLocationDTO>();
         UserLocationDTO userLocationDTO;
@@ -60,6 +58,7 @@ public class PersistenceTest {
         }
     }
 
+    @After
     public void dropDB() {
         //This needs to happen before/after any of the tests
         //would put in @Before/AfterClass but method needs to be static
@@ -71,7 +70,30 @@ public class PersistenceTest {
         template.getDb().dropDatabase();
     }
 
-    public void sendRequestAndJoin() throws Exception{
+    public void sendMixedRequestAndJoin() throws Exception{
+        //This sends the request, which persists 10 of 20 items
+        //We then wait for the request to complete so we don't get ahead of ourselves
+        List<UserLocationDTO> dtos = new ArrayList<>(userLocationDTOs);
+        dtos.addAll(userLocationDTOs);
+        for (int i=0; i<10; i++) {
+            dtos.add(new UserLocationDTO(null, null, null));
+        }
+
+        //I don't care about the response
+        //that's tested in LocationsControllerTest
+        this.testRestTemplate.postForObject("/allie-data/v1/locations",
+                dtos, Object.class);
+
+        //wait on the thread that the post spins up
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        for (Thread thread: threadSet) {
+            if(thread.isAlive() && thread.getName().equals("insert-location")) {
+                thread.join(5 * 1000);
+            }
+        }
+    }
+
+    public void sendGoodRequestAndJoin() throws Exception{
         //This sends the request, which hopefuly persists
         //We then wait for the request to complete so we don't get ahead of ourselves
 
@@ -79,6 +101,28 @@ public class PersistenceTest {
         //that's tested in LocationsControllerTest
         this.testRestTemplate.postForObject("/allie-data/v1/locations",
                 userLocationDTOs, Object.class);
+
+        //wait on the thread that the post spins up
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        for (Thread thread: threadSet) {
+            if(thread.isAlive() && thread.getName().equals("insert-location")) {
+                thread.join(5 * 1000);
+            }
+        }
+    }
+
+    public void sendBadRequestAndJoin() throws Exception{
+        //This sends an invalid request,
+        //We then wait for the request to complete so we don't get ahead of ourselves
+
+        List<Object> badData = new ArrayList<Object>();
+        badData.add(new LocationFactory());
+        badData.add(new Integer(8));
+        badData.add("bad data");
+        //I don't care about the response
+        //that's tested in LocationsControllerTest
+        this.testRestTemplate.postForObject("/allie-data/v1/locations",
+               badData, Object.class);
 
         //wait on the thread that the post spins up
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
@@ -124,21 +168,78 @@ public class PersistenceTest {
     }
 
     @Test
-    public void testLocationsControllerToPersistence () throws Exception {
+    public void testTwoGoodServiceCalls () throws Exception {
         //Due to the interdependent nature of these tests
         //They need to be written in one mega test
         //As such I broke the test up into methods that feel
         //Like more logical test boundaries
 
-        dropDB();
-        sendRequestAndJoin();
+        sendGoodRequestAndJoin();
         testCollectionLength(1);
         testCollectionMatchesInput(1);
-        sendRequestAndJoin();
+        sendGoodRequestAndJoin();
         testCollectionLength(2);
         testCollectionMatchesInput(2);
-        dropDB();
 
     }
 
+    @Test
+    public void testTwoBadServiceCalls () throws Exception {
+        sendBadRequestAndJoin();
+        testCollectionLength(0);
+        sendBadRequestAndJoin();
+        testCollectionLength(0);
+
+    }
+
+    @Test
+    public void testBadGoodServiceCalls () throws Exception {
+        sendBadRequestAndJoin();
+        testCollectionLength(0);
+        sendGoodRequestAndJoin();
+        testCollectionLength(1);
+
+    }
+
+    @Test
+    public void testGoodBadServiceCalls () throws Exception {
+        sendGoodRequestAndJoin();
+        testCollectionLength(1);
+        testCollectionMatchesInput(1);
+        sendBadRequestAndJoin();
+        testCollectionLength(1);
+        testCollectionMatchesInput(1);
+
+    }
+
+    @Test
+    public void testTwoMixedServiceCalls () throws Exception {
+        sendMixedRequestAndJoin();
+        testCollectionLength(1);
+        testCollectionMatchesInput(1);
+        sendMixedRequestAndJoin();
+        testCollectionLength(2);
+        testCollectionMatchesInput(2);
+    }
+
+    @Test
+    public void testMixedGoodServiceCalls () throws Exception {
+        sendMixedRequestAndJoin();
+        testCollectionLength(1);
+        testCollectionMatchesInput(1);
+        sendGoodRequestAndJoin();
+        testCollectionLength(2);
+        testCollectionMatchesInput(2);
+    }
+
+    @Test
+    public void testMixedBadServiceCalls () throws Exception {
+        sendMixedRequestAndJoin();
+        testCollectionLength(1);
+        testCollectionMatchesInput(1);
+        sendBadRequestAndJoin();
+        testCollectionLength(1);
+        testCollectionMatchesInput(1);
+
+    }
 }
