@@ -13,7 +13,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value="allie-data/v1")
-public class MovementController {
+public class MovementsController {
 
     @Autowired
     MovementService service;

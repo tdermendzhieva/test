@@ -26,8 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(MovementController.class)
-public class MovementControllerTest {
+@WebMvcTest(MovementsController.class)
+public class MovementsControllerTest {
     @Autowired
     private MockMvc mvc;
 

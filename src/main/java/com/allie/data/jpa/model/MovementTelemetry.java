@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "MovementTelemetryRecords")
 public class MovementTelemetry {
     @Id
-    public String id;
+    public String dbId;
 
     public DateTime timestamp;
     public Boolean hasMoved;
@@ -23,6 +23,9 @@ public class MovementTelemetry {
         this.allieId = allieId;
     }
 
+    public String getDbId() {return this.dbId;}
+    public void setDbId(String dbId) {this.dbId = dbId;}
+
     public void setAllieId(String allieId) {this.allieId = allieId;}
     public String getAllieId() {return this.allieId;}
 
@@ -31,4 +34,5 @@ public class MovementTelemetry {
 
     public void setTimestamp(DateTime timestamp) {this.timestamp = timestamp;}
     public DateTime getTimestamp() {return timestamp;}
+
 }
