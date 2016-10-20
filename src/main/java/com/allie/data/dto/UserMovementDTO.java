@@ -1,7 +1,5 @@
 package com.allie.data.dto;
 
-import org.apache.catalina.User;
-
 /**
  * Created by jacob.headlee on 10/19/2016.
  */
