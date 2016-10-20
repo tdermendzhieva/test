@@ -21,7 +21,7 @@ public class CustomerExceptionHandler  extends ResponseEntityExceptionHandler{
     public ResponseEntity<com.allie.data.dto.Error> handleConflict(Exception e) {
         Error error = new Error();
         error.setError(HttpStatus.CONFLICT.getReasonPhrase());
-        error.setMessage("Allie user exists");
+        error.setMessage(e.getMessage());
         error.setStatus(HttpStatus.CONFLICT.value());
         error.setTimestamp(System.currentTimeMillis());
         error.setPath("/");
