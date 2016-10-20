@@ -43,6 +43,8 @@ public class LocationService {
                     && lt.getLocation() != null && lt.getLocation().length == 2
                     && lt.getTimestamp() != null) {
                 locationTelemetries.add(lt);
+            } else {
+                logger.debug("User Location missing required field, received:" + userLocation);
             }
         }
         //batch insert

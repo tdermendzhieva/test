@@ -41,6 +41,8 @@ public class MovementService {
                     && mt.getTimestamp() != null
                     ) {
                 movementTelemetries.add(mt);
+            } else {
+                logger.debug("User Movement missing required field, received:" + dto);
             }
         }
         //batch insert
