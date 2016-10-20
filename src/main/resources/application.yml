@@ -12,6 +12,15 @@ logging:
   pattern:
     console: "%d %-5level %logger : %msg%n"
     file: "%d %-5level [%thread] %logger [correlation-id:%X{correlation-id}] [request-id:%X{request-id}]: %msg%n"
+server:
+  tomcat:
+    accesslog:
+      directory: C:\allie\logs
+      enabled: true
+      pattern: common
+      prefix: access_log
+      rename-on-rotate: false
+      suffix: .log
 ---
 spring:
   profiles : DEV
@@ -26,6 +35,15 @@ logging:
     org.springframework.web: DEBUG
   pattern:
     file: "%d %-5level [%thread] %logger [correlation-id:%X{correlation-id}] [request-id:%X{request-id}]: %msg%n"
+server:
+  tomcat:
+    accesslog:
+      directory: /allie/logs
+      enabled: true
+      pattern: common
+      prefix: access_log
+      rename-on-rotate: false
+      suffix: .log
 ---
 spring:
   profiles : DEVTEST
@@ -40,6 +58,15 @@ logging:
     org.springframework.web: DEBUG
   pattern:
     file: "%d %-5level [%thread] %logger [correlation-id:%X{correlation-id}] [request-id:%X{request-id}]: %msg%n"
+server:
+  tomcat:
+    accesslog:
+      directory: /allie/logs
+      enabled: true
+      pattern: common
+      prefix: access_log
+      rename-on-rotate: false
+      suffix: .log
 ---
 spring:
   profiles : TEST
@@ -56,4 +83,12 @@ logging:
   pattern:
     console: "%d %-5level %logger : %msg%n"
     file: "%d %-5level [%thread] %logger [correlation-id:%X{correlation-id}] [request-id:%X{request-id}]: %msg%n"
-
+server:
+  tomcat:
+    accesslog:
+      directory: C:\allie\logs
+      enabled: true
+      pattern: common
+      prefix: access_log
+      rename-on-rotate: false
+      suffix: .log
