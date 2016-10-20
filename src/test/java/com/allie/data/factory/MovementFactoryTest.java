@@ -23,7 +23,8 @@ public class MovementFactoryTest {
     @Test
     public void testCreateMovementTelemetryMovement() throws Exception {
         UserMovementDTO userMovementDTO = new UserMovementDTO();
-        assertThat(movementFactory.createMovementTelemetry(userMovementDTO), equalTo(null));
+        userMovementDTO.setHasMoved(true);
+        assertThat(movementFactory.createMovementTelemetry(userMovementDTO).getHasMoved(), equalTo(true));
 
     }
 

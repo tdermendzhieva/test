@@ -58,6 +58,7 @@ public class MovementServiceTest {
         movementDTOList.add(userMovementDTO);
         MovementTelemetry movementTelemetry = new MovementTelemetry();
         movementTelemetry.setAllieId("test");
+        movementTelemetry.setHasMoved(true);
         movementTelemetry.setTimestamp(new DateTime(2016, 10, 19, 12, 31, 0, 0));
         List<MovementTelemetry> movementTelemetries = new ArrayList<>();
         movementTelemetries.add(movementTelemetry);
@@ -85,48 +86,47 @@ public class MovementServiceTest {
 
         //Create the transformed inputs
         //Good
-        MovementTelemetry lt1 = new MovementTelemetry();
-        lt1.setAllieId("lt1");
-        lt1.setTimestamp(new DateTime(2016, 10, 19, 12, 31, 1, 0));
+        MovementTelemetry mt1 = new MovementTelemetry();
+        mt1.setAllieId("mt1");
+        mt1.setHasMoved(false);
+        mt1.setTimestamp(new DateTime(2016, 10, 19, 12, 31, 1, 0));
 
         //Bad
-        MovementTelemetry lt2 = new MovementTelemetry();
+        MovementTelemetry mt2 = new MovementTelemetry();
 
         //Bad
-        MovementTelemetry lt3 = new MovementTelemetry();
-        lt3.setAllieId("lt3");
-        double[] loc3 = new double[2];
-        loc3[0] = 0;
-        loc3[1] = 0;
+        MovementTelemetry mt3 = new MovementTelemetry();
+        mt3.setAllieId("mt3");
+        mt3.setHasMoved(true);
 
         //Bad
-        MovementTelemetry lt4 = new MovementTelemetry();
-        lt4.setAllieId("lt4");
-        lt4.setTimestamp(new DateTime(2016, 10, 19, 12, 31, 4, 0));
+        MovementTelemetry mt4 = new MovementTelemetry();
+        mt4.setAllieId("mt4");
+        mt4.setTimestamp(new DateTime(2016, 10, 19, 12, 31, 4, 0));
 
         //Bad
-        MovementTelemetry lt5 = new MovementTelemetry();
-        lt5.setTimestamp(new DateTime(2016, 10, 19, 12, 31, 5, 0));
+        MovementTelemetry mt5 = new MovementTelemetry();
+        mt5.setTimestamp(new DateTime(2016, 10, 19, 12, 31, 5, 0));
         //put them into an array
         List<MovementTelemetry> movementTelemetries = new ArrayList<>();
-        movementTelemetries.add(lt1);
-        movementTelemetries.add(lt2);
-        movementTelemetries.add(lt3);
-        movementTelemetries.add(lt4);
-        movementTelemetries.add(lt5);
+        movementTelemetries.add(mt1);
+        movementTelemetries.add(mt2);
+        movementTelemetries.add(mt3);
+        movementTelemetries.add(mt4);
+        movementTelemetries.add(mt5);
 
         //assume that the inputs transform into the telemetries
-        given(movementFactory.createMovementTelemetry(userMovementDTO1)).willReturn(lt1);
-        given(movementFactory.createMovementTelemetry(userMovementDTO2)).willReturn(lt2);
-        given(movementFactory.createMovementTelemetry(userMovementDTO3)).willReturn(lt3);
-        given(movementFactory.createMovementTelemetry(userMovementDTO4)).willReturn(lt4);
-        given(movementFactory.createMovementTelemetry(userMovementDTO5)).willReturn(lt5);
+        given(movementFactory.createMovementTelemetry(userMovementDTO1)).willReturn(mt1);
+        given(movementFactory.createMovementTelemetry(userMovementDTO2)).willReturn(mt2);
+        given(movementFactory.createMovementTelemetry(userMovementDTO3)).willReturn(mt3);
+        given(movementFactory.createMovementTelemetry(userMovementDTO4)).willReturn(mt4);
+        given(movementFactory.createMovementTelemetry(userMovementDTO5)).willReturn(mt5);
 
         //another assumption
         List<MovementTelemetry> diminishedList = new ArrayList<MovementTelemetry>();
-        diminishedList.add(lt1);
+        diminishedList.add(mt1);
         given(movementTelemetryRepository.insert(diminishedList)).willReturn(diminishedList);
 
-        assertThat("inserted MovementTelemetry is returned", service.insertMovements(movementDTOList).get(0), equalTo(lt1));
+        assertThat("inserted MovementTelemetry is returned", service.insertMovements(movementDTOList).get(0), equalTo(mt1));
     }
 }

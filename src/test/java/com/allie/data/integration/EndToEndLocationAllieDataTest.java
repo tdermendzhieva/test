@@ -34,7 +34,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @ActiveProfiles("DEVTEST")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class EndToEndAllieDataTest {
+public class EndToEndLocationAllieDataTest {
     @Autowired
     private TestRestTemplate testRestTemplate;
 
@@ -66,9 +66,6 @@ public class EndToEndAllieDataTest {
 
     @After
     public void dropDB() {
-        //This needs to happen before/after any of the tests
-        //would put in @Before/AfterClass but method needs to be static
-        //template can't be static due to Spring
 
         //Make sure we have the right db
         assertThat(template.getDb().getName(), equalTo("TEST"));
