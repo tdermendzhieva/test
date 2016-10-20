@@ -1,12 +1,12 @@
 package com.allie.data.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.allie.data.dto.UserMovementDTO;
+import com.allie.data.service.MovementService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by andrew.larsen on 10/18/2016.
@@ -15,12 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value="allie-data/v1")
 public class MovementController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    MovementService service;
 
     @RequestMapping(value="/movements", method= RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void postMovementTelemetry() {
-        logger.info("test from controller");
-        //might need to thread and respond
+    public void postMovementTelemetry(@RequestBody List<UserMovementDTO> requestList) {
+        Thread thread = new Thread(() -> service.insertMovements(requestList));
+        thread.setName("insert-movement");
+        thread.run();
     }
 }
