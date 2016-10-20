@@ -37,7 +37,9 @@ public class MovementController {
     })
     @RequestMapping(value = "/movements", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void postMovementTelemetry(@RequestBody List<UserMovementDTO> requestList) {
+    public void postMovementTelemetry(@RequestBody List<UserMovementDTO> requestList,
+                                      @RequestHeader(name = "x-allie-request-id") String requestId,
+                                      @RequestHeader(name = "x-allie-correlation-id") String correlationId) {
         Thread thread = new Thread(() -> service.insertMovements(requestList));
         thread.setName("insert-movement");
         thread.run();
