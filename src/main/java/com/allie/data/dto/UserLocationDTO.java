@@ -20,7 +20,6 @@ public class UserLocationDTO {
     public String getTimestamp() {
         return timestamp;
     }
-
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
@@ -28,7 +27,6 @@ public class UserLocationDTO {
     public Location getLocation() {
         return location;
     }
-
     public void setLocation(Location location) {
         this.location = location;
     }
@@ -36,7 +34,6 @@ public class UserLocationDTO {
     public String getAllieId() {
         return allieId;
     }
-
     public void setAllieId(String allieId) {
         this.allieId = allieId;
     }

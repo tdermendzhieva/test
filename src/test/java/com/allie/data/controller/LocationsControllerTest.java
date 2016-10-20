@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -52,23 +51,7 @@ public class LocationsControllerTest {
 
 
     }
-////  redundant since response no longer contains data,
-////  renamed other slightly more robust test
-//    @Test
-//    public void testPostLocationReturnsAccepted() throws Exception {
-//
-//        userLocationDTOs.add(userLocationDTO);
-//        locationTelemetry.setAllieId(allieId);
-//        locationTelemetries.add(locationTelemetry);
-//
-//        given(this.locationService.insertLocations(userLocationDTOs))
-//                .willReturn(locationTelemetries);
-//
-//        this.mvc.perform(post("/allie-data/v1/locations")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(asJsonString(userLocationDTOs)))
-//                .andExpect(status().isAccepted());
-//    }
+
     @Test
     public void testPostLocationReturn404() throws Exception {
 
