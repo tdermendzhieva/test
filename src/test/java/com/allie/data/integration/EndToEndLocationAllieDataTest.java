@@ -15,7 +15,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -104,8 +103,7 @@ public class EndToEndLocationAllieDataTest {
         //This sends the request, which hopefuly persists
         //We then wait for the request to complete so we don't get ahead of ourselves
 
-        //I don't care about the response
-        //that's tested in LocationsControllerTest
+        //Response tested in LocationsControllerTest
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("x-allie-request-id", "req-id");
@@ -155,7 +153,7 @@ public class EndToEndLocationAllieDataTest {
                 , fromDB.size(), equalTo(i * 10));
     }
 
-    public void testCollectionMatchesInput(int i) {
+    public void testCollectionContent(int i) {
         List<LocationTelemetry> lts = new ArrayList<LocationTelemetry>();
         for (UserLocationDTO dto : userLocationDTOs) {
             lts.add(locationFactory.createLocationTelemetry(dto));
@@ -186,10 +184,10 @@ public class EndToEndLocationAllieDataTest {
     public void testTwoGoodServiceCalls () throws Exception {
         sendGoodRequestAndJoin();
         testCollectionLength(1);
-        testCollectionMatchesInput(1);
+        testCollectionContent(1);
         sendGoodRequestAndJoin();
         testCollectionLength(2);
-        testCollectionMatchesInput(2);
+        testCollectionContent(2);
 
     }
 
@@ -215,10 +213,10 @@ public class EndToEndLocationAllieDataTest {
     public void testGoodBadServiceCalls () throws Exception {
         sendGoodRequestAndJoin();
         testCollectionLength(1);
-        testCollectionMatchesInput(1);
+        testCollectionContent(1);
         sendBadRequestAndJoin();
         testCollectionLength(1);
-        testCollectionMatchesInput(1);
+        testCollectionContent(1);
 
     }
 
@@ -226,30 +224,30 @@ public class EndToEndLocationAllieDataTest {
     public void testTwoMixedServiceCalls () throws Exception {
         sendMixedRequestAndJoin();
         testCollectionLength(1);
-        testCollectionMatchesInput(1);
+        testCollectionContent(1);
         sendMixedRequestAndJoin();
         testCollectionLength(2);
-        testCollectionMatchesInput(2);
+        testCollectionContent(2);
     }
 
     @Test
     public void testMixedGoodServiceCalls () throws Exception {
         sendMixedRequestAndJoin();
         testCollectionLength(1);
-        testCollectionMatchesInput(1);
+        testCollectionContent(1);
         sendGoodRequestAndJoin();
         testCollectionLength(2);
-        testCollectionMatchesInput(2);
+        testCollectionContent(2);
     }
 
     @Test
     public void testMixedBadServiceCalls () throws Exception {
         sendMixedRequestAndJoin();
         testCollectionLength(1);
-        testCollectionMatchesInput(1);
+        testCollectionContent(1);
         sendBadRequestAndJoin();
         testCollectionLength(1);
-        testCollectionMatchesInput(1);
+        testCollectionContent(1);
 
     }
 
