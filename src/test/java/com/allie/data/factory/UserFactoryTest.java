@@ -59,6 +59,7 @@ public class UserFactoryTest {
         dto.setFirstName("first");
         dto.setEnrolledSkills(enrolledSkills);
         dto.setMeetings(meetings);
+        dto.setNickname("nickname");
     }
 
     @Test
@@ -130,5 +131,12 @@ public class UserFactoryTest {
         boolean after = user.getUpdatedTimeStamp().isAfter((new DateTime().getMillis()) - 5*1000);
         boolean before = user.getUpdatedTimeStamp().isEqualNow() || user.getUpdatedTimeStamp().isBeforeNow();
         assertThat(after && before, equalTo(true));
+    }
+
+    @Test
+    public void testCreateNickname(){
+        User user = uf.createUser(dto);
+
+        assertThat(user.getNickname(), equalTo("nickname"));
     }
 }

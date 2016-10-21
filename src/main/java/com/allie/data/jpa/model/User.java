@@ -31,6 +31,7 @@ public class User {
     public List<String> enrolledSkills;
     public DateTime createdTimeStamp;
     public DateTime updatedTimeStamp;
+    public String nickname;
 
     public String getDbId() {return this.dbId;}
     public void setDbId(String dbId) {this.dbId = dbId;}
@@ -64,4 +65,7 @@ public class User {
 
     public DateTime getUpdatedTimeStamp() {return this.updatedTimeStamp;}
     public void setUpdatedTimeStamp(DateTime updatedTimeStamp) {this.updatedTimeStamp = updatedTimeStamp;}
+
+    public String getNickname() {return this.nickname;}
+    public void setNickname(String nickname) {this.nickname = nickname;}
 }

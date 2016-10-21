@@ -19,6 +19,7 @@ public class UserDTO {
     public Map<String, MeetingDTO> meetings;
     public Map<String, String> norms;
     public List<String> enrolledSkills;
+    public String nickname;
 
     public String getAllieId() {return allieId;}
     public void setAllieId(String allieId) {this.allieId = allieId;}
@@ -44,4 +45,60 @@ public class UserDTO {
     public List<String> getEnrolledSkills() {return enrolledSkills;}
     public void setEnrolledSkills(List<String> enrolledSkills) {this.enrolledSkills = enrolledSkills;}
 
+    public String getNickname() {return nickname;}
+    public void setNickname(String nickname) {this.nickname = nickname;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserDTO userDTO = (UserDTO) o;
+
+        if (!getAllieId().equals(userDTO.getAllieId())) return false;
+        if (getFirstName() != null ? !getFirstName().equals(userDTO.getFirstName()) : userDTO.getFirstName() != null)
+            return false;
+        if (getLastName() != null ? !getLastName().equals(userDTO.getLastName()) : userDTO.getLastName() != null)
+            return false;
+        if (getPushToken() != null ? !getPushToken().equals(userDTO.getPushToken()) : userDTO.getPushToken() != null)
+            return false;
+        if (getAddresses() != null ? !getAddresses().equals(userDTO.getAddresses()) : userDTO.getAddresses() != null)
+            return false;
+        if (getMeetings() != null ? !getMeetings().equals(userDTO.getMeetings()) : userDTO.getMeetings() != null)
+            return false;
+        if (getNorms() != null ? !getNorms().equals(userDTO.getNorms()) : userDTO.getNorms() != null) return false;
+        if (getEnrolledSkills() != null ? !getEnrolledSkills().equals(userDTO.getEnrolledSkills()) : userDTO.getEnrolledSkills() != null)
+            return false;
+        return getNickname() != null ? getNickname().equals(userDTO.getNickname()) : userDTO.getNickname() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getAllieId().hashCode();
+        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
+        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
+        result = 31 * result + (getPushToken() != null ? getPushToken().hashCode() : 0);
+        result = 31 * result + (getAddresses() != null ? getAddresses().hashCode() : 0);
+        result = 31 * result + (getMeetings() != null ? getMeetings().hashCode() : 0);
+        result = 31 * result + (getNorms() != null ? getNorms().hashCode() : 0);
+        result = 31 * result + (getEnrolledSkills() != null ? getEnrolledSkills().hashCode() : 0);
+        result = 31 * result + (getNickname() != null ? getNickname().hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "allieId='" + allieId + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", pushToken='" + pushToken + '\'' +
+                ", addresses=" + addresses +
+                ", meetings=" + meetings +
+                ", norms=" + norms +
+                ", enrolledSkills=" + enrolledSkills +
+                ", nickname='" + nickname + '\'' +
+                '}';
+    }
 }

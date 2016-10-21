@@ -23,4 +23,27 @@ public class UserMovementDTO {
 
     public void setTimestamp(String timestamp) {this.timestamp = timestamp;}
     public String getTimestamp() {return timestamp;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserMovementDTO that = (UserMovementDTO) o;
+
+        if (getTimestamp() != null ? !getTimestamp().equals(that.getTimestamp()) : that.getTimestamp() != null)
+            return false;
+        if (getHasMoved() != null ? !getHasMoved().equals(that.getHasMoved()) : that.getHasMoved() != null)
+            return false;
+        return getAllieId() != null ? getAllieId().equals(that.getAllieId()) : that.getAllieId() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getTimestamp() != null ? getTimestamp().hashCode() : 0;
+        result = 31 * result + (getHasMoved() != null ? getHasMoved().hashCode() : 0);
+        result = 31 * result + (getAllieId() != null ? getAllieId().hashCode() : 0);
+        return result;
+    }
 }

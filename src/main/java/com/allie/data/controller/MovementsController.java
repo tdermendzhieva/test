@@ -20,8 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value="allie-data/v1")
 @Api(value = "locations", description = "Endpoint to store user's phone movement")
-
-public class MovementController {
+public class MovementsController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired

@@ -37,4 +37,27 @@ public class UserLocationDTO {
     public void setAllieId(String allieId) {
         this.allieId = allieId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserLocationDTO that = (UserLocationDTO) o;
+
+        if (getTimestamp() != null ? !getTimestamp().equals(that.getTimestamp()) : that.getTimestamp() != null)
+            return false;
+        if (getLocation() != null ? !getLocation().equals(that.getLocation()) : that.getLocation() != null)
+            return false;
+        return getAllieId() != null ? getAllieId().equals(that.getAllieId()) : that.getAllieId() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getTimestamp() != null ? getTimestamp().hashCode() : 0;
+        result = 31 * result + (getLocation() != null ? getLocation().hashCode() : 0);
+        result = 31 * result + (getAllieId() != null ? getAllieId().hashCode() : 0);
+        return result;
+    }
 }

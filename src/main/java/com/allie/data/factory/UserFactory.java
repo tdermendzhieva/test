@@ -5,6 +5,7 @@ import com.allie.data.dto.UserDTO;
 import com.allie.data.jpa.model.Meeting;
 import com.allie.data.jpa.model.User;
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.Set;
 /**
  * Created by jacob.headlee on 10/20/2016.
  */
+@Component
 public class UserFactory {
     public User createUser(UserDTO userDTO) {
         User user = new User();
@@ -22,6 +24,7 @@ public class UserFactory {
         user.setEnrolledSkills(userDTO.getEnrolledSkills());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+        user.setNickname(userDTO.getNickname());
         Map<String, Meeting> meetings = new HashMap<String, Meeting>();
         for (Map.Entry<String, MeetingDTO> entry : userDTO.getMeetings().entrySet()) {
             meetings.put(entry.getKey(), this.createMeeting(entry.getValue()));
