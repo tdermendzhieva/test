@@ -29,7 +29,9 @@ public class LocationsController {
 	})
 	@RequestMapping(value="/locations", method=RequestMethod.POST, consumes = "application/json")
 	@ResponseStatus(HttpStatus.ACCEPTED)
-	public void postLocationTelemetryList(@RequestBody List<UserLocationDTO> requestList) {
+	public void postLocationTelemetryList(@RequestBody List<UserLocationDTO> requestList,
+										  @RequestHeader(name = "x-allie-request-id") String requestId,
+										  @RequestHeader(name = "x-allie-correlation-id") String correlationId) {
 		//might need to thread and respond
 		Thread thread = new Thread(() -> service.insertLocations(requestList));
 		thread.setName("insert-location");
