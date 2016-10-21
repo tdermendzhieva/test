@@ -55,7 +55,7 @@ public class UserDTO {
 
         UserDTO userDTO = (UserDTO) o;
 
-        if (!getAllieId().equals(userDTO.getAllieId())) return false;
+        if (getAllieId() != null ? !getAllieId().equals(userDTO.getAllieId()) : userDTO.getAllieId() != null) return false;
         if (getFirstName() != null ? !getFirstName().equals(userDTO.getFirstName()) : userDTO.getFirstName() != null)
             return false;
         if (getLastName() != null ? !getLastName().equals(userDTO.getLastName()) : userDTO.getLastName() != null)

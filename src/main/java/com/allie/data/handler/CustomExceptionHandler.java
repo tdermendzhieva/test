@@ -38,12 +38,12 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
         Error error = new Error();
         error.setError(HttpStatus.BAD_REQUEST.getReasonPhrase());
         error.setMessage(e.getMessage());
-        error.setStatus(HttpStatus.CONFLICT.value());
+        error.setStatus(HttpStatus.BAD_REQUEST.value());
         error.setTimestamp(System.currentTimeMillis());
         error.setPath("/");
 
 
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -32,7 +32,7 @@ public class UserService {
             toReturn = repository.insert(user);
         } else {
             logger.debug("User Movement missing required field, received:" + userDTO);
-            throw(new IllegalArgumentException("User must have an allieId"));
+            throw new IllegalArgumentException("User must have an allieId");
         }
 
         return toReturn;
