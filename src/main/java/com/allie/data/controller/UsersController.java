@@ -30,7 +30,7 @@ public class UsersController {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "The service successfully persisted the user"),
             @ApiResponse(code = 400, message = "The request was malformed to the point that no information can be stored"),
-            //409
+            @ApiResponse(code = 409, message = "A user with the given allieId already exists"),
             @ApiResponse(code = 500, message = "There was an unspecified server error.")
     })
     @RequestMapping(value = "/users", method = RequestMethod.POST, consumes = "application/json")

@@ -3,6 +3,7 @@ package com.allie.data.repository;
 import com.allie.data.jpa.model.Address;
 import com.allie.data.jpa.model.Meeting;
 import com.allie.data.jpa.model.User;
+import com.mongodb.DBObject;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Test;
@@ -61,4 +62,14 @@ public class UserRepositoryTest {
     }
 
 
+    @Test
+    public void testHasIndex() {
+        User user = new User();
+        user.allieId = "indexTest";
+        repository.insert(user);
+
+        assertThat("need the collection", template.collectionExists("Users"));
+        List<DBObject> list = template.getCollection("Users").getIndexInfo();
+        assertThat("need 2 indicies", list.size() == 2);
+    }
 }

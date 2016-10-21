@@ -26,8 +26,10 @@ public class UserFactory {
         user.setLastName(userDTO.getLastName());
         user.setNickname(userDTO.getNickname());
         Map<String, Meeting> meetings = new HashMap<String, Meeting>();
-        for (Map.Entry<String, MeetingDTO> entry : userDTO.getMeetings().entrySet()) {
-            meetings.put(entry.getKey(), this.createMeeting(entry.getValue()));
+        if(userDTO.getMeetings() != null) {
+            for (Map.Entry<String, MeetingDTO> entry : userDTO.getMeetings().entrySet()) {
+                meetings.put(entry.getKey(), this.createMeeting(entry.getValue()));
+            }
         }
         user.setMeetings(meetings);
         user.setNorms(userDTO.getNorms());
