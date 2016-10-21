@@ -85,7 +85,7 @@ logging:
 server:
   tomcat:
     accesslog:
-      directory: C:\allie\logs
+      directory: /allie/logs
       enabled: true
       pattern: common
       prefix: access_log
