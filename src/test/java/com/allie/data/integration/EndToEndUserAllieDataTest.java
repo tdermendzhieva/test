@@ -5,6 +5,7 @@ import com.allie.data.dto.UserDTO;
 import com.allie.data.jpa.model.Address;
 import com.allie.data.jpa.model.User;
 import com.allie.data.repository.UserRepository;
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.junit.After;
 import org.junit.Before;
@@ -13,17 +14,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -84,23 +84,18 @@ public class EndToEndUserAllieDataTest {
         userDTO.setNickname("nick");
     }
 
+//    @Before
     @After
     public void dropDB() {
         //Verify that we have the right db
         assertThat(template.getDb().getName(), equalTo("TEST"));
         //Drop the test db
         template.getDb().dropDatabase();
+        //make sure we have indexing
+        Index index = new Index().on("allieId", Sort.Direction.ASC).unique();
+        template.indexOps(User.class).ensureIndex(index);
+        assertThat(template.getCollection("Users").getIndexInfo().size(), equalTo(2));
     }
-
-//    @Test
-//    public void testHasIndex() throws Exception {
-//        User user = new User();
-//        user.setAllieId("indexTest");
-//        repository.insert(user);
-//        assertThat("need the collection", template.collectionExists("Users"));
-//        List<DBObject> list = template.getCollection("Users").getIndexInfo();
-//        assertThat(list.size(), equalTo(2));
-//    }
 
     @Test
     public void testPostUser() {
