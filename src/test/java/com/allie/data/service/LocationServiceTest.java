@@ -1,18 +1,13 @@
 package com.allie.data.service;
 
-import com.allie.data.dto.Location;
 import com.allie.data.dto.UserLocationDTO;
 import com.allie.data.factory.LocationFactory;
 import com.allie.data.jpa.model.LocationTelemetry;
 import com.allie.data.repository.LocationTelemetryRepository;
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,22 +15,27 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 /**
  * Created by andrew.larsen on 10/17/2016.
  */
-@RunWith(SpringRunner.class)
-@SpringBootTest
+
+
 public class LocationServiceTest {
 
-    @MockBean
     private LocationFactory locationFactory;
-    @MockBean
-    LocationTelemetryRepository locationTelemetryRepository;
+    private LocationTelemetryRepository locationTelemetryRepository;
 
     @Autowired
     LocationService service;
 
+    @Before
+    public void setup(){
+        locationFactory = mock(LocationFactory.class);
+        locationTelemetryRepository = mock(LocationTelemetryRepository.class);
+        service = new LocationService(locationTelemetryRepository, locationFactory);
+    }
     @Test
     public void testEmptyInsertLocations() throws Exception {
         //we don't insert empty location records
@@ -47,7 +47,6 @@ public class LocationServiceTest {
         locationTelemetries.add(locationTelemetry);
         given(locationFactory.createLocationTelemetry(userLocationDTO)).willReturn(locationTelemetry);
         given(locationTelemetryRepository.insert(new ArrayList<LocationTelemetry>())).willReturn(new ArrayList<LocationTelemetry>());
-
         assertThat("should not insert empty locationTelemetry", service.insertLocations(locationDTOList).size(), equalTo(0));
 
     }
