@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 @Document(collection="LocationTelemetryRecords")
 public class LocationTelemetry {
 	@Id
-	public String id;
+	public String dbId;
 	
 	public String allieId;
 	public double[] location;
@@ -21,8 +21,8 @@ public class LocationTelemetry {
 		this.timestamp = timestamp;
 	}
 	
-	public String getId() {return id;}
-	public void setId(String id) {this.id = id;}
+	public String getDbId() {return dbId;}
+	public void setDbId(String DBId) {this.dbId = DBId;}
 	
 	public String getAllieId() {return allieId;}
 	public void setAllieId(String allieId) {this.allieId = allieId;}
@@ -39,6 +39,6 @@ public class LocationTelemetry {
 	public String toString() {
 		return String.format(
 				"LocationTelemetry[id='%s', allieId='%s', location='%s', timestamp='%s']",
-				id, allieId, location, timestamp);
+				dbId, allieId, location, timestamp);
 	}
 }

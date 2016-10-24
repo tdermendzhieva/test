@@ -81,6 +81,11 @@ public class LocationServiceTest {
         UserLocationDTO userLocationDTO3 = new UserLocationDTO();
         UserLocationDTO userLocationDTO4 = new UserLocationDTO();
         UserLocationDTO userLocationDTO5 = new UserLocationDTO();
+        userLocationDTO1.setAllieId("1");
+        userLocationDTO2.setAllieId("2");
+        userLocationDTO3.setAllieId("3");
+        userLocationDTO4.setAllieId("4");
+        userLocationDTO5.setAllieId("5");
         //put them in an array
         List<UserLocationDTO> locationDTOList = new ArrayList<>();
         locationDTOList.add(userLocationDTO1);

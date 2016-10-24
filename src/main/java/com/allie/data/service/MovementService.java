@@ -32,7 +32,7 @@ public class MovementService {
     public List<MovementTelemetry> insertMovements(List<UserMovementDTO> userMovementDTOs) {
         List<MovementTelemetry> movementTelemetries = new ArrayList<MovementTelemetry>();
         //Convert to jpa objects
-        MovementTelemetry mt = new MovementTelemetry();
+        MovementTelemetry mt;
         for (UserMovementDTO dto : userMovementDTOs) {
             mt = movementFactory.createMovementTelemetry(dto);
             if(

@@ -76,6 +76,11 @@ public class MovementServiceTest {
         UserMovementDTO userMovementDTO3 = new UserMovementDTO();
         UserMovementDTO userMovementDTO4 = new UserMovementDTO();
         UserMovementDTO userMovementDTO5 = new UserMovementDTO();
+        userMovementDTO1.setAllieId("1");
+        userMovementDTO2.setAllieId("2");
+        userMovementDTO3.setAllieId("3");
+        userMovementDTO4.setAllieId("4");
+        userMovementDTO5.setAllieId("5");
         //put them in an array
         List<UserMovementDTO> movementDTOList = new ArrayList<>();
         movementDTOList.add(userMovementDTO1);

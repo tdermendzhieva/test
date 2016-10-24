@@ -3,7 +3,9 @@ package com.allie.data.integration;
 import com.allie.data.dto.UserMovementDTO;
 import com.allie.data.factory.LocationFactory;
 import com.allie.data.factory.MovementFactory;
+import com.allie.data.jpa.model.MovementTelemetry;
 import com.allie.data.repository.MovementTelemetryRepository;
+import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +45,7 @@ public class EndToEndMovementAllieDataTest {
 
     private List<UserMovementDTO> userMovementDTOs;
 
-    private MovementFactory movementFactory;
+    private MovementFactory movementFactory = new MovementFactory();
 
     @Before
     public void setUp(){
@@ -75,12 +77,12 @@ public class EndToEndMovementAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<List<UserMovementDTO>> entity = new HttpEntity<>(userMovementDTOs, headers);
-        this.testRestTemplate.postForLocation("/allie-data/v1/locations", entity);
+        this.testRestTemplate.postForLocation("/allie-data/v1/movements", entity);
 
         //wait on the thread that the post spins up
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
         for (Thread thread: threadSet) {
-            if(thread.isAlive() && thread.getName().equals("insert-location")) {
+            if(thread.isAlive() && thread.getName().equals("insert-movement")) {
                 thread.join(5 * 1000);
             }
         }
@@ -100,12 +102,12 @@ public class EndToEndMovementAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<List<Object>> entity = new HttpEntity<>(badData, headers);
-        this.testRestTemplate.postForLocation("/allie-data/v1/locations", entity);
+        this.testRestTemplate.postForLocation("/allie-data/v1/movements", entity);
 
         //wait on the thread that the post spins up
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
         for (Thread thread: threadSet) {
-            if(thread.isAlive() && thread.getName().equals("insert-location")) {
+            if(thread.isAlive() && thread.getName().equals("insert-movement")) {
                 thread.join(5 * 1000);
             }
         }
@@ -124,18 +126,48 @@ public class EndToEndMovementAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<List<UserMovementDTO>> entity = new HttpEntity<>(dtos, headers);
-        this.testRestTemplate.postForLocation("/allie-data/v1/locations", entity);
+        this.testRestTemplate.postForLocation("/allie-data/v1/movements", entity);
 
         //wait on the thread that the post spins up
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
         for (Thread thread: threadSet) {
-            if(thread.isAlive() && thread.getName().equals("insert-location")) {
+            if(thread.isAlive() && thread.getName().equals("insert-movement")) {
                 thread.join(5 * 1000);
             }
         }
     }
-    public void testCollectionLength(int i) {}
-    public void testCollectionContent(int i) {}
+    public void testCollectionLength(int i) {
+        //make sure that all ten records per i requests made their way to the db
+        List<MovementTelemetry> fromDB = repository.findAll();
+        assertThat("Must have 10 records for each of " + i +" requests"
+                , fromDB.size(), CoreMatchers.equalTo(i * 10));
+    }
+    public void testCollectionContent(int i) {
+        List<MovementTelemetry> mts = new ArrayList<MovementTelemetry>();
+        for (UserMovementDTO dto : userMovementDTOs) {
+            mts.add(movementFactory.createMovementTelemetry(dto));
+        }
+        boolean failed = false;
+        List<MovementTelemetry> fromDB = repository.findAll();
+
+        for (MovementTelemetry mtGen : mts) {
+            if(!failed) {
+                int matches = 0;
+                for (MovementTelemetry mtDB : fromDB) {
+                    if (mtDB.getAllieId().equals(mtGen.getAllieId())) {
+                        assertThat("Where allieId matches so must ts",
+                                mtDB.getTimestamp(),
+                                CoreMatchers.equalTo(mtGen.getTimestamp()));
+                        assertThat("Where allieId matches so must log",
+                                mtDB.getTimestamp(),
+                                CoreMatchers.equalTo(mtGen.getTimestamp()));
+                        matches++;
+                    }
+                }
+                assertThat("A record should be recorded for each allieId no match found for", matches == i);
+            }
+        }
+    }
 
     @Test
     public void testTwoGoodServiceCalls () throws Exception {
