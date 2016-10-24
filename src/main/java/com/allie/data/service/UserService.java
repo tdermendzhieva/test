@@ -4,7 +4,6 @@ import com.allie.data.dto.UserDTO;
 import com.allie.data.factory.UserFactory;
 import com.allie.data.jpa.model.User;
 import com.allie.data.repository.UserRepository;
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
