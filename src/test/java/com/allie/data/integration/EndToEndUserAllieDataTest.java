@@ -114,24 +114,24 @@ public class EndToEndUserAllieDataTest {
         assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userDTO.getAddresses().get("address3").getCity()));
     }
 
-//    @Test
-//    public void testPostDuplicateUser() {
-//
-//        //Create a valid request
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_JSON);
-//        headers.add("x-allie-request-id", "req-id");
-//        headers.add("x-allie-correlation-id", "corr-id");
-//        HttpEntity<UserDTO> entity = new HttpEntity<>(userDTO, headers);
-//        this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
-//        this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
-//
-//        List<User> users =  repository.findAll();
-//        assertThat(users.size(), equalTo(1));
-//        assertThat(users.get(0).getAllieId(), equalTo(userDTO.getAllieId()));
-//        assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userDTO.getAddresses().get("address3").getCity()));
-//
-//    }
+    @Test
+    public void testPostDuplicateUser() {
+
+        //Create a valid request
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<UserDTO> entity = new HttpEntity<>(userDTO, headers);
+        this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
+        this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
+
+        List<User> users =  repository.findAll();
+        assertThat(users.size(), equalTo(1));
+        assertThat(users.get(0).getAllieId(), equalTo(userDTO.getAllieId()));
+        assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userDTO.getAddresses().get("address3").getCity()));
+
+    }
 
     @Test
     public void testPostUserNoAllieId() {
