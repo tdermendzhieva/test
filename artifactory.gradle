@@ -5,6 +5,8 @@ apply plugin: 'java'
 buildscript {
     ext {
         springBootVersion = '1.4.1.RELEASE'
+        artifactoryUsername =  System.env.ARTIFACTORY_USER
+        artifactoryPassword = System.env.ARTIFACTORY_PASSWORD
     }
     repositories {
         //jfrog artifactory repo
@@ -28,8 +30,8 @@ artifactory {
     publish {
         repository {
             repoKey = 'libs-release-local'
-            username = System.env.ARTIFACTORY_USER
-            password = System.env.ARTIFACTORY_PASSWORD
+            username = artifactoryUsername
+            password = artifactoryPassword
         }
         defaults {
             publications 'main'
