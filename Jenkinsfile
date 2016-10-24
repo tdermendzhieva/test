@@ -4,7 +4,7 @@ node {
         env.APP_VERSION = "1.0."+env.BUILD_NUMBER
         env.GRADLE_USER_HOME = '~/.gradle'
         env.BUILD
-        env.DEPLOYMENT_ENVIRONMENT = ${ENVIRONMENT}
+        env.DEPLOYMENT_ENVIRONMENT = '${ENVIRONMENT}'
        def err
        def status = "Success"
        try{
