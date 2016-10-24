@@ -85,22 +85,22 @@ public class UsersControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-//    @Test
-//    public void testPostUserReturnsConflict() throws Exception{
-//        user = new User();
-//        user.setAllieId("test");
-//        userDTO = new UserDTO();
-//        userDTO.setAllieId("test");
-//
-//        given(this.service.insertUser(userDTO)).willThrow(new DataIntegrityViolationException(""));
-//
-//        this.mvc.perform(post("/allie-data/v1/users")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(asJsonString(userDTO))
-//                .header("x-allie-request-id", "request-id")
-//                .header("x-allie-correlation-id", "correlation-id"))
-//                    .andExpect(status().isConflict());
-//    }
+    @Test
+    public void testPostUserReturnsConflict() throws Exception{
+        user = new User();
+        user.setAllieId("test");
+        userDTO = new UserDTO();
+        userDTO.setAllieId("test");
+
+        given(this.service.insertUser(userDTO)).willThrow(new DataIntegrityViolationException(""));
+
+        this.mvc.perform(post("/allie-data/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userDTO))
+                .header("x-allie-request-id", "request-id")
+                .header("x-allie-correlation-id", "correlation-id"))
+                    .andExpect(status().isConflict());
+    }
 
     @Test
     public void testPostUserReturnsBadRequest() throws Exception{
