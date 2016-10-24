@@ -4,6 +4,7 @@ node {
         env.APP_VERSION = "1.0."+env.BUILD_NUMBER
         env.GRADLE_USER_HOME = '~/.gradle'
         env.BUILD
+        env.DEPLOYMENT_ENVIRONMENT = ${ENVIRONMENT}
        def err
        def status = "Success"
        try{
@@ -16,7 +17,7 @@ node {
             stage 'Publish Artifact to Artifactory'
               sh './gradlew artifactoryPublish --debug --stacktrace'
             stage 'Deploy Dev'
-              sh './gradlew deployOnTest --debug --stacktrace'
+              sh './gradlew deployToAWS --debug --stacktrace'
         }
         catch(error){
             err = error

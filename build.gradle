@@ -112,14 +112,14 @@ task s3Upload(type: Exec, dependsOn: zipAWSArchive){
 }
 
 // Deploys a given revision to the test environment
-task deployOnTest(type:Exec) {
+task deployToAWS(type:Exec) {
     // Defines the path into the project of the deploy.sh script
     def deploy = "automation/deploy.sh"
     // Defines the distribution name based on the jar section
     def artifactName = archivesBaseName + "-${System.env.APP_VERSION}-SNAPSHOT.zip"
     // Deploys the given distribution to the test deployment group
     executable "bash"
-    args "-c", "sh ${deploy} DEV ${artifactName}"
+    args "-c", "sh ${deploy} ${System.env.DEPLOYMENT_ENVIRONMENT} ${artifactName}"
 }
 
 
