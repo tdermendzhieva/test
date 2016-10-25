@@ -9,10 +9,6 @@ public class Location {
 
     public Location() {}
 
-//    public Location(double longitude, double latitude) {
-//        this.longitude = longitude;
-//        this.latitude = latitude;
-//    }
 
     public double getLongitude() {
         return longitude;
@@ -30,6 +26,12 @@ public class Location {
         this.latitude = latitude;
     }
 
+
+    /**
+     * Generated equals method to compare the sub properties instead of property references
+     * @param o object to compare
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -42,6 +44,10 @@ public class Location {
 
     }
 
+    /**
+     * Generated hashCode method to use sub properties instead of property references
+     * @return
+     */
     @Override
     public int hashCode() {
         int result;
