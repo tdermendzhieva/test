@@ -61,7 +61,6 @@ public class UsersController {
     public UserResponseDTO getUser(@PathVariable String allieId,
                                    @RequestHeader(value = "x-allie-request-id") String requestId,
                                    @RequestHeader(value = "x-allie-correlation-id") String correlationId) throws Exception{
-        allieId = URLDecoder.decode(allieId, "UTF-8");
         return service.selectUser(allieId);
     }
 
