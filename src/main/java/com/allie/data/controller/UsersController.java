@@ -21,7 +21,7 @@ import java.net.URLDecoder;
  */
 @RestController
 @RequestMapping(value = "allie-data/v1")
-@Api(value = "users", description = "Endpoint to store a user")
+@Api(value = "users", description = "Endpoints for users")
 public class UsersController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
