@@ -1,7 +1,9 @@
 package com.allie.data.integration;
 
 import com.allie.data.dto.MeetingDTO;
-import com.allie.data.dto.UserDTO;
+import com.allie.data.dto.UserRequestDTO;
+import com.allie.data.dto.UserResponseDTO;
+import com.allie.data.factory.UserFactory;
 import com.allie.data.jpa.model.Address;
 import com.allie.data.jpa.model.User;
 import com.allie.data.repository.UserRepository;
@@ -17,9 +19,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -46,10 +46,10 @@ public class EndToEndUserAllieDataTest {
     @Autowired
     UserRepository repository;
 
-    UserDTO userDTO;
+    UserRequestDTO userRequestDTO;
 
     @Before
-    public void buildUserDto() {
+    public void buildUserRequestDto() {
         Map<String, String> norms = new HashMap<>();
         Map<String, Address> addresses = new HashMap<>();
         Map<String, MeetingDTO> meetings = new HashMap<>();
@@ -72,16 +72,16 @@ public class EndToEndUserAllieDataTest {
             skills.add("skill"+i);
         }
 
-        userDTO = new UserDTO();
-        userDTO.setAllieId("allieId");
-        userDTO.setPushToken("pushToken");
-        userDTO.setNorms(norms);
-        userDTO.setAddresses(addresses);
-        userDTO.setFirstName("first");
-        userDTO.setMeetings(meetings);
-        userDTO.setEnrolledSkills(skills);
-        userDTO.setLastName("last");
-        userDTO.setNickname("nick");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("allieId");
+        userRequestDTO.setPushToken("pushToken");
+        userRequestDTO.setNorms(norms);
+        userRequestDTO.setAddresses(addresses);
+        userRequestDTO.setFirstName("first");
+        userRequestDTO.setMeetings(meetings);
+        userRequestDTO.setEnrolledSkills(skills);
+        userRequestDTO.setLastName("last");
+        userRequestDTO.setNickname("nick");
     }
 
 //    @Before
@@ -105,13 +105,13 @@ public class EndToEndUserAllieDataTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
-        HttpEntity<UserDTO> entity = new HttpEntity<>(userDTO, headers);
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
         this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(1));
-        assertThat(users.get(0).getAllieId(), equalTo(userDTO.getAllieId()));
-        assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userDTO.getAddresses().get("address3").getCity()));
+        assertThat(users.get(0).getAllieId(), equalTo(userRequestDTO.getAllieId()));
+        assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userRequestDTO.getAddresses().get("address3").getCity()));
     }
 
     @Test
@@ -122,14 +122,14 @@ public class EndToEndUserAllieDataTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
-        HttpEntity<UserDTO> entity = new HttpEntity<>(userDTO, headers);
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
         this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
         this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(1));
-        assertThat(users.get(0).getAllieId(), equalTo(userDTO.getAllieId()));
-        assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userDTO.getAddresses().get("address3").getCity()));
+        assertThat(users.get(0).getAllieId(), equalTo(userRequestDTO.getAllieId()));
+        assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userRequestDTO.getAddresses().get("address3").getCity()));
 
     }
 
@@ -140,8 +140,8 @@ public class EndToEndUserAllieDataTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
-        userDTO.setAllieId(null);
-        HttpEntity<UserDTO> entity = new HttpEntity<>(userDTO, headers);
+        userRequestDTO.setAllieId(null);
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
         this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
 
         List<User> users =  repository.findAll();
@@ -152,18 +152,18 @@ public class EndToEndUserAllieDataTest {
     @Test
     public void testPostUserOnlyAllieId() {
         //Create a valid request
-        UserDTO userDTO = new UserDTO();
-        userDTO.setAllieId("allieId");
+        UserRequestDTO userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("allieId");
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
-        HttpEntity<UserDTO> entity = new HttpEntity<>(userDTO, headers);
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
         this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(1));
-        assertThat(users.get(0).getAllieId(), equalTo(userDTO.getAllieId()));
+        assertThat(users.get(0).getAllieId(), equalTo(userRequestDTO.getAllieId()));
 
     }
 
@@ -175,20 +175,81 @@ public class EndToEndUserAllieDataTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
-        HttpEntity<UserDTO> entity = new HttpEntity<>(userDTO, headers);
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
         this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
-        userDTO.setAllieId("allieId2");
-        entity = new HttpEntity<>(userDTO, headers);
+        userRequestDTO.setAllieId("allieId2");
+        entity = new HttpEntity<>(userRequestDTO, headers);
         this.testRestTemplate.postForLocation("/allie-data/v1/users", entity);
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(2));
         assertThat(users.get(0).getAllieId(), equalTo("allieId"));
-        assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userDTO.getAddresses().get("address3").getCity()));
-        assertThat(users.get(1).getAllieId(), equalTo(userDTO.getAllieId()));
-        assertThat(users.get(1).getAddresses().get("address3").getCity(), equalTo(userDTO.getAddresses().get("address3").getCity()));
-
+        assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userRequestDTO.getAddresses().get("address3").getCity()));
+        assertThat(users.get(1).getAllieId(), equalTo(userRequestDTO.getAllieId()));
+        assertThat(users.get(1).getAddresses().get("address3").getCity(), equalTo(userRequestDTO.getAddresses().get("address3").getCity()));
 
     }
 
+    @Test
+    public void testGet1User() {
+
+        UserFactory factory = new UserFactory();
+        User user = factory.createUser(userRequestDTO);
+        repository.insert(user);
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/" + user.getAllieId(), HttpMethod.GET, entity, UserResponseDTO.class);
+
+        UserResponseDTO newUser = resp.getBody();
+        assertThat(newUser.getAllieId(), equalTo(user.getAllieId()));
+        assertThat(newUser.getNickname(), equalTo(user.getNickname()));
+        assertThat(newUser.getAddresses().get("address5").getCity(), equalTo(user.getAddresses().get("address5").getCity()));
+
+    }
+
+    @Test
+    public void testGetEachOfManyUsers() {
+        UserFactory factory = new UserFactory();
+
+        User user;
+        for(int i = 0; i<10; i++) {
+            userRequestDTO.setAllieId("id" + i);
+            user = factory.createUser(userRequestDTO);
+            repository.insert(user);
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
+
+
+        for(int i = 0; i<10; i++) {
+            ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/" + "id" + i, HttpMethod.GET, entity, UserResponseDTO.class);
+            assertThat(resp.getBody().getAllieId(), equalTo("id" + i));
+        }
+    }
+
+    @Test
+    public void testGetNonExtantAllieId() {
+        UserFactory factory = new UserFactory();
+
+        User user;
+        for(int i = 0; i<10; i++) {
+            userRequestDTO.setAllieId("id" + i);
+            user = factory.createUser(userRequestDTO);
+            repository.insert(user);
+        }
+
+        ResponseEntity<User> resp = this.testRestTemplate.getForEntity("/allie-id/v1/users/" + "badid", User.class);
+        assertThat(resp.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+
+    }
 }

@@ -1,6 +1,7 @@
 package com.allie.data.controller;
 
-import com.allie.data.dto.UserDTO;
+import com.allie.data.dto.UserRequestDTO;
+import com.allie.data.dto.UserResponseDTO;
 import com.allie.data.jpa.model.User;
 import com.allie.data.service.UserService;
 import org.junit.Test;
@@ -13,8 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.MissingResourceException;
+
 import static com.allie.data.util.TestUtil.asJsonString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,37 +35,37 @@ public class UsersControllerTest {
     @MockBean
     UserService service;
 
-    UserDTO userDTO;
-    User user;
+    UserRequestDTO userRequestDTO;
+    UserResponseDTO userResponseDTO;
 
     @Test
     public void testPostUserNoHeadersReturnsBadRequest ()throws Exception {
-        user = new User();
-        user.setAllieId("test");
-        userDTO = new UserDTO();
-        userDTO.setAllieId("test");
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("test");
 
-        given(this.service.insertUser(userDTO)).willReturn(user);
+        given(this.service.insertUser(userRequestDTO)).willReturn(userResponseDTO);
 
         this.mvc.perform(post("/allie-data/v1/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(userDTO)))
+            .content(asJsonString(userRequestDTO)))
             .andExpect(status().isBadRequest());
 
     }
 
     @Test
     public void testPostUserReturnsCreated () throws Exception {
-        user = new User();
-        user.setAllieId("test");
-        userDTO = new UserDTO();
-        userDTO.setAllieId("test");
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("test");
 
-        given(this.service.insertUser(userDTO)).willReturn(user);
+        given(this.service.insertUser(userRequestDTO)).willReturn(userResponseDTO);
 
         this.mvc.perform(post("/allie-data/v1/users")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(userDTO))
+            .content(asJsonString(userRequestDTO))
             .header("x-allie-request-id", "request-id")
             .header("x-allie-correlation-id", "correlation-id"))
                 .andExpect(status().isCreated())
@@ -70,16 +74,16 @@ public class UsersControllerTest {
 
     @Test
     public void testPostOtherReturnsNotFound() throws Exception{
-        user = new User();
-        user.setAllieId("test");
-        userDTO = new UserDTO();
-        userDTO.setAllieId("test");
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("test");
 
-        given(this.service.insertUser(userDTO)).willReturn(user);
+        given(this.service.insertUser(userRequestDTO)).willReturn(userResponseDTO);
 
         this.mvc.perform(post("/other")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(asJsonString(userDTO))
+            .content(asJsonString(userRequestDTO))
             .header("x-allie-request-id", "request-id")
             .header("x-allie-correlation-id", "correlation-id"))
                 .andExpect(status().isNotFound());
@@ -87,16 +91,16 @@ public class UsersControllerTest {
 
     @Test
     public void testPostUserReturnsConflict() throws Exception{
-        user = new User();
-        user.setAllieId("test");
-        userDTO = new UserDTO();
-        userDTO.setAllieId("test");
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("test");
 
-        given(this.service.insertUser(userDTO)).willThrow(new DataIntegrityViolationException(""));
+        given(this.service.insertUser(userRequestDTO)).willThrow(new DataIntegrityViolationException(""));
 
         this.mvc.perform(post("/allie-data/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userDTO))
+                .content(asJsonString(userRequestDTO))
                 .header("x-allie-request-id", "request-id")
                 .header("x-allie-correlation-id", "correlation-id"))
                     .andExpect(status().isConflict());
@@ -104,21 +108,53 @@ public class UsersControllerTest {
 
     @Test
     public void testPostUserReturnsBadRequest() throws Exception{
-        user = new User();
-        user.setPushToken("");
-        userDTO = new UserDTO();
-        userDTO.setPushToken("");
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setPushToken("");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setPushToken("");
 
-        given(this.service.insertUser(userDTO)).willThrow(new IllegalArgumentException(""));
+        given(this.service.insertUser(userRequestDTO)).willThrow(new IllegalArgumentException(""));
 
         this.mvc.perform(post("/allie-data/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(userDTO))
+                .content(asJsonString(userRequestDTO))
                 .header("x-allie-request-id", "request-id")
                 .header("x-allie-correlation-id", "correlation-id"))
                     .andExpect(status().isBadRequest());
     }
 
+    @Test
+    public void testGetUserReturnsUser() throws Exception{
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        given(this.service.selectUser("test")).willReturn(userResponseDTO);
+
+        this.mvc.perform(get("/allie-data/v1/users/test")
+            .header("x-allie-request-id", "request-id")
+            .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("allieId", is("test")));
+    }
+
+    @Test
+    public void testGetUserReturnsBadRequest() throws Exception{
+        given(this.service.selectUser(" ")).willThrow(new IllegalArgumentException());
+
+        this.mvc.perform(get("/allie-data/v1/users/ ")
+            .header("x-allie-request-id", "request-id")
+            .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetUserReturnsNotFound() throws Exception{
+        given(this.service.selectUser("test")).willThrow(new MissingResourceException("", "", ""));
+
+        this.mvc.perform(get("/allie-data/v1/users/test")
+            .header("x-allie-request-id", "request-id")
+            .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isNotFound());
+    }
 
 
 

@@ -1,7 +1,8 @@
 package com.allie.data.factory;
 
 import com.allie.data.dto.MeetingDTO;
-import com.allie.data.dto.UserDTO;
+import com.allie.data.dto.UserRequestDTO;
+import com.allie.data.dto.UserResponseDTO;
 import com.allie.data.jpa.model.Address;
 import com.allie.data.jpa.model.Meeting;
 import com.allie.data.jpa.model.User;
@@ -21,18 +22,21 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by jacob.headlee on 10/20/2016.
  */
 public class UserFactoryTest {
-    UserDTO dto;
+    UserRequestDTO dto;
+    User user;
 
     UserFactory uf = new UserFactory();
 
 
     @Before
     public void setDto() {
-        dto = new UserDTO();
+        dto = new UserRequestDTO();
+        user = new User();
         Map<String, Address> addresses = new HashMap<>();
         Map<String, String> norms = new HashMap<>();
         List<String> enrolledSkills = new ArrayList<>();
-        Map<String, MeetingDTO> meetings = new HashMap<>();
+        Map<String, MeetingDTO> meetingDTOs = new HashMap<>();
+        Map<String, Meeting> meetings = new HashMap<>();
 
         for(int i = 0; i < 10; i++) {
             Address address = new Address();
@@ -41,81 +45,96 @@ public class UserFactoryTest {
             address.setPostalCode("zip" +i);
             address.setState("state" + i);
 
+            Meeting meeting = new Meeting();
+            meeting.setDateTime(new DateTime("2016-10-2" + i + "T10:10:10.111Z"));
             MeetingDTO meetingDTO = new MeetingDTO();
             meetingDTO.setDateTime("2016-10-2" + i + "T10:10:10.111Z");
 
             addresses.put("address" + i, address);
             norms.put("normkey" + i, "normval" + i);
             enrolledSkills.add("skill" + i);
-            meetings.put("meeting" +i, meetingDTO);
+            meetingDTOs.put("meeting" +i, meetingDTO);
+            meetings.put("meeting" + i, meeting);
         }
 
 
         dto.setAddresses(addresses);
+        user.setAddresses(addresses);
         dto.setAllieId("allieId");
+        user.setAllieId("allieId");
         dto.setPushToken("pushToken");
+        user.setPushToken("pushToken");
         dto.setNorms(norms);
+        user.setNorms(norms);
         dto.setLastName("last");
+        user.setLastName("last");
         dto.setFirstName("first");
+        user.setFirstName("first");
         dto.setEnrolledSkills(enrolledSkills);
-        dto.setMeetings(meetings);
+        user.setEnrolledSkills(enrolledSkills);
+        dto.setMeetings(meetingDTOs);
+        user.setMeetings(meetings);
         dto.setNickname("nickname");
+        user.setNickname("nickname");
+
+        user.setCreatedTimeStamp(new DateTime("2010-10-10T10:10:10.101Z"));
+        user.setUpdatedTimeStamp(new DateTime("2010-10-10T10:10:10.101Z"));
     }
 
     @Test
-    public void testCreateAllieId(){
+    public void testCreateUserAllieId(){
         User user = uf.createUser(dto);
 
         assertThat(user.getAllieId(), equalTo("allieId"));
     }
     @Test
-    public void testCreateFirstName(){
+    public void testCreateUserFirstName(){
         User user = uf.createUser(dto);
 
         assertThat(user.getFirstName(), equalTo("first"));
     }
     @Test
-    public void testCreateLastName(){
+    public void testCreateUserLastName(){
         User user = uf.createUser(dto);
 
         assertThat(user.getLastName(), equalTo("last"));
     }
     @Test
-    public void testCreatePushToken(){
+    public void testCreateUserPushToken(){
         User user = uf.createUser(dto);
 
         assertThat(user.getPushToken(), equalTo("pushToken"));
     }
     @Test
-    public void testCreateAddresses(){
+    public void testCreateUserAddresses(){
         User user = uf.createUser(dto);
 
         assertThat(user.getAddresses().size(), equalTo(10));
         assertThat(user.getAddresses().get("address5").getState(), equalTo("state5"));
     }
     @Test
-    public void testCreateMeetings(){
+    public void testCreateUserMeetings(){
         User user = uf.createUser(dto);
 
         assertThat(user.getMeetings().size(), equalTo(10));
         assertThat(user.getMeetings().get("meeting8").getDateTime().getDayOfMonth(), equalTo(28));
     }
     @Test
-    public void testCreateNorms(){
+    public void testCreateUserNorms(){
         User user = uf.createUser(dto);
 
         assertThat(user.getNorms().size(), equalTo(10));
         assertThat(user.getNorms().get("normkey3"), equalTo("normval3"));
     }
     @Test
-    public void testCreateEnrolledSkills(){
+    public void testCreateUserEnrolledSkills(){
         User user = uf.createUser(dto);
 
         assertThat(user.getEnrolledSkills().size(), equalTo(10));
         assertThat(user.getEnrolledSkills().get(3), equalTo("skill3"));
     }
     @Test
-    public void testCreateCreatedTimeStamp(){
+    public void testCreateUserCreatedTimeStamp(){
         User user = uf.createUser(dto);
 
         //Generated at on createUser call, verify that was within 5 secs
@@ -124,7 +143,7 @@ public class UserFactoryTest {
         assertThat(after && before, equalTo(true));
     }
     @Test
-    public void testCreateUpdatedTimeStamp(){
+    public void testCreateUserUpdatedTimeStamp(){
         User user = uf.createUser(dto);
 
         //Generated at on createUser call, verify that was within 5 secs
@@ -134,9 +153,84 @@ public class UserFactoryTest {
     }
 
     @Test
-    public void testCreateNickname(){
+    public void testCreateUserNickname(){
         User user = uf.createUser(dto);
 
         assertThat(user.getNickname(), equalTo("nickname"));
+    }
+
+
+    @Test
+    public void testCreateUserResponseDTOAllieId(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getAllieId(), equalTo("allieId"));
+    }
+    @Test
+    public void testCreateUserResponseDTOFirstName(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getFirstName(), equalTo("first"));
+    }
+    @Test
+    public void testCreateUserResponseDTOLastName(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getLastName(), equalTo("last"));
+    }
+    @Test
+    public void testCreateUserResponseDTOPushToken(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getPushToken(), equalTo("pushToken"));
+    }
+    @Test
+    public void testCreateUserResponseDTOAddresses(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getAddresses().size(), equalTo(10));
+        assertThat(userResponseDTO.getAddresses().get("address5").getState(), equalTo("state5"));
+    }
+    @Test
+    public void testCreateUserResponseDTOMeetings(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getMeetings().size(), equalTo(10));
+        assertThat(new DateTime(userResponseDTO.getMeetings().get("meeting8").getDateTime()).getDayOfMonth(), equalTo(28));
+    }
+    @Test
+    public void testCreateUserResponseDTONorms(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getNorms().size(), equalTo(10));
+        assertThat(userResponseDTO.getNorms().get("normkey3"), equalTo("normval3"));
+    }
+    @Test
+    public void testCreateUserResponseDTOEnrolledSkills(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getEnrolledSkills().size(), equalTo(10));
+        assertThat(userResponseDTO.getEnrolledSkills().get(3), equalTo("skill3"));
+    }
+    @Test
+    public void testCreateUserResponseDTOCreatedTimeStamp(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+        
+        assertThat(new DateTime(userResponseDTO.getCreatedTimeStamp()).isEqual(new DateTime("2010-10-10T10:10:10.101Z").getMillis()),
+                equalTo(true));
+    }
+    @Test
+    public void testCreateUserResponseDTOUpdatedTimeStamp(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(new DateTime(userResponseDTO.getCreatedTimeStamp()).isEqual(new DateTime("2010-10-10T10:10:10.101Z").getMillis()),
+                equalTo(true));
+    }
+
+    @Test
+    public void testCreateUserResponseDTONickname(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getNickname(), equalTo("nickname"));
     }
 }
