@@ -30,8 +30,8 @@ artifactory {
     publish {
         repository {
             repoKey = 'libs-release-local'
-            username = artifactoryUsername
-            password = artifactoryPassword
+            username = 'admin'
+            password = 'password'
         }
         defaults {
             publications 'main'
