@@ -46,6 +46,16 @@ public class UsersController {
 
     }
 
+
+    @ApiOperation(value = "Persistence service call to retrieve a user with a given allieId",
+            notes = "The service will return the user.  If the request is successful, a 200 (ok) status will be returned, with the " +
+                    "user in the body.  If no user is found for the given allieId a 404 (not found) will be returned.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "The service found the user, the user is in the body"),
+            @ApiResponse(code = 400, message = "Given allieId was null or empty"),
+            @ApiResponse(code = 404, message = "No user found for given allieId"),
+            @ApiResponse(code = 500, message = "There was an unspecified server error.")
+    })
     @RequestMapping(value = "/users/{allieId}", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDTO getUser(@PathVariable String allieId,
