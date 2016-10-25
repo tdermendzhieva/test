@@ -34,7 +34,7 @@ public class UserEventFactoryTest {
         UserEventDTO userEventDTO = new UserEventDTO();
         userEventDTO.setEventReceivedTimestamp(timestamp);
         UserEvent userEvent = factory.createUserEvent(userEventDTO);
-        assertThat(userEvent.getEventReceivedTimestamp()).isEqualTo(timestamp);
+        assertThat(userEvent.getEventReceivedTimestamp()).isEqualTo(new DateTime(timestamp));
 
     }
     @Test

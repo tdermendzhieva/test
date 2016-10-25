@@ -1,6 +1,7 @@
 package com.allie.data.jpa.model;
 
 import com.mongodb.DBObject;
+import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,7 +14,7 @@ public class UserEvent{
     @Id
     private String id;
     private String allieId;
-    private String eventReceivedTimestamp;
+    private DateTime eventReceivedTimestamp;
     private DBObject neuraJson;
 
     public String getAllieId() {
@@ -24,11 +25,11 @@ public class UserEvent{
         this.allieId = allieId;
     }
 
-    public String getEventReceivedTimestamp() {
+    public DateTime getEventReceivedTimestamp() {
         return eventReceivedTimestamp;
     }
 
-    public void setEventReceivedTimestamp(String eventReceivedTimestamp) {
+    public void setEventReceivedTimestamp(DateTime eventReceivedTimestamp) {
         this.eventReceivedTimestamp = eventReceivedTimestamp;
     }
 

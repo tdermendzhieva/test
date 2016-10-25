@@ -4,6 +4,7 @@ import com.allie.data.dto.UserEventDTO;
 import com.allie.data.jpa.model.UserEvent;
 import com.allie.data.repository.UserEventRepository;
 import com.mongodb.BasicDBObject;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +65,7 @@ public class EndToEndUserEventDataTest {
         //make sure there's only one inserted
         assertThat(userEvent.size(), equalTo(1));
         assertThat(userEvent.get(0).getAllieId(), equalTo(goodRequest.getAllieId()));
-        assertThat(userEvent.get(0).getEventReceivedTimestamp(), equalTo(goodRequest.getEventReceivedTimestamp()));
+        assertThat(userEvent.get(0).getEventReceivedTimestamp(), equalTo(new DateTime(goodRequest.getEventReceivedTimestamp())));
         assertThat(userEvent.get(0).getNeuraJson(), equalTo(new BasicDBObject(goodRequest.getNeuraJson())));
 
     }
