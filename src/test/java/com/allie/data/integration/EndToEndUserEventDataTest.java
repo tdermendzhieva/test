@@ -27,11 +27,10 @@ import static org.hamcrest.core.IsEqual.equalTo;
  * Created by andrew.larsen on 10/25/2016.
  */
 
-
 @ActiveProfiles("DEVTEST")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class EndToEndUserEventCreationTest {
+public class EndToEndUserEventDataTest {
     @Autowired
     TestRestTemplate testRestTemplate;
 
@@ -117,5 +116,4 @@ public class EndToEndUserEventCreationTest {
         return this.testRestTemplate.postForEntity("/allie-data/v1/events", entity, String.class);
 
     }
-
 }
