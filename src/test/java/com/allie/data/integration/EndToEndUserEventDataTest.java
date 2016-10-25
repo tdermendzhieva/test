@@ -95,11 +95,11 @@ public class EndToEndUserEventDataTest {
     public void testPostBadRequestNoTimestamp() throws IOException {
         badRequest = createEventDTONoTimestamp();
         ResponseEntity responseEntity = sendRequest(badRequest);
-        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.BAD_REQUEST.value()));
+        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.CREATED.value()));
         //now make sure entry is in db
         List<UserEvent> userEvent = repository.findAll();
         //make sure there's only one inserted
-        assertThat(userEvent.size(), equalTo(0));
+        assertThat(userEvent.size(), equalTo(1));
 
     }
     @Test
