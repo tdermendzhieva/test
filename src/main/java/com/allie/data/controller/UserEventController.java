@@ -1,10 +1,12 @@
 package com.allie.data.controller;
 
 import com.allie.data.dto.UserEventDTO;
+import com.allie.data.service.UserEventService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,12 +14,13 @@ import org.springframework.web.bind.annotation.*;
  * Created by andrew.larsen on 10/24/2016.
  */
 @RestController
-@RequestMapping(value="allie-data/v1")
+@RequestMapping(value="/allie-data/v1")
 @Api(value = "Events", description = "Endpoint to manage user events")
 public class UserEventController {
 
 
-   // UserEventService service;
+    @Autowired
+    UserEventService service;
     @ApiOperation(value = "Persistence service call to store an Allie User Event",
             notes = "The service will asynchronously store all data in backend persistence structure.  If the request successfully reaches the service, a 202 (accepted) HttpStatus will " +
                     "be returned")
@@ -31,6 +34,6 @@ public class UserEventController {
     public void createUserEvent(@RequestBody UserEventDTO request,
                                           @RequestHeader(name = "x-allie-request-id") String requestId,
                                           @RequestHeader(name = "x-allie-correlation-id") String correlationId) {
-      //  service.insertEvent(request);
+        service.insertEvent(request);
     }
 }

@@ -32,7 +32,7 @@ public class UserService {
             User tempUser = repository.insert(user);
             return factory.createUserResponseDTO(tempUser);
         } else {
-            logger.debug("User missing required field, received:" + userRequestDTO);
+            logger.error("User missing required field, received:" + userRequestDTO);
             throw new IllegalArgumentException("User must have an allieId");
         }
     }
@@ -42,7 +42,7 @@ public class UserService {
         if(allieId != null && !allieId.trim().isEmpty()) {
             tempUser = repository.findByAllieId(allieId);
         } else {
-            logger.debug("Get user requires an allieId");
+            logger.error("Get user requires an allieId");
             throw new IllegalArgumentException("Get user requires an allieId");
         }
         if (tempUser != null) {

@@ -42,7 +42,7 @@ public class MovementService {
                     ) {
                 movementTelemetries.add(mt);
             } else {
-                logger.debug("User Movement missing required field, received:" + dto);
+                logger.error("User Movement missing required field, received:" + dto);
             }
         }
         //batch insert

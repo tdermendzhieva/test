@@ -1,13 +1,13 @@
 package com.allie.data.handler;
 
 import com.allie.data.dto.Error;
+import com.mongodb.MongoException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -61,4 +61,16 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
         return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
     }
 
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE) //404
+    @ExceptionHandler(MongoException.class)
+    public ResponseEntity<com.allie.data.dto.Error> handleMongoException(Exception e) {
+        Error error = new Error();
+        error.setError(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase());
+        error.setMessage(e.getMessage());
+        error.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
+        error.setTimestamp(System.currentTimeMillis());
+        error.setPath("/");
+
+        return new ResponseEntity<Error>(error, HttpStatus.SERVICE_UNAVAILABLE);
+    }
 }
