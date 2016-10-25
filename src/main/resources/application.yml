@@ -3,6 +3,11 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/ALLIE?connectTimeoutMS=10000&socketTimeoutMS=5000
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 logging:
   file: C:\allie\logs\dev_app.log
   level:
@@ -21,12 +26,18 @@ server:
       prefix: access_log
       rename-on-rotate: false
       suffix: .log
+
 ---
 spring:
   profiles : DEV
   data:
     mongodb:
       uri: mongodb://ec2-52-39-103-175.us-west-2.compute.amazonaws.com:27017/ALLIE?connectTimeoutMS=10000&socketTimeoutMS=5000
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 logging:
   file: /allie/logs/allie-data.log
   level:
@@ -50,6 +61,11 @@ spring:
   data:
     mongodb:
       uri: mongodb://ec2-52-39-103-175.us-west-2.compute.amazonaws.com:27017/TEST?connectTimeoutMS=10000&socketTimeoutMS=5000
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 logging:
   file: /allie/logs/allie-data.log
   level:
@@ -73,6 +89,11 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/test?connectTimeoutMS=10000&socketTimeoutMS=5000
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 logging:
   file: C:\allie\logs\dev_app.log
   level:

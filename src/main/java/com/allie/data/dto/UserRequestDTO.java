@@ -8,8 +8,8 @@ import java.util.Map;
 /**
  * Created by jacob.headlee on 10/20/2016.
  */
-public class UserDTO {
-    public UserDTO(){}
+public class UserRequestDTO {
+    public UserRequestDTO(){}
 
     public String allieId;
     public String firstName;
@@ -53,23 +53,23 @@ public class UserDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        UserDTO userDTO = (UserDTO) o;
+        UserRequestDTO userRequestDTO = (UserRequestDTO) o;
 
-        if (getAllieId() != null ? !getAllieId().equals(userDTO.getAllieId()) : userDTO.getAllieId() != null) return false;
-        if (getFirstName() != null ? !getFirstName().equals(userDTO.getFirstName()) : userDTO.getFirstName() != null)
+        if (getAllieId() != null ? !getAllieId().equals(userRequestDTO.getAllieId()) : userRequestDTO.getAllieId() != null) return false;
+        if (getFirstName() != null ? !getFirstName().equals(userRequestDTO.getFirstName()) : userRequestDTO.getFirstName() != null)
             return false;
-        if (getLastName() != null ? !getLastName().equals(userDTO.getLastName()) : userDTO.getLastName() != null)
+        if (getLastName() != null ? !getLastName().equals(userRequestDTO.getLastName()) : userRequestDTO.getLastName() != null)
             return false;
-        if (getPushToken() != null ? !getPushToken().equals(userDTO.getPushToken()) : userDTO.getPushToken() != null)
+        if (getPushToken() != null ? !getPushToken().equals(userRequestDTO.getPushToken()) : userRequestDTO.getPushToken() != null)
             return false;
-        if (getAddresses() != null ? !getAddresses().equals(userDTO.getAddresses()) : userDTO.getAddresses() != null)
+        if (getAddresses() != null ? !getAddresses().equals(userRequestDTO.getAddresses()) : userRequestDTO.getAddresses() != null)
             return false;
-        if (getMeetings() != null ? !getMeetings().equals(userDTO.getMeetings()) : userDTO.getMeetings() != null)
+        if (getMeetings() != null ? !getMeetings().equals(userRequestDTO.getMeetings()) : userRequestDTO.getMeetings() != null)
             return false;
-        if (getNorms() != null ? !getNorms().equals(userDTO.getNorms()) : userDTO.getNorms() != null) return false;
-        if (getEnrolledSkills() != null ? !getEnrolledSkills().equals(userDTO.getEnrolledSkills()) : userDTO.getEnrolledSkills() != null)
+        if (getNorms() != null ? !getNorms().equals(userRequestDTO.getNorms()) : userRequestDTO.getNorms() != null) return false;
+        if (getEnrolledSkills() != null ? !getEnrolledSkills().equals(userRequestDTO.getEnrolledSkills()) : userRequestDTO.getEnrolledSkills() != null)
             return false;
-        return getNickname() != null ? getNickname().equals(userDTO.getNickname()) : userDTO.getNickname() == null;
+        return getNickname() != null ? getNickname().equals(userRequestDTO.getNickname()) : userRequestDTO.getNickname() == null;
 
     }
 
@@ -89,7 +89,7 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return "UserDTO{" +
+        return "UserRequestDTO{" +
                 "allieId='" + allieId + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
