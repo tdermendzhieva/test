@@ -20,4 +20,8 @@ public class UserEventFactory {
         }
         return userEvent;
     }
+
+    public UserEventDTO createUserEventDTO(UserEvent userEvent) {
+        return new UserEventDTO();
+    }
 }

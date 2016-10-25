@@ -5,9 +5,16 @@ import com.allie.data.factory.UserEventFactory;
 import com.allie.data.jpa.model.UserEvent;
 import com.allie.data.repository.UserEventRepository;
 import com.mongodb.MongoException;
+import org.joda.time.DateTime;
+import org.joda.time.IllegalFieldValueException;
+import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by andrew.larsen on 10/24/2016.
@@ -18,7 +25,6 @@ public class UserEventService {
 
     private UserEventRepository repository;
     private UserEventFactory factory;
-
 
     public UserEventService(UserEventRepository repository, UserEventFactory factory) {
         this.repository = repository;
@@ -48,5 +54,28 @@ public class UserEventService {
             throw new MongoException("Failed to insert record");
         }
         return returnEvent;
+    }
+
+    public List<UserEventDTO> selectEvents(String allieId, String receivedDate) {
+        DateTime tempDate;
+        DateTime startDate;
+        DateTime endDate;
+        try {
+            tempDate = new DateTime(receivedDate);
+        } catch (Exception e){
+            logger.debug("Date was absent or malformed, assuming today");
+            tempDate = new DateTime();
+        }
+        //Make sure we're just looking at a date not a specific time
+        startDate = new DateTime().withDate(tempDate.getYear(), tempDate.getMonthOfYear(), tempDate.getDayOfMonth());
+        endDate = new DateTime().withDate(tempDate.getYear(), tempDate.getMonthOfYear(), tempDate.getDayOfYear() + 1);
+
+        List<UserEvent> userEvents = repository.findUserEvents(allieId, startDate, endDate);
+
+        List<UserEventDTO> toReturn = new ArrayList<>();
+        for(UserEvent userEvent : userEvents) {
+            toReturn.add(factory.createUserEventDTO(userEvent));
+        }
+        return toReturn;
     }
 }

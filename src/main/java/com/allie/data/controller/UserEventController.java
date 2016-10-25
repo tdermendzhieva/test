@@ -16,7 +16,7 @@ import java.util.*;
  * Created by andrew.larsen on 10/24/2016.
  */
 @RestController
-@RequestMapping(value="allie-data/v1")
+@RequestMapping(value="/allie-data/v1")
 @Api(value = "Events", description = "Endpoint to manage user events")
 public class UserEventController {
 
@@ -46,30 +46,12 @@ public class UserEventController {
     })
     @RequestMapping(value = "user/{allieId}/events", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<UserEventDTO> getUserEvent(@RequestParam String allieId,
-                                           @RequestParam(name = "received_date", defaultValue = "") String recievedDate,
+    public List<UserEventDTO> getUserEvent(@PathVariable String allieId,
+                                           @RequestParam(name = "received_date", defaultValue = "") String receivedDate,
                                            @RequestHeader(name = "x-allie-request-id") String requestId,
                                            @RequestHeader(name = "x-allie-correlation-id") String correlationId
     ) {
-
-        List<UserEventDTO> mockList = new ArrayList<>();
-        UserEventDTO mock = new UserEventDTO();
-        mock.setAllieId("allieId");
-        mock.setEventReceivedTimestamp("2010-10-10T10:10:10.101Z");
-        Map neuraJson = new HashMap();
-        neuraJson.put("identifier", "YourEventIdentifier_userIsOnTheWayHome");
-        neuraJson.put("userId", "allieId");
-        Map event = new HashMap();
-        event.put("name", "userIsOnTheWayHome");
-        event.put("timestamp", 1477342584);
-        Map metaData = new HashMap();
-        event.put("metadata", metaData);
-        neuraJson.put("event", event);
-        mock.setNeuraJson(neuraJson);
-        mockList.add(mock);
-        return mockList;
-
-        //return service.selectUserEvent(allieId, recievedDate);
+        return service.selectEvents(allieId, receivedDate);
     }
 
 }

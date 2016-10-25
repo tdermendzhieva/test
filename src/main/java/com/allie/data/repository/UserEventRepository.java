@@ -1,10 +1,16 @@
 package com.allie.data.repository;
 
 import com.allie.data.jpa.model.UserEvent;
+import org.joda.time.DateTime;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+
+import java.util.List;
 
 /**
  * Created by andrew.larsen on 10/24/2016.
  */
 public interface UserEventRepository extends MongoRepository<UserEvent, String> {
+    @Query(value = "{$and: [{'allieId' : ?0}, {'eventReceivedTimestamp' : {$gte: ?1}}, {'eventReceivedTimestamp' : {$lt: ?2}}]}")
+    List<UserEvent> findUserEvents(String allieId, DateTime startDate, DateTime endDate);
 }
