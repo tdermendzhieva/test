@@ -107,7 +107,7 @@ public class EndToEndUserEventDataTest {
         badRequest = createEventDTONoTimestamp();
         badRequest.setEventReceivedTimestamp("2015/10/10");
         ResponseEntity responseEntity = sendRequest(badRequest);
-        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.BAD_REQUEST.value()));
+        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.OK.value()));
         //now make sure entry is in db
         List<UserEvent> userEvent = repository.findAll();
         //make sure there's only one inserted
