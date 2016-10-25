@@ -44,6 +44,7 @@ public class UserEventTestUtils {
         UserEventDTO userEventDTO = new UserEventDTO();
         String json = "{\"test\" : 1}";
         Map jsonMap = mapper.readValue(json, HashMap.class);
+        userEventDTO.setAllieId("ALLIEID");
         userEventDTO.setNeuraJson(jsonMap);
         return userEventDTO;
     }

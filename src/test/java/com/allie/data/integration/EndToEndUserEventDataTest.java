@@ -102,6 +102,30 @@ public class EndToEndUserEventDataTest {
         assertThat(userEvent.size(), equalTo(0));
 
     }
+    @Test
+    public void testPostBadRequestInvalidFormatTimestamp() throws IOException {
+        badRequest = createEventDTONoTimestamp();
+        badRequest.setEventReceivedTimestamp("2015/10/10");
+        ResponseEntity responseEntity = sendRequest(badRequest);
+        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.BAD_REQUEST.value()));
+        //now make sure entry is in db
+        List<UserEvent> userEvent = repository.findAll();
+        //make sure there's only one inserted
+        assertThat(userEvent.size(), equalTo(0));
+
+    }
+    @Test
+    public void testPostBadRequestInvalidTimestamp() throws IOException {
+        badRequest = createEventDTONoTimestamp();
+        badRequest.setEventReceivedTimestamp("20-54-23T18:25:43.511Z");
+        ResponseEntity responseEntity = sendRequest(badRequest);
+        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.BAD_REQUEST.value()));
+        //now make sure entry is in db
+        List<UserEvent> userEvent = repository.findAll();
+        //make sure there's only one inserted
+        assertThat(userEvent.size(), equalTo(0));
+
+    }
     /**
      * Helper method to send request
      * @param request
