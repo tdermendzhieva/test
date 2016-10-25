@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by andrew.larsen on 10/24/2016.
  */
 @RestController
-@RequestMapping(value="/allie-data/v1")
+@RequestMapping(value="allie-data/v1")
 @Api(value = "Events", description = "Endpoint to manage user events")
 public class UserEventController {
 
