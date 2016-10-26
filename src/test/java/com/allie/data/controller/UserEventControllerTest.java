@@ -83,7 +83,7 @@ public class UserEventControllerTest {
         dto.setEventReceivedTimestamp("blah");
         given(this.service.selectEvents("test", "blah"))
                 .willReturn(list);
-        this.mvc.perform(get("/allie-data/v1/user/test/events?received_date=blah")
+        this.mvc.perform(get("/allie-data/v1/users/test/events?received_date=blah")
                 .header("x-allie-correlation-id", "corr-id")
                 .header("x-allie-request-id", "req-id"))
                     .andExpect(status().isOk())
@@ -106,7 +106,7 @@ public class UserEventControllerTest {
     public void testGetUserReturns400() throws Exception{
         given(this.service.selectEvents("test", "blah"))
                 .willThrow(new IllegalArgumentException());
-        this.mvc.perform(get("/allie-data/v1/user/test/events?received_date=blah")
+        this.mvc.perform(get("/allie-data/v1/users/test/events?received_date=blah")
                 .header("x-allie-correlation-id", "corr-id")
                 .header("x-allie-request-id", "req-id"))
                 .andExpect(status().isBadRequest());

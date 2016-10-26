@@ -6,12 +6,14 @@ import com.allie.data.jpa.model.UserEvent;
 import com.allie.data.repository.UserEventRepository;
 import com.mongodb.MongoException;
 import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingResourceException;
 
 /**
  * Created by andrew.larsen on 10/24/2016.
@@ -53,6 +55,12 @@ public class UserEventService {
         return returnEvent;
     }
 
+    /**
+     * Method to retrieve events from the repository
+     * @param allieId user whose events should be retrieved
+     * @param receivedDate date of events to retrieve
+     * @return
+     */
     public List<UserEventDTO> selectEvents(String allieId, String receivedDate) {
         if(allieId == null || allieId.trim().isEmpty()) {
             logger.debug("allieId null or empty, throwing IllegalArgumentException");
@@ -73,11 +81,16 @@ public class UserEventService {
 
         List<UserEvent> userEvents = repository.findUserEvents(allieId, startDate, endDate);
 
-        //Transform the UserEvents into returnable DTOs
-        List<UserEventDTO> toReturn = new ArrayList<>();
-        for(UserEvent userEvent : userEvents) {
-            toReturn.add(factory.createUserEventDTO(userEvent));
+        if(userEvents.size() > 0 ) {
+            //Transform the UserEvents into returnable DTOs
+            List<UserEventDTO> toReturn = new ArrayList<>();
+            for (UserEvent userEvent : userEvents) {
+                toReturn.add(factory.createUserEventDTO(userEvent));
+            }
+            return toReturn;
+        } else {
+            logger.debug("No user events found for allieId " + allieId + " at date " + tempDate.toString(ISODateTimeFormat.date()));
+            throw new MissingResourceException("No user events found for allieId " + allieId + " at date " + tempDate.toString(ISODateTimeFormat.date()), UserEvent.class.getName(), allieId);
         }
-        return toReturn;
     }
 }

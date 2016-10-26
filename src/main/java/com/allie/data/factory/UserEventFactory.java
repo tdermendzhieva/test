@@ -26,6 +26,11 @@ public class UserEventFactory {
         return userEvent;
     }
 
+    /**
+     * Creates a UserEventDTO object from a UserEvent object
+     * @param userEvent the object to transform
+     * @return
+     */
     public UserEventDTO createUserEventDTO(UserEvent userEvent) {
         UserEventDTO userEventDTO = new UserEventDTO();
         userEventDTO.setAllieId(userEvent.getAllieId());

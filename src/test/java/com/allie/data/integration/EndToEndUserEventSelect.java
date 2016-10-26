@@ -70,11 +70,41 @@ public class EndToEndUserEventSelect {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<List<UserEventDTO>> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<UserEventDTO[]> resp = this.testRestTemplate.exchange("/allie-data/v1/user/id0/events?received_date=2020-10-20", HttpMethod.GET, entity, UserEventDTO[].class);
+        ResponseEntity<UserEventDTO[]> resp = this.testRestTemplate.exchange("/allie-data/v1/users/id0/events?received_date=2020-10-20", HttpMethod.GET, entity, UserEventDTO[].class);
 
         UserEventDTO[] eventDTOs = resp.getBody();
         assertThat(eventDTOs.length, equalTo(5));
         assertThat(eventDTOs[3].getAllieId(), equalTo("id0"));
+
+    }
+
+    @Test
+    public void testGetUserEventsReturns400() {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<List<UserEventDTO>> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users/ /events?received_date=2020-10-20", HttpMethod.GET, entity, Object.class);
+
+        assertThat(resp.getStatusCode().value(), equalTo(400));
+
+    }
+
+    @Test
+    public void testGetUserEventsReturns404() {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<List<UserEventDTO>> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users/notarealid/events?received_date=2020-10-20", HttpMethod.GET, entity, Object.class);
+
+        assertThat(resp.getStatusCode().value(), equalTo(404));
 
     }
 }
