@@ -17,7 +17,10 @@ public class LocationFactoryTest {
     public void testCreateLocationTelemetryTimestamp() throws Exception {
         UserLocationDTO userLocationDTO = new UserLocationDTO();
         userLocationDTO.setTimestamp("2012-04-23T18:25:43.511Z");
-        userLocationDTO.setLocation(new Location(10,10));
+        Location location = new Location();
+        location.setLongitude(10);
+        location.setLatitude(10);
+        userLocationDTO.setLocation(location);
         assertThat(locationFactory.createLocationTelemetry(userLocationDTO).getTimestamp(), equalTo(new DateTime("2012-04-23T18:25:43.511Z")));
 
     }
@@ -25,7 +28,9 @@ public class LocationFactoryTest {
     @Test
     public void testCreateLocationTelemetryLocation() throws Exception {
         UserLocationDTO userLocationDTO = new UserLocationDTO();
-        Location location = new Location(10,10);
+        Location location = new Location();
+        location.setLongitude(10);
+        location.setLatitude(10);
         userLocationDTO.setLocation(location);
         double[] locationArray = new double[2];
         locationArray[0] = location.getLongitude();
@@ -37,7 +42,9 @@ public class LocationFactoryTest {
     @Test
     public void testCreateLocationTelemetryAllieId() throws Exception {
         UserLocationDTO userLocationDTO = new UserLocationDTO();
-        Location location = new Location(10,10);
+        Location location = new Location();
+        location.setLongitude(10);
+        location.setLatitude(10);
         userLocationDTO.setLocation(location);
         String allid = "asdfasdf";
         userLocationDTO.setAllieId(allid);

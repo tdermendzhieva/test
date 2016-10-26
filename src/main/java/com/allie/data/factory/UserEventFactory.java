@@ -25,4 +25,17 @@ public class UserEventFactory {
         }
         return userEvent;
     }
+
+    public UserEventDTO createUserEventDTO(UserEvent userEvent) {
+        UserEventDTO userEventDTO = new UserEventDTO();
+        userEventDTO.setAllieId(userEvent.getAllieId());
+        if(userEvent.getEventReceivedTimestamp() != null) {
+            userEventDTO.setEventReceivedTimestamp(userEvent.getEventReceivedTimestamp()
+                    .toString());
+        }
+        if(userEvent.getNeuraJson() != null) {
+            userEventDTO.setNeuraJson(userEvent.getNeuraJson().toMap());
+        }
+        return userEventDTO;
+    }
 }

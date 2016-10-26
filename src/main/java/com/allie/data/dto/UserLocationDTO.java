@@ -38,6 +38,11 @@ public class UserLocationDTO {
         this.allieId = allieId;
     }
 
+    /**
+     * Generated equals method to compare the sub properties instead of property references
+     * @param o object to compare
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,6 +58,10 @@ public class UserLocationDTO {
 
     }
 
+    /**
+     * Generated hashCode method to use sub properties instead of property references
+     * @return
+     */
     @Override
     public int hashCode() {
         int result = getTimestamp() != null ? getTimestamp().hashCode() : 0;

@@ -6,7 +6,6 @@ import com.allie.data.dto.UserResponseDTO;
 import com.allie.data.jpa.model.Meeting;
 import com.allie.data.jpa.model.User;
 import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -49,7 +48,7 @@ public class UserFactory {
 
     private MeetingDTO createMeetingDTO(Meeting meeting) {
         MeetingDTO meetingDTO = new MeetingDTO();
-        meetingDTO.setDateTime(meeting.getDateTime().toString(ISODateTimeFormat.dateTime()));
+        meetingDTO.setDateTime(meeting.getDateTime().toString());
         return meetingDTO;
     }
 
@@ -64,8 +63,8 @@ public class UserFactory {
         userResponseDTO.setFirstName(user.getFirstName());
         userResponseDTO.setLastName(user.getLastName());
 
-        userResponseDTO.setCreatedTimeStamp(user.getCreatedTimeStamp().toString(ISODateTimeFormat.dateTime()));
-        userResponseDTO.setUpdatedTimeStamp(user.getUpdatedTimeStamp().toString(ISODateTimeFormat.dateTime()));
+        userResponseDTO.setCreatedTimeStamp(user.getCreatedTimeStamp().toString());
+        userResponseDTO.setUpdatedTimeStamp(user.getUpdatedTimeStamp().toString());
 
         userResponseDTO.setAddresses(user.getAddresses());
         userResponseDTO.setEnrolledSkills(user.getEnrolledSkills());

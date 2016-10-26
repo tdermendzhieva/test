@@ -48,6 +48,11 @@ public class UserRequestDTO {
     public String getNickname() {return nickname;}
     public void setNickname(String nickname) {this.nickname = nickname;}
 
+    /**
+     * Generated equals method to compare the sub properties instead of property references
+     * @param o object to compare
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,6 +78,10 @@ public class UserRequestDTO {
 
     }
 
+    /**
+     * Generated hashCode method to use sub properties instead of property references
+     * @return
+     */
     @Override
     public int hashCode() {
         int result = getAllieId().hashCode();
@@ -87,6 +96,10 @@ public class UserRequestDTO {
         return result;
     }
 
+    /**
+     * toString with property values
+     * @return
+     */
     @Override
     public String toString() {
         return "UserRequestDTO{" +

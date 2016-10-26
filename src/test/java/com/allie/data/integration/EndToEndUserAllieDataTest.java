@@ -7,8 +7,6 @@ import com.allie.data.factory.UserFactory;
 import com.allie.data.jpa.model.Address;
 import com.allie.data.jpa.model.User;
 import com.allie.data.repository.UserRepository;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -84,7 +82,6 @@ public class EndToEndUserAllieDataTest {
         userRequestDTO.setNickname("nick");
     }
 
-//    @Before
     @After
     public void dropDB() {
         //Verify that we have the right db
@@ -202,7 +199,7 @@ public class EndToEndUserAllieDataTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
-        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(null, headers);
+        HttpEntity<Object> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/" + user.getAllieId(), HttpMethod.GET, entity, UserResponseDTO.class);
 

@@ -6,12 +6,15 @@ import com.allie.data.jpa.model.User;
 import com.mongodb.DBObject;
 import org.joda.time.DateTime;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -44,6 +47,17 @@ public class UserRepositoryTest {
         template.getDb().dropDatabase();
     }
 
+    @Before
+    public void setUp() {
+        //Verify that we have the right db
+        assertThat(template.getDb().getName(), equalTo("TEST"));
+        //make sure we have indexing initialized
+        Index index = new Index().on("allieId", Sort.Direction.ASC).unique();
+        template.indexOps(User.class).ensureIndex(index);
+        assertThat(template.getCollection("Users").getIndexInfo().size(), equalTo(2));
+
+    }
+
     @Test
     public void insertDuplicateUsers() {
         User user = new User();
@@ -61,15 +75,4 @@ public class UserRepositoryTest {
         assertThat("shouldn't get this far", false, equalTo(true));
     }
 
-
-    @Test
-    public void testHasIndex() {
-        User user = new User();
-        user.allieId = "indexTest";
-        repository.insert(user);
-
-        assertThat("need the collection", template.collectionExists("Users"));
-        List<DBObject> list = template.getCollection("Users").getIndexInfo();
-        assertThat("need 2 indicies", list.size() == 2);
-    }
 }

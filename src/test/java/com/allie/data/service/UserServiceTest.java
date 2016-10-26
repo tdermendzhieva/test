@@ -9,16 +9,12 @@ import com.allie.data.jpa.model.Meeting;
 import com.allie.data.jpa.model.User;
 import com.allie.data.repository.UserRepository;
 import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.*;
@@ -92,8 +88,8 @@ public class UserServiceTest {
 
         userResponseDTO.setAddresses(addresses);
         userResponseDTO.setAllieId("allieId");
-        userResponseDTO.setUpdatedTimeStamp(new DateTime().toString(ISODateTimeFormat.dateTime()));
-        userResponseDTO.setCreatedTimeStamp(new DateTime().toString(ISODateTimeFormat.dateTime()));
+        userResponseDTO.setUpdatedTimeStamp(new DateTime().toString());
+        userResponseDTO.setCreatedTimeStamp(new DateTime().toString());
         userResponseDTO.setNorms(norms);
         userResponseDTO.setPushToken("token");
         userResponseDTO.setMeetings(meetingDTOs);

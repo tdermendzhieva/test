@@ -15,8 +15,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.MissingResourceException;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -63,6 +70,45 @@ public class UserEventControllerTest {
                 .header("x-allie-correlation-id", "corr-id")
                 .header("x-allie-request-id", "req-id")
                 .content(new ObjectMapper().writeValueAsString(userEventDTO)))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    public void testGetUserEvent() throws Exception{
+        UserEventDTO dto = new UserEventDTO();
+        dto.setAllieId("test");
+        List<UserEventDTO> list = new ArrayList<>();
+        list.add(dto);
+        dto.setEventReceivedTimestamp("blah");
+        given(this.service.selectEvents("test", "blah"))
+                .willReturn(list);
+        this.mvc.perform(get("/allie-data/v1/user/test/events?received_date=blah")
+                .header("x-allie-correlation-id", "corr-id")
+                .header("x-allie-request-id", "req-id"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$[0].allieId", is("test")))
+                    .andExpect(jsonPath("$[0].eventReceivedTimestamp", is("blah")));
+
+    }
+
+    @Test
+    public void testGetUserReturns404() throws Exception{
+        given(this.service.selectEvents("test", "blah"))
+                .willThrow(new MissingResourceException("", "", ""));
+        this.mvc.perform(get("/allie-data/v1/user/test/events?received_date=blah")
+                .header("x-allie-correlation-id", "corr-id")
+                .header("x-allie-request-id", "req-id"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetUserReturns400() throws Exception{
+        given(this.service.selectEvents("test", "blah"))
+                .willThrow(new IllegalArgumentException());
+        this.mvc.perform(get("/allie-data/v1/user/test/events?received_date=blah")
+                .header("x-allie-correlation-id", "corr-id")
+                .header("x-allie-request-id", "req-id"))
                 .andExpect(status().isBadRequest());
     }
 }
