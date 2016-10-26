@@ -89,6 +89,7 @@ public class UserEventService {
             }
             return toReturn;
         } else {
+            logger.debug("No user events found for allieId " + allieId + " at date " + tempDate.toString(ISODateTimeFormat.date()));
             throw new MissingResourceException("No user events found for allieId " + allieId + " at date " + tempDate.toString(ISODateTimeFormat.date()), UserEvent.class.getName(), allieId);
         }
     }

@@ -61,7 +61,7 @@ public class UserEventController {
             @ApiResponse(code = 404, message = "No events found for the given allieId and date"),
             @ApiResponse(code = 400, message = "Required allieId was null or empty")
     })
-    @RequestMapping(value = "user/{allieId}/events", method = RequestMethod.GET)
+    @RequestMapping(value = "users/{allieId}/events", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public List<UserEventDTO> getUserEvent(@PathVariable String allieId,
                                            @RequestParam(name = "received_date", defaultValue = "") String receivedDate,

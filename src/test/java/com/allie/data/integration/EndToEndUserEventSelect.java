@@ -70,7 +70,7 @@ public class EndToEndUserEventSelect {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<List<UserEventDTO>> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<UserEventDTO[]> resp = this.testRestTemplate.exchange("/allie-data/v1/user/id0/events?received_date=2020-10-20", HttpMethod.GET, entity, UserEventDTO[].class);
+        ResponseEntity<UserEventDTO[]> resp = this.testRestTemplate.exchange("/allie-data/v1/users/id0/events?received_date=2020-10-20", HttpMethod.GET, entity, UserEventDTO[].class);
 
         UserEventDTO[] eventDTOs = resp.getBody();
         assertThat(eventDTOs.length, equalTo(5));
@@ -87,7 +87,7 @@ public class EndToEndUserEventSelect {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<List<UserEventDTO>> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/user/ /events?received_date=2020-10-20", HttpMethod.GET, entity, Object.class);
+        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users/ /events?received_date=2020-10-20", HttpMethod.GET, entity, Object.class);
 
         assertThat(resp.getStatusCode().value(), equalTo(400));
 
@@ -102,7 +102,7 @@ public class EndToEndUserEventSelect {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<List<UserEventDTO>> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/user/notarealid/events?received_date=2020-10-20", HttpMethod.GET, entity, Object.class);
+        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users/notarealid/events?received_date=2020-10-20", HttpMethod.GET, entity, Object.class);
 
         assertThat(resp.getStatusCode().value(), equalTo(404));
 
