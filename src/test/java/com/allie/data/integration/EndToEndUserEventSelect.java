@@ -74,7 +74,7 @@ public class EndToEndUserEventSelect {
 
         UserEventDTO[] eventDTOs = resp.getBody();
         assertThat(eventDTOs.length, equalTo(5));
-        assertThat(eventDTOs[3], equalTo("id0"));
+        assertThat(eventDTOs[3].getAllieId(), equalTo("id0"));
 
     }
 }
