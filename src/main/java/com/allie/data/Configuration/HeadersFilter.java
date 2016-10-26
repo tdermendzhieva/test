@@ -27,16 +27,19 @@ public class HeadersFilter implements Filter {
         //if no headers reject
         //"x-allie-correlation-id : 354643a2sdf56465asdf"
         //"x-allie-request-id : 42345a3s5d4ffwaertfg2"
-
-        String corrId = ((HttpServletRequest) request).getHeader("x-allie-correlation-id");
-        String reqId = ((HttpServletRequest) request).getHeader("x-allie-request-id");
-        if(corrId != null && !corrId.isEmpty() && reqId != null && !reqId.isEmpty()) {
-            MDC.put("correlation-id", corrId);
-            MDC.put("request-id", reqId);
-            chain.doFilter(request, response);
-        } else {
-            logger.info("Bad request: invalid headers: x-allie-correlation-id:" + corrId + " x-allie-request-id:" + reqId);
-            ((HttpServletResponse) response).sendError(400, "Missing Headers");
+        try {
+            String corrId = ((HttpServletRequest) request).getHeader("x-allie-correlation-id");
+            String reqId = ((HttpServletRequest) request).getHeader("x-allie-request-id");
+            if (corrId != null && !corrId.isEmpty() && reqId != null && !reqId.isEmpty()) {
+                MDC.put("correlation-id", corrId);
+                MDC.put("request-id", reqId);
+                chain.doFilter(request, response);
+            } else {
+                logger.info("Bad request: invalid headers: x-allie-correlation-id:" + corrId + " x-allie-request-id:" + reqId);
+                ((HttpServletResponse) response).sendError(400, "Missing Headers");
+            }
+        } finally {
+            MDC.clear();
         }
     }
 
