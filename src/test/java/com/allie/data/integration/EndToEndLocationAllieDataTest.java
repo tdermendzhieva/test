@@ -57,8 +57,11 @@ public class EndToEndLocationAllieDataTest {
             //make sure we pass a valid date
             //would use "0" + i but 00 isn't date
             String string = "1" + i;
+            Location location = new Location();
+            location.setLongitude(i*10);
+            location.setLatitude(i-50);
             userLocationDTO = new UserLocationDTO("2010-10-" + string + "T00:00:00.000Z",
-                    new Location(i * 10, i - 50), "test" + i);
+                    location, "test" + i);
             userLocationDTOs.add(userLocationDTO);
         }
     }

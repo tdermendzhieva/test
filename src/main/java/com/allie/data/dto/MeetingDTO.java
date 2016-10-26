@@ -12,6 +12,11 @@ public class MeetingDTO {
     public String getDateTime() {return this.dateTime;}
     public void setDateTime(String dateTime) {this.dateTime = dateTime;}
 
+    /**
+     * Generated equals method to compare the sub properties instead of property references
+     * @param o object to compare
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -23,6 +28,10 @@ public class MeetingDTO {
 
     }
 
+    /**
+     * Generated hashCode method to use sub properties instead of property references
+     * @return
+     */
     @Override
     public int hashCode() {
         return getDateTime() != null ? getDateTime().hashCode() : 0;
