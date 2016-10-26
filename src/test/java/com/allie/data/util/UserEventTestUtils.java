@@ -44,6 +44,7 @@ public class UserEventTestUtils {
         UserEventDTO userEventDTO = new UserEventDTO();
         String json = "{\"test\" : 1}";
         Map jsonMap = mapper.readValue(json, HashMap.class);
+        userEventDTO.setAllieId("ALLIEID");
         userEventDTO.setNeuraJson(jsonMap);
         return userEventDTO;
     }
@@ -55,7 +56,7 @@ public class UserEventTestUtils {
     }
     public static UserEvent createEvent() throws IOException {
         UserEvent userEvent = new UserEvent();
-        userEvent.setEventReceivedTimestamp(new DateTime().toString());
+        userEvent.setEventReceivedTimestamp(new DateTime());
         userEvent.setAllieId("ALLIEID");
         String json = "{\"test\" : 1}";
         Map jsonMap = mapper.readValue(json, HashMap.class);

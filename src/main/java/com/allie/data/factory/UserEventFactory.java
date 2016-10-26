@@ -3,6 +3,7 @@ package com.allie.data.factory;
 import com.allie.data.dto.UserEventDTO;
 import com.allie.data.jpa.model.UserEvent;
 import com.mongodb.BasicDBObject;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +15,7 @@ public class UserEventFactory {
     public UserEvent createUserEvent(UserEventDTO userEventDTO) {
         UserEvent userEvent = new UserEvent();
         userEvent.setAllieId(userEventDTO.getAllieId());
-        userEvent.setEventReceivedTimestamp(userEventDTO.getEventReceivedTimestamp());
+        userEvent.setEventReceivedTimestamp(new DateTime(userEventDTO.getEventReceivedTimestamp()));
         if(userEventDTO.getNeuraJson() != null) {
             userEvent.setNeuraJson(new BasicDBObject(userEventDTO.getNeuraJson()));
         }
