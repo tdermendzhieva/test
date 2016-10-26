@@ -15,7 +15,11 @@ public class UserEventFactory {
     public UserEvent createUserEvent(UserEventDTO userEventDTO) {
         UserEvent userEvent = new UserEvent();
         userEvent.setAllieId(userEventDTO.getAllieId());
-        userEvent.setEventReceivedTimestamp(new DateTime(userEventDTO.getEventReceivedTimestamp()));
+        if(userEventDTO.getEventReceivedTimestamp() == null){
+            userEvent.setEventReceivedTimestamp(new DateTime());
+        }else {
+            userEvent.setEventReceivedTimestamp(new DateTime(userEventDTO.getEventReceivedTimestamp()));
+        }
         if(userEventDTO.getNeuraJson() != null) {
             userEvent.setNeuraJson(new BasicDBObject(userEventDTO.getNeuraJson()));
         }
