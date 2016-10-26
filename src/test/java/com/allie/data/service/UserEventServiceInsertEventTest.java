@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Created by andrew.larsen on 10/25/2016.
  */
-public class UserEventServiceTest {
+public class UserEventServiceInsertEventTest {
 
     private UserEventFactory factory;
     private UserEventRepository repository;
@@ -147,4 +147,5 @@ public class UserEventServiceTest {
             fail("threw incorrect exception");
         }
     }
+
 }

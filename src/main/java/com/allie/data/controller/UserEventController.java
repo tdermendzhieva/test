@@ -23,6 +23,7 @@ public class UserEventController {
 
     @Autowired
     UserEventService service;
+
     @ApiOperation(value = "Persistence service call to store an Allie User Event",
             notes = "The service will asynchronously store all data in backend persistence structure.  If the request successfully reaches the service, a 202 (accepted) HttpStatus will " +
                     "be returned")
@@ -42,7 +43,9 @@ public class UserEventController {
     @ApiOperation(value = "Persistence service call to retrieve Allie User Events",
             notes = "The service will get all Allie User Events for a given user on a given day (defaults to today)")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The events were successfully retrieved")
+            @ApiResponse(code = 200, message = "The events were successfully retrieved"),
+            @ApiResponse(code = 404, message = "No events found for the given allieId and date"),
+            @ApiResponse(code = 400, message = "Required allieId was null or empty")
     })
     @RequestMapping(value = "user/{allieId}/events", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)

@@ -1,6 +1,8 @@
-package com.allie.data.repository;
+package com.allie.data.integration;
 
+import com.allie.data.dto.UserEventDTO;
 import com.allie.data.jpa.model.UserEvent;
+import com.allie.data.repository.UserEventRepository;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -8,24 +10,30 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 /**
- * Created by jacob.headlee on 10/25/2016.
+ * Created by jacob.headlee on 10/26/2016.
  */
+
+
 @ActiveProfiles("DEVTEST")
 @RunWith(SpringRunner.class)
-@SpringBootTest
-public class UserEventRepositoryTest {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class EndToEndUserEventSelect {
+    @Autowired
+    TestRestTemplate testRestTemplate;
+
     @Autowired
     MongoTemplate template;
 
@@ -33,7 +41,7 @@ public class UserEventRepositoryTest {
     UserEventRepository repository;
 
     @After
-    public void dropDB(){
+    public void dropDB() {
         //Verify that we have the right db
         assertThat(template.getDb().getName(), equalTo("TEST"));
         //Drop the test db
@@ -41,7 +49,7 @@ public class UserEventRepositoryTest {
     }
 
     @Before
-    public void setUpDB(){
+    public void setUp() {
         assertThat(template.getDb().getName(), equalTo("TEST"));
         UserEvent event;
         for(int i = 0; i<20; i++) {
@@ -51,18 +59,22 @@ public class UserEventRepositoryTest {
             event.setAllieId("id"+ i%2);
             repository.insert(event);
         }
-
     }
 
     @Test
-    public void testFindUserEventsFindsTheRightEvents() {
-        List<UserEvent> events = repository.findUserEvents("id0", new DateTime("2020-10-20"), new DateTime("2020-10-21"));
-        assertThat(events.size(), equalTo(5));
-        for(UserEvent event : events) {
-            assertThat(event.getAllieId(), equalTo("id0"));
-            assertThat(event.getEventReceivedTimestamp(), equalTo(new DateTime("2020-10-20T12:00:00.000Z")));
-        }
+    public void testGetUserEvents() {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<List<UserEventDTO>> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<UserEventDTO[]> resp = this.testRestTemplate.exchange("/allie-data/v1/user/id0/events?received_date=2020-10-20", HttpMethod.GET, entity, UserEventDTO[].class);
+
+        UserEventDTO[] eventDTOs = resp.getBody();
+        assertThat(eventDTOs.length, equalTo(5));
+        assertThat(eventDTOs[3], equalTo("id0"));
 
     }
-
 }

@@ -6,11 +6,8 @@ import com.allie.data.jpa.model.UserEvent;
 import com.allie.data.repository.UserEventRepository;
 import com.mongodb.MongoException;
 import org.joda.time.DateTime;
-import org.joda.time.IllegalFieldValueException;
-import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -57,6 +54,10 @@ public class UserEventService {
     }
 
     public List<UserEventDTO> selectEvents(String allieId, String receivedDate) {
+        if(allieId == null || allieId.trim().isEmpty()) {
+            logger.debug("allieId null or empty, throwing IllegalArgumentException");
+            throw new IllegalArgumentException("Get user events requires an allieId");
+        }
         DateTime tempDate;
         DateTime startDate;
         DateTime endDate;
@@ -67,11 +68,12 @@ public class UserEventService {
             tempDate = new DateTime();
         }
         //Make sure we're just looking at a date not a specific time
-        startDate = new DateTime().withDate(tempDate.getYear(), tempDate.getMonthOfYear(), tempDate.getDayOfMonth());
-        endDate = new DateTime().withDate(tempDate.getYear(), tempDate.getMonthOfYear(), tempDate.getDayOfYear() + 1);
+        startDate = new DateTime(tempDate).withTimeAtStartOfDay();
+        endDate = new DateTime(tempDate.plusDays(1)).withTimeAtStartOfDay();
 
         List<UserEvent> userEvents = repository.findUserEvents(allieId, startDate, endDate);
 
+        //Transform the UserEvents into returnable DTOs
         List<UserEventDTO> toReturn = new ArrayList<>();
         for(UserEvent userEvent : userEvents) {
             toReturn.add(factory.createUserEventDTO(userEvent));

@@ -55,4 +55,21 @@ public class UserEventFactoryTest {
 
     }
 
+    @Test
+    public void testCreateUserEventDTOAllieId() throws Exception {
+        UserEvent userEvent = new UserEvent();
+        userEvent.setAllieId("test");
+
+        UserEventDTO userEventDTO = factory.createUserEventDTO(userEvent);
+        assertThat(userEventDTO.getAllieId()).isEqualTo("test");
+    }
+
+    @Test
+    public void testCreateUserEventDTOEventReceivedTimestamp() throws Exception{
+        UserEvent userEvent = new UserEvent();
+        userEvent.setEventReceivedTimestamp(new DateTime("2016-10-26T10:53:12.111Z"));
+
+        UserEventDTO userEventDTO = factory.createUserEventDTO(userEvent);
+        assertThat(userEventDTO.getEventReceivedTimestamp()).isEqualTo(new DateTime("2016-10-26T10:53:12.111Z").toString());
+    }
 }

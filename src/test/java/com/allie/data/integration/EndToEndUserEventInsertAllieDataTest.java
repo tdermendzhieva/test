@@ -31,7 +31,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 @ActiveProfiles("DEVTEST")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class EndToEndUserEventDataTest {
+public class EndToEndUserEventInsertAllieDataTest {
     @Autowired
     TestRestTemplate testRestTemplate;
 
