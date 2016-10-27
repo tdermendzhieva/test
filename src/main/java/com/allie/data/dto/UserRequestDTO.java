@@ -12,6 +12,7 @@ public class UserRequestDTO {
     public UserRequestDTO(){}
 
     public String allieId;
+    public String alliePhoneNumber;
     public String firstName;
     public String lastName;
     public String pushToken;
@@ -24,7 +25,10 @@ public class UserRequestDTO {
     public String getAllieId() {return allieId;}
     public void setAllieId(String allieId) {this.allieId = allieId;}
 
-    public String getFirstName() {return firstName;}
+    public String getAlliePhoneNumber() {return alliePhoneNumber;}
+	public void setAlliePhoneNumber(String alliePhoneNumber) {this.alliePhoneNumber = alliePhoneNumber;}
+	
+	public String getFirstName() {return firstName;}
     public void setFirstName(String firstName) {this.firstName = firstName;}
 
     public String getLastName() {return lastName;}
@@ -48,70 +52,90 @@ public class UserRequestDTO {
     public String getNickname() {return nickname;}
     public void setNickname(String nickname) {this.nickname = nickname;}
 
-    /**
-     * Generated equals method to compare the sub properties instead of property references
-     * @param o object to compare
-     * @return
-     */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserRequestDTO other = (UserRequestDTO) obj;
+		if (addresses == null) {
+			if (other.addresses != null)
+				return false;
+		} else if (!addresses.equals(other.addresses))
+			return false;
+		if (allieId == null) {
+			if (other.allieId != null)
+				return false;
+		} else if (!allieId.equals(other.allieId))
+			return false;
+		if (alliePhoneNumber == null) {
+			if (other.alliePhoneNumber != null)
+				return false;
+		} else if (!alliePhoneNumber.equals(other.alliePhoneNumber))
+			return false;
+		if (enrolledSkills == null) {
+			if (other.enrolledSkills != null)
+				return false;
+		} else if (!enrolledSkills.equals(other.enrolledSkills))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (meetings == null) {
+			if (other.meetings != null)
+				return false;
+		} else if (!meetings.equals(other.meetings))
+			return false;
+		if (nickname == null) {
+			if (other.nickname != null)
+				return false;
+		} else if (!nickname.equals(other.nickname))
+			return false;
+		if (norms == null) {
+			if (other.norms != null)
+				return false;
+		} else if (!norms.equals(other.norms))
+			return false;
+		if (pushToken == null) {
+			if (other.pushToken != null)
+				return false;
+		} else if (!pushToken.equals(other.pushToken))
+			return false;
+		return true;
+	}
 
-        UserRequestDTO userRequestDTO = (UserRequestDTO) o;
-
-        if (getAllieId() != null ? !getAllieId().equals(userRequestDTO.getAllieId()) : userRequestDTO.getAllieId() != null) return false;
-        if (getFirstName() != null ? !getFirstName().equals(userRequestDTO.getFirstName()) : userRequestDTO.getFirstName() != null)
-            return false;
-        if (getLastName() != null ? !getLastName().equals(userRequestDTO.getLastName()) : userRequestDTO.getLastName() != null)
-            return false;
-        if (getPushToken() != null ? !getPushToken().equals(userRequestDTO.getPushToken()) : userRequestDTO.getPushToken() != null)
-            return false;
-        if (getAddresses() != null ? !getAddresses().equals(userRequestDTO.getAddresses()) : userRequestDTO.getAddresses() != null)
-            return false;
-        if (getMeetings() != null ? !getMeetings().equals(userRequestDTO.getMeetings()) : userRequestDTO.getMeetings() != null)
-            return false;
-        if (getNorms() != null ? !getNorms().equals(userRequestDTO.getNorms()) : userRequestDTO.getNorms() != null) return false;
-        if (getEnrolledSkills() != null ? !getEnrolledSkills().equals(userRequestDTO.getEnrolledSkills()) : userRequestDTO.getEnrolledSkills() != null)
-            return false;
-        return getNickname() != null ? getNickname().equals(userRequestDTO.getNickname()) : userRequestDTO.getNickname() == null;
-
-    }
-
-    /**
-     * Generated hashCode method to use sub properties instead of property references
-     * @return
-     */
     @Override
-    public int hashCode() {
-        int result = getAllieId().hashCode();
-        result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
-        result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
-        result = 31 * result + (getPushToken() != null ? getPushToken().hashCode() : 0);
-        result = 31 * result + (getAddresses() != null ? getAddresses().hashCode() : 0);
-        result = 31 * result + (getMeetings() != null ? getMeetings().hashCode() : 0);
-        result = 31 * result + (getNorms() != null ? getNorms().hashCode() : 0);
-        result = 31 * result + (getEnrolledSkills() != null ? getEnrolledSkills().hashCode() : 0);
-        result = 31 * result + (getNickname() != null ? getNickname().hashCode() : 0);
-        return result;
-    }
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((addresses == null) ? 0 : addresses.hashCode());
+		result = prime * result + ((allieId == null) ? 0 : allieId.hashCode());
+		result = prime * result + ((alliePhoneNumber == null) ? 0 : alliePhoneNumber.hashCode());
+		result = prime * result + ((enrolledSkills == null) ? 0 : enrolledSkills.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((meetings == null) ? 0 : meetings.hashCode());
+		result = prime * result + ((nickname == null) ? 0 : nickname.hashCode());
+		result = prime * result + ((norms == null) ? 0 : norms.hashCode());
+		result = prime * result + ((pushToken == null) ? 0 : pushToken.hashCode());
+		return result;
+	}
 
-    /**
-     * toString with property values
-     * @return
-     */
     @Override
-    public String toString() {
-        return "UserRequestDTO{" +
-                "allieId='" + allieId + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", pushToken='" + pushToken + '\'' +
-                ", addresses=" + addresses +
-                ", meetings=" + meetings +
-                ", norms=" + norms +
-                ", enrolledSkills=" + enrolledSkills +
-                ", nickname='" + nickname + '\'' +
-                '}';
-    }
+	public String toString() {
+		return "UserRequestDTO [allieId=" + allieId + ", alliePhoneNumber=" + alliePhoneNumber + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", pushToken=" + pushToken + ", addresses=" + addresses
+				+ ", meetings=" + meetings + ", norms=" + norms + ", enrolledSkills=" + enrolledSkills + ", nickname="
+				+ nickname + "]";
+	}
 }

@@ -73,6 +73,7 @@ public class EndToEndUserAllieDataTest {
 
         userRequestDTO = new UserRequestDTO();
         userRequestDTO.setAllieId("allieId");
+        userRequestDTO.setAlliePhoneNumber("alliePhoneNumber");
         userRequestDTO.setPushToken("pushToken");
         userRequestDTO.setNorms(norms);
         userRequestDTO.setAddresses(addresses);

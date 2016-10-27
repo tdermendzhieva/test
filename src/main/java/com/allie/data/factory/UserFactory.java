@@ -19,6 +19,7 @@ public class UserFactory {
     public User createUser(UserRequestDTO userRequestDTO) {
         User user = new User();
         user.setAllieId(userRequestDTO.getAllieId());
+        user.setAlliePhoneNumber(userRequestDTO.getAlliePhoneNumber());
         user.setAddresses(userRequestDTO.getAddresses());
         user.setEnrolledSkills(userRequestDTO.getEnrolledSkills());
         user.setFirstName(userRequestDTO.getFirstName());
@@ -58,6 +59,7 @@ public class UserFactory {
         UserResponseDTO userResponseDTO = new UserResponseDTO();
 
         userResponseDTO.setAllieId(user.getAllieId());
+        userResponseDTO.setAlliePhoneNumber(user.getAlliePhoneNumber());
         userResponseDTO.setDbId(user.getDbId());
         userResponseDTO.setPushToken(user.getPushToken());
 

@@ -83,6 +83,7 @@ public class UserServiceTest {
 
         user.setAddresses(addresses);
         user.setAllieId("allieId");
+        user.setAlliePhoneNumber("alliePhoneNumber");
         user.setUpdatedTimeStamp(new DateTime());
         user.setCreatedTimeStamp(new DateTime());
         user.setNorms(norms);
@@ -94,6 +95,7 @@ public class UserServiceTest {
 
         userResponseDTO.setAddresses(addresses);
         userResponseDTO.setAllieId("allieId");
+        userResponseDTO.setAlliePhoneNumber("alliePhoneNumber");
         userResponseDTO.setUpdatedTimeStamp(new DateTime().toString());
         userResponseDTO.setCreatedTimeStamp(new DateTime().toString());
         userResponseDTO.setNorms(norms);

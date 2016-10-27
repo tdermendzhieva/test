@@ -22,6 +22,7 @@ public class User {
     @Indexed(unique = true)
     public String allieId;
 
+    public String alliePhoneNumber;
     public String firstName;
     public String lastName;
     public String pushToken;
@@ -39,7 +40,10 @@ public class User {
     public String getAllieId() {return this.allieId;}
     public void setAllieId(String allieId) {this.allieId = allieId;}
 
-    public String getFirstName() {return this.firstName;}
+    public String getAlliePhoneNumber() {return alliePhoneNumber;}
+	public void setAlliePhoneNumber(String alliePhoneNumber) {this.alliePhoneNumber = alliePhoneNumber;}
+	
+	public String getFirstName() {return this.firstName;}
     public void setFirstName(String firstName) {this.firstName = firstName;}
 
     public String getLastName() {return this.lastName;}

@@ -1,10 +1,9 @@
 package com.allie.data.dto;
 
-import com.allie.data.jpa.model.Address;
-import com.allie.data.jpa.model.Meeting;
-
 import java.util.List;
 import java.util.Map;
+
+import com.allie.data.jpa.model.Address;
 
 /**
  * Created by jacob.headlee on 10/24/2016.
@@ -16,6 +15,7 @@ public class UserResponseDTO {
 
     public String allieId;
 
+    public String alliePhoneNumber;
     public String firstName;
     public String lastName;
     public String pushToken;
@@ -33,7 +33,10 @@ public class UserResponseDTO {
     public String getAllieId() {return this.allieId;}
     public void setAllieId(String allieId) {this.allieId = allieId;}
 
-    public String getFirstName() {return this.firstName;}
+    public String getAlliePhoneNumber() {return alliePhoneNumber;}
+	public void setAlliePhoneNumber(String alliePhoneNumber) {this.alliePhoneNumber = alliePhoneNumber;}
+	
+	public String getFirstName() {return this.firstName;}
     public void setFirstName(String firstName) {this.firstName = firstName;}
 
     public String getLastName() {return this.lastName;}

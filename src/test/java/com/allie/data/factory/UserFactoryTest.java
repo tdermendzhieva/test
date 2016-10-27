@@ -64,6 +64,8 @@ public class UserFactoryTest {
         user.setAddresses(addresses);
         dto.setAllieId("allieId");
         user.setAllieId("allieId");
+        dto.setAlliePhoneNumber("alliePhoneNumber");
+        user.setAlliePhoneNumber("alliePhoneNumber");
         dto.setPushToken("pushToken");
         user.setPushToken("pushToken");
         dto.setNorms(norms);
@@ -88,6 +90,12 @@ public class UserFactoryTest {
         User user = uf.createUser(dto);
 
         assertThat(user.getAllieId(), equalTo("allieId"));
+    }
+    @Test
+    public void testCreateUserAlliePhoneNumber(){
+        User user = uf.createUser(dto);
+
+        assertThat(user.getAlliePhoneNumber(), equalTo("alliePhoneNumber"));
     }
     @Test
     public void testCreateUserFirstName(){
@@ -168,6 +176,12 @@ public class UserFactoryTest {
         UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
 
         assertThat(userResponseDTO.getAllieId(), equalTo("allieId"));
+    }
+    @Test
+    public void testCreateUserResponseDTOAlliePhoneNumber(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getAlliePhoneNumber(), equalTo("alliePhoneNumber"));
     }
     @Test
     public void testCreateUserResponseDTOFirstName(){
