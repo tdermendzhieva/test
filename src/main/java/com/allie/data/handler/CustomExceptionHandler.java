@@ -2,7 +2,6 @@ package com.allie.data.handler;
 
 import com.allie.data.dto.Error;
 import com.mongodb.MongoException;
-import com.mongodb.MongoSocketReadTimeoutException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -73,16 +72,5 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
 
         return new ResponseEntity<Error>(error, HttpStatus.SERVICE_UNAVAILABLE);
     }
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE) //503
-    @ExceptionHandler(MongoSocketReadTimeoutException.class)
-    public ResponseEntity<com.allie.data.dto.Error> handleMongoSocketException(Exception e) {
-        Error error = new Error();
-        error.setError(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase());
-        error.setMessage(e.getMessage());
-        error.setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
-        error.setTimestamp(System.currentTimeMillis());
-        error.setPath("/");
 
-        return new ResponseEntity<Error>(error, HttpStatus.SERVICE_UNAVAILABLE);
-    }
 }
