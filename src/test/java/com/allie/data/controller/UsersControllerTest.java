@@ -156,6 +156,9 @@ public class UsersControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-
+    @Test
+    public void testGetAllAllieIds() throws Exception{
+        given(this.service.getAllUserIds())
+    }
 
 }

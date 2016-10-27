@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 
 /**
@@ -29,8 +31,13 @@ public class UserService {
     public UserResponseDTO insertUser(UserRequestDTO userRequestDTO) {
         User user = factory.createUser(userRequestDTO);
         if(user.getAllieId() != null) {
-            User tempUser = repository.insert(user);
-            return factory.createUserResponseDTO(tempUser);
+            try {
+                User tempUser = repository.insert(user);
+                return factory.createUserResponseDTO(tempUser);
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                throw e;
+            }
         } else {
             logger.error("User missing required field, received:" + userRequestDTO);
             throw new IllegalArgumentException("User must have an allieId");
@@ -40,7 +47,12 @@ public class UserService {
     public UserResponseDTO selectUser(String allieId) {
         User tempUser;
         if(allieId != null && !allieId.trim().isEmpty()) {
-            tempUser = repository.findByAllieId(allieId);
+            try {
+                tempUser = repository.findByAllieId(allieId);
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                throw e;
+            }
         } else {
             logger.error("Get user requires an allieId");
             throw new IllegalArgumentException("Get user requires an allieId");
@@ -49,6 +61,25 @@ public class UserService {
             return factory.createUserResponseDTO(tempUser);
         } else {
             throw new MissingResourceException("No user found for allieId " + allieId, User.class.getName(), allieId);
+        }
+    }
+
+    public List<?> getAllUserIds(String format) {
+        if(format.toLowerCase().equals("list")) {
+            try {
+                List<User> users = repository.findAllAllieIds("id");
+                List<String> ids = new ArrayList<>();
+                for(User user : users) {
+                    ids.add(user.getAllieId());
+                }
+                return ids;
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                throw e;
+            }
+        } else {
+            logger.error("get all users requires a valid format");
+            throw new IllegalArgumentException("Get all users requires a valid format");
         }
     }
 }

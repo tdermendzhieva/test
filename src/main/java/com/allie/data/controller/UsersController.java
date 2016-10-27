@@ -14,11 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by jacob.headlee on 10/20/2016.
  */
 @RestController
-@RequestMapping(value = "allie-data/v1")
+@RequestMapping(value = "/allie-data/v1")
 @Api(value = "users", description = "Endpoints for users")
 public class UsersController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -76,4 +79,11 @@ public class UsersController {
         return service.selectUser(allieId);
     }
 
+
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    public List<?> getAllUserIds(@RequestParam(value = "format") String format,
+                                                      @RequestHeader(value="x-allie-correlation-id") String correlationId,
+                                                      @RequestHeader(value="x-allie-request-id") String requestId) {
+        return service.getAllUserIds(format);
+    }
 }
