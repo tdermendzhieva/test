@@ -42,12 +42,14 @@ public class UserFactory {
 
     private Meeting createMeeting(MeetingDTO meetingDTO) {
         Meeting meeting = new Meeting();
+        meeting.setTitle(meetingDTO.getTitle());
         meeting.setDateTime(new DateTime(meetingDTO.getDateTime()));
         return meeting;
     }
 
     private MeetingDTO createMeetingDTO(Meeting meeting) {
         MeetingDTO meetingDTO = new MeetingDTO();
+        meetingDTO.setTitle(meeting.getTitle());
         meetingDTO.setDateTime(meeting.getDateTime().toString());
         return meetingDTO;
     }
