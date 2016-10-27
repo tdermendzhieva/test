@@ -5,6 +5,8 @@ import com.allie.data.jpa.model.UserEvent;
 import com.allie.data.service.UserEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoException;
+import com.mongodb.MongoSocketException;
+import com.mongodb.ServerAddress;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -110,5 +112,15 @@ public class UserEventControllerTest {
                 .header("x-allie-correlation-id", "corr-id")
                 .header("x-allie-request-id", "req-id"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetUserReturns503OnSocketTimeout() throws Exception{
+        given(this.service.selectEvents("test", "blah"))
+                .willThrow(new MongoSocketException("TEST", new ServerAddress()));
+        this.mvc.perform(get("/allie-data/v1/users/test/events?received_date=blah")
+                .header("x-allie-correlation-id", "corr-id")
+                .header("x-allie-request-id", "req-id"))
+                .andExpect(status().isServiceUnavailable());
     }
 }

@@ -44,7 +44,6 @@ public class UserEventServiceInsertEventTest {
     public void testInsertEventOk() throws Exception {
         given(factory.createUserEvent(userEventDTO)).willReturn(userEvent);
         given(repository.insert(userEvent)).willReturn(returnEvent);
-
         assertThat(service.insertEvent(userEventDTO)).isEqualTo(returnEvent);
 
     }
