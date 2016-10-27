@@ -3,7 +3,7 @@ import os
 
 print 'hello'
 
-fo = open('/var/allie-data/config/application.properties','rw+')
+fo = open('/var/' +  os.environ['APPLICATION_NAME'] + '/config/application.properties','rw+')
 
 print "file name ", fo.name
 
