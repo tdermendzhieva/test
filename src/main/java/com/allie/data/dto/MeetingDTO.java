@@ -1,39 +1,53 @@
 package com.allie.data.dto;
 
-import java.util.Map;
-
 /**
  * Created by jacob.headlee on 10/20/2016.
  */
 public class MeetingDTO {
     public MeetingDTO(){}
+    public String title;
     public String dateTime;
 
-    public String getDateTime() {return this.dateTime;}
+    
+    public String getTitle() {return title;}
+	public void setTitle(String title) {this.title = title;}
+	public String getDateTime() {return this.dateTime;}
     public void setDateTime(String dateTime) {this.dateTime = dateTime;}
 
-    /**
-     * Generated equals method to compare the sub properties instead of property references
-     * @param o object to compare
-     * @return
-     */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MeetingDTO other = (MeetingDTO) obj;
+		if (dateTime == null) {
+			if (other.dateTime != null)
+				return false;
+		} else if (!dateTime.equals(other.dateTime))
+			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
+		return true;
+	}
 
-        MeetingDTO that = (MeetingDTO) o;
-
-        return getDateTime() != null ? getDateTime().equals(that.getDateTime()) : that.getDateTime() == null;
-
-    }
-
-    /**
-     * Generated hashCode method to use sub properties instead of property references
-     * @return
-     */
     @Override
-    public int hashCode() {
-        return getDateTime() != null ? getDateTime().hashCode() : 0;
-    }
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		return result;
+	}
+    
+	@Override
+	public String toString() {
+		return "MeetingDTO [title=" + title + ", dateTime=" + dateTime + "]";
+	}
+	
 }

@@ -46,8 +46,10 @@ public class UserFactoryTest {
             address.setState("state" + i);
 
             Meeting meeting = new Meeting();
+            meeting.setTitle("Standup");
             meeting.setDateTime(new DateTime("2016-10-2" + i + "T10:10:10.111Z"));
             MeetingDTO meetingDTO = new MeetingDTO();
+            meetingDTO.setTitle("Standup");
             meetingDTO.setDateTime("2016-10-2" + i + "T10:10:10.111Z");
 
             addresses.put("address" + i, address);
@@ -117,6 +119,7 @@ public class UserFactoryTest {
         User user = uf.createUser(dto);
 
         assertThat(user.getMeetings().size(), equalTo(10));
+        assertThat(user.getMeetings().get("meeting8").getTitle(), equalTo("Standup"));
         assertThat(user.getMeetings().get("meeting8").getDateTime().getDayOfMonth(), equalTo(28));
     }
     @Test
@@ -196,6 +199,7 @@ public class UserFactoryTest {
         UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
 
         assertThat(userResponseDTO.getMeetings().size(), equalTo(10));
+        assertThat(userResponseDTO.getMeetings().get("meeting8").getTitle(), equalTo("Standup"));
         assertThat(new DateTime(userResponseDTO.getMeetings().get("meeting8").getDateTime()).getDayOfMonth(), equalTo(28));
     }
     @Test

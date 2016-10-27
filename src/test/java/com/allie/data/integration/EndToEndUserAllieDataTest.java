@@ -62,6 +62,7 @@ public class EndToEndUserAllieDataTest {
             address.setPostalCode("zip"+i);
             address.setState("state"+i);
 
+            meeting.setTitle("Standup");
             meeting.setDateTime("2010-10-1"+i+"T10:10:10.101Z");
 
             norms.put("norm"+i, "val"+i);

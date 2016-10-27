@@ -1,13 +1,15 @@
 package com.allie.data.service;
 
-import com.allie.data.dto.MeetingDTO;
-import com.allie.data.dto.UserRequestDTO;
-import com.allie.data.dto.UserResponseDTO;
-import com.allie.data.factory.UserFactory;
-import com.allie.data.jpa.model.Address;
-import com.allie.data.jpa.model.Meeting;
-import com.allie.data.jpa.model.User;
-import com.allie.data.repository.UserRepository;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.mockito.BDDMockito.given;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.MissingResourceException;
+
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,12 +19,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.*;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
+import com.allie.data.dto.MeetingDTO;
+import com.allie.data.dto.UserRequestDTO;
+import com.allie.data.dto.UserResponseDTO;
+import com.allie.data.factory.UserFactory;
+import com.allie.data.jpa.model.Address;
+import com.allie.data.jpa.model.Meeting;
+import com.allie.data.jpa.model.User;
+import com.allie.data.repository.UserRepository;
 
 /**
  * Created by jacob.headlee on 10/20/2016.
@@ -63,9 +67,11 @@ public class UserServiceTest {
             address.setAddress1("address" + i);
 
             meetingDTO = new MeetingDTO();
+            meetingDTO.setTitle("Standup");
             meetingDTO.setDateTime("2000-10-1"  + i + "T10:10:10.111Z");
 
             meeting = new Meeting();
+            meeting.setTitle("Standup");
             meeting.setDateTime(new DateTime("2000-10-1"  + i + "T10:10:10.111Z"));
 
             meetingDTOs.put("meeting" +i, meetingDTO);
