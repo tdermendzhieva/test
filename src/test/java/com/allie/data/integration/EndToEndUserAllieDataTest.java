@@ -251,4 +251,59 @@ public class EndToEndUserAllieDataTest {
         assertThat(resp.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
 
     }
+
+    @Test
+    public void testGetAllAllieIds() {
+        UserFactory factory = new UserFactory();
+
+        User user;
+        for(int i = 0; i<10; i++) {
+            userRequestDTO.setAllieId("id" + i);
+            user = factory.createUser(userRequestDTO);
+            repository.insert(user);
+        }
+
+        ArrayList<String> list = new ArrayList<String>();
+        Class clazz = list.getClass();
+
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<Object> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<String[]> resp = this.testRestTemplate.exchange("/allie-data/v1/users/?format=list", HttpMethod.GET, entity, String[].class);
+        String[] ids = resp.getBody();
+        assertThat(resp.getStatusCode(), equalTo(HttpStatus.OK));
+        assertThat(ids.length, equalTo(10));
+        assertThat(ids[4], equalTo("id4"));
+
+    }
+
+    @Test
+    public void testGetAllAllieIdsNoUsersReturns404() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<Object> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users/?format=list", HttpMethod.GET, entity, Object.class);
+        assertThat(resp.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void testGetAllAllieIdsBadFormatReturns400() {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<Object> entity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users/?format=asdf", HttpMethod.GET, entity, Object.class);
+        assertThat(resp.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+    }
 }

@@ -86,7 +86,7 @@ public class UsersController {
             @ApiResponse(code = 404, message = "No users found"),
             @ApiResponse(code = 500, message = "There was an unspecified error")
     })
-    @RequestMapping(value = "/users", method = RequestMethod.GET)
+    @RequestMapping(value = "/users/", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public List<?> getAllUsers(@RequestParam(value = "format") String format,
                                                       @RequestHeader(value="x-allie-correlation-id") String correlationId,
