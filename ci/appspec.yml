@@ -6,13 +6,17 @@ files:
   -
     source: config
     destination: /var/allie-data/config/
-
 hooks:
   ApplicationStop:
       -
         location: deploy_hooks/stop-service.sh
         runas: root
         timeout: 3600
+  BeforeInstall:
+    -
+      location: deploy_hooks/rename-deployable.sh
+      runas: root
+      timeout: 3600
   AfterInstall:
     -
       location: deploy_hooks/set-environment.py

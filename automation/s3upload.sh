@@ -2,7 +2,7 @@
 
 AWS="/usr/local/bin/aws"
 
-APPLICATION_NAME="Allie-Data"
+APPLICATION_NAME="allie-data"
 
 BUCKET_NAME="allstatedeployables"
 FULL_BUCKET="s3://${BUCKET_NAME}/${APPLICATION_NAME}/"

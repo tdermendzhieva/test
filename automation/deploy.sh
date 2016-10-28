@@ -2,7 +2,7 @@
 
 AWS="/usr/local/bin/aws"
 
-APPLICATION_NAME="Allie-Data"
+APPLICATION_NAME="allie-data"
 APPLICATION_ENV=$1
 DEPLOYMENT_GROUP="${APPLICATION_ENV}"
 BUCKET_NAME="allstatedeployables"

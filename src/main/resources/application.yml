@@ -60,7 +60,7 @@ spring:
   profiles : DEVTEST
   data:
     mongodb:
-      uri: mongodb://ec2-52-39-103-175.us-west-2.compute.amazonaws.com:27017/TEST?connectTimeoutMS=10000&socketTimeoutMS=5000
+      uri: mongodb://ec2-52-39-103-175.us-west-2.compute.amazonaws.com:27017/TEST?connectTimeoutMS=10000&socketTimeoutMS=10000
   http:
     encoding:
       charset: UTF-8
