@@ -13,5 +13,5 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findByAllieId(String allieId);
 
     @Query(value="{'allieId': {$ne:null}}", fields="{'allieId': 1, '_id': 0}")
-    List<User> findAllAllieIds(String id);
+    List<User> findAllAllieIds();
 }

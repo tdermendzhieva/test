@@ -64,15 +64,19 @@ public class UserService {
         }
     }
 
-    public List<?> getAllUserIds(String format) {
+    public List<String> getAllUserIds(String format) {
         if(format.toLowerCase().equals("list")) {
             try {
-                List<User> users = repository.findAllAllieIds("id");
+                List<User> users = repository.findAllAllieIds();
                 List<String> ids = new ArrayList<>();
-                for(User user : users) {
-                    ids.add(user.getAllieId());
+                if(users.size() > 0) {
+                    for (User user : users) {
+                        ids.add(user.getAllieId());
+                    }
+                    return ids;
+                } else {
+                    throw new MissingResourceException("No users found", User.class.getName(), "");
                 }
-                return ids;
             } catch (Exception e) {
                 logger.error(e.getMessage());
                 throw e;

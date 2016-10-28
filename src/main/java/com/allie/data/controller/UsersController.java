@@ -2,7 +2,6 @@ package com.allie.data.controller;
 
 import com.allie.data.dto.UserRequestDTO;
 import com.allie.data.dto.UserResponseDTO;
-import com.allie.data.jpa.model.User;
 import com.allie.data.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -79,9 +77,18 @@ public class UsersController {
         return service.selectUser(allieId);
     }
 
-
+    @ApiOperation(value="Persistence service call to retrieve all allieIds",
+            notes="the format value 'list' (case insensitive) will retrieve a list of all Allie Ids, " +
+                    "currently all other values for format will return a 400 (bad request)")
+    @ApiResponses(value = {
+            @ApiResponse(code = 202, message = "The service found the users and is returning them in the requested format"),
+            @ApiResponse(code = 400, message="The requested format is invalid"),
+            @ApiResponse(code = 404, message = "No users found"),
+            @ApiResponse(code = 500, message = "There was an unspecified error")
+    })
     @RequestMapping(value = "/users", method = RequestMethod.GET)
-    public List<?> getAllUserIds(@RequestParam(value = "format") String format,
+    @ResponseStatus(HttpStatus.OK)
+    public List<?> getAllUsers(@RequestParam(value = "format") String format,
                                                       @RequestHeader(value="x-allie-correlation-id") String correlationId,
                                                       @RequestHeader(value="x-allie-request-id") String requestId) {
         return service.getAllUserIds(format);

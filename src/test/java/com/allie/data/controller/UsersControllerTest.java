@@ -6,6 +6,7 @@ import com.allie.data.jpa.model.User;
 import com.allie.data.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,7 +14,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.ResourceAccessException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 
 import static com.allie.data.util.TestUtil.asJsonString;
@@ -158,7 +162,40 @@ public class UsersControllerTest {
 
     @Test
     public void testGetAllAllieIds() throws Exception{
-        given(this.service.getAllUserIds())
+        List<String> list = new ArrayList<>();
+        list.add("id0");
+        given(this.service.getAllUserIds(Mockito.anyString())).willReturn(list);
+
+        this.mvc.perform(get("/allie-data/v1/users/?format=list")
+            .header("x-allie-request-id", "request-id")
+            .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]", is("id0")));
+    }
+
+    @Test
+    public void testGetAllAllieIdsIsBadRequest() throws Exception{
+        List<String> list = new ArrayList<>();
+        list.add("id0");
+        given(this.service.getAllUserIds(Mockito.anyString())).willThrow(new IllegalArgumentException(""));
+
+        this.mvc.perform(get("/allie-data/v1/users/?format=asddfasd")
+                .header("x-allie-request-id", "request-id")
+                .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testGetAllAllieIdsIsNotFound() throws Exception{
+        List<String> list = new ArrayList<>();
+        list.add("id0");
+        given(this.service.getAllUserIds(Mockito.anyString())).willThrow(new MissingResourceException("","",""));
+
+        this.mvc.perform(get("/allie-data/v1/users/?format=list")
+                .header("x-allie-request-id", "request-id")
+                .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isNotFound());
+
     }
 
 }

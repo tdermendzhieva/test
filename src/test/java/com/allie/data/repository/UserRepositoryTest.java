@@ -59,7 +59,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    public void insertDuplicateUsers() {
+    public void testInsertDuplicateUsers() {
         User user = new User();
 
         user.setAllieId("allieId");
@@ -73,6 +73,24 @@ public class UserRepositoryTest {
             return;
         }
         assertThat("shouldn't get this far", false, equalTo(true));
+    }
+
+    @Test
+    public void testGetAllAllieIds() {
+        User user;
+        for(int i = 0; i< 10; i++) {
+            user = new User();
+            user.setAllieId("id"+i);
+            user.setLastName("ln"+i);
+            repository.insert(user);
+        }
+        List<User> users = repository.findAllAllieIds();
+        for(int i = 0; i<10; i++) {
+            user =  users.get(i);
+            assertThat(user.getAllieId(), equalTo("id" + i));
+            assertThat(user.getLastName(), equalTo(null));
+            assertThat(user.getDbId(), equalTo(null));
+        }
     }
 
 }
