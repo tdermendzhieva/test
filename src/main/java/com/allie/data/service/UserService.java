@@ -64,6 +64,12 @@ public class UserService {
         }
     }
 
+    /**
+     * gets all users based on a format, curretly the only suported format is 'list' (case insensitive)
+     * throws exceptions for: invalid format, no users found, db exception
+     * @param format currently must be 'list'
+     * @return
+     */
     public List<String> getAllUserIds(String format) {
         if(format.toLowerCase().equals("list")) {
             try {
