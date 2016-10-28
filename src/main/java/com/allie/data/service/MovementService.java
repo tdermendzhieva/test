@@ -46,7 +46,13 @@ public class MovementService {
             }
         }
         //batch insert
-        List<MovementTelemetry> toReturn = repository.insert(movementTelemetries);
+        List<MovementTelemetry> toReturn;
+        try {
+            toReturn = repository.insert(movementTelemetries);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
         //log then return
         int initialSize = userMovementDTOs.size();
         int finalSize = toReturn.size();

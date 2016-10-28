@@ -47,8 +47,14 @@ public class UserEventService {
             throw new IllegalArgumentException("Missing required field");
 
         }
-        //insert user
-        UserEvent returnEvent = repository.insert(userEvent);
+        UserEvent returnEvent;
+        try {
+            //insert user
+            returnEvent = repository.insert(userEvent);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
         if(returnEvent == null || returnEvent.getId() == null){
             throw new MongoException("Failed to insert record");
         }
@@ -79,7 +85,13 @@ public class UserEventService {
         startDate = new DateTime(tempDate).withTimeAtStartOfDay();
         endDate = new DateTime(tempDate.plusDays(1)).withTimeAtStartOfDay();
 
-        List<UserEvent> userEvents = repository.findUserEvents(allieId, startDate, endDate);
+        List<UserEvent> userEvents;
+        try {
+            userEvents = repository.findUserEvents(allieId, startDate, endDate);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
 
         if(userEvents.size() > 0 ) {
             //Transform the UserEvents into returnable DTOs

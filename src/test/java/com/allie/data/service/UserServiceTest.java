@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 
+import com.mongodb.MongoException;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -173,6 +174,55 @@ public class UserServiceTest {
             service.selectUser("test");
         } catch (Exception e) {
             assertThat(e.getClass(), equalTo(MissingResourceException.class));
+            return;
+        }
+        assertThat("we shouldn't get this far", true, equalTo(false));
+    }
+
+    @Test
+    public void testGetAllUsers() {
+        List<User> users = new ArrayList<>();
+        User user = new User();
+        user.setAllieId("something");
+        users.add(user);
+        given(repository.findAllAllieIds()).willReturn(users);
+        List<String> ids = service.getAllUserIds("list");
+        assertThat(ids.size(), equalTo(1));
+        assertThat(ids.get(0), equalTo("something"));
+    }
+
+    @Test
+    public void testGetAllUsersBadFormat() {
+        try {
+            service.getAllUserIds("blah");
+        } catch (Exception e) {
+            assertThat(e.getClass(), equalTo(IllegalArgumentException.class));
+            return;
+        }
+        assertThat("we shouldn't get this far", true, equalTo(false));
+    }
+
+    @Test
+    public void testGetAllUsersEmpty() {
+        given(repository.findAllAllieIds()).willReturn(new ArrayList<User>());
+
+        try{
+            service.getAllUserIds("list");
+        } catch (Exception e) {
+            assertThat(e.getClass(), equalTo(MissingResourceException.class));
+            return;
+        }
+        assertThat("we shouldn't get this far", true, equalTo(false));
+    }
+
+    @Test
+    public void testGetAllUsersTimeout() {
+        given(repository.findAllAllieIds()).willThrow(new MongoException(""));
+
+        try{
+            service.getAllUserIds("list");
+        } catch (Exception e) {
+            assertThat(e.getClass(), equalTo(MongoException.class));
             return;
         }
         assertThat("we shouldn't get this far", true, equalTo(false));
