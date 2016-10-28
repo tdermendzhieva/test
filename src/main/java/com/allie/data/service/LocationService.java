@@ -47,9 +47,15 @@ public class LocationService {
                 logger.error("User Location missing required field, received:" + userLocation);
             }
         }
-        //batch insert
-        List<LocationTelemetry> toReturn = repository.insert(locationTelemetries);
 
+        List<LocationTelemetry> toReturn;
+        try {
+            //batch insert
+            toReturn = repository.insert(locationTelemetries);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
         //logging
         int initialSize = userLocationDTOs.size();
         int finalSize = toReturn.size();
