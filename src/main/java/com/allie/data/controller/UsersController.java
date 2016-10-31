@@ -112,7 +112,7 @@ public class UsersController {
                     "a 400 (bad request) will be returned, if no user is found for the given allieId a 404 (not found) will be returned")
     @ApiResponses( value = {
             @ApiResponse(code = 200, message = "The service successfully updated the resource"),
-            @ApiResponse(code = 400, message = "No allieId was provided or the request was malformed to the point that no information can be stored"),
+            @ApiResponse(code = 400, message = "No allieId was provided, the allieId in the url didn't match the allieId in the body, or the request was malformed to the point that no information can be stored"),
             @ApiResponse(code = 404, message = "No user found for given allieId"),
             @ApiResponse(code = 500, message = "There was an unspecified error"),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
