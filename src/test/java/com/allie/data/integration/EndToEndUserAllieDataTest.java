@@ -190,7 +190,7 @@ public class EndToEndUserAllieDataTest {
     }
 
     @Test
-    public void testUpdateUser() {
+    public void testUpdateUser200ResponseCode() {
         UserFactory factory = new UserFactory();
         User user = factory.createUser(userRequestDTO);
         repository.insert(user);
@@ -205,11 +205,9 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
         this.testRestTemplate.put("/allie-data/v1/users", entity);
+        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/", HttpMethod.PUT, entity, UserResponseDTO.class);
+        assertThat("return 200 ok", resp.getStatusCode()== HttpStatus.OK);
 
-        List<User> users =  repository.findAll();
-        assertThat(users.size(), equalTo(1));
-        assertThat(users.get(0).getAllieId(), equalTo(userRequestDTO.getAllieId()));
-        assertThat(users.get(0).getLastName(), equalTo(userRequestDTO.getLastName()));
     }
 
     @Test
@@ -235,6 +233,22 @@ public class EndToEndUserAllieDataTest {
         assertThat(users.get(0).getAllieId(), equalTo("allieId"));
         assertThat(users.get(0).getLastName(), equalTo("last"));
     }
+    @Test
+    public void testUpdateUser404ResponseCode() {
+        userRequestDTO.setAllieId("updatedAllieId");
+        userRequestDTO.setLastName("updatedLastName");
+
+        //Create a valid request
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
+        this.testRestTemplate.put("/allie-data/v1/users", entity);
+        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/", HttpMethod.PUT, entity, UserResponseDTO.class);
+        assertThat("return 404 not found", resp.getStatusCode()== HttpStatus.NOT_FOUND);
+
+    }
 
     @Test
     public void testUpdateUserNoAllieId() {
@@ -259,7 +273,24 @@ public class EndToEndUserAllieDataTest {
         assertThat(users.get(0).getAllieId(), equalTo("allieId"));
         assertThat(users.get(0).getLastName(), equalTo("last"));
     }
+    @Test
+    public void testUpdateUserNoAllieId400ResponseCode() {
 
+        userRequestDTO.setAllieId(null);
+        userRequestDTO.setLastName("updatedLastName");
+
+
+        //Create a valid request
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
+        this.testRestTemplate.put("/allie-data/v1/users", entity);
+
+        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/", HttpMethod.PUT, entity, UserResponseDTO.class);
+        assertThat("response code is 400", resp.getStatusCode() == HttpStatus.BAD_REQUEST);
+    }
     @Test
     public void testUpdateUserNullsUnspecifiedFields() {
 
