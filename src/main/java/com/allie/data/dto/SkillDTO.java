@@ -1,9 +1,9 @@
-package com.allie.data.jpa.model;
+package com.allie.data.dto;
 
 /**
- * Created by andrew.larsen on 10/28/2016.
+ * Created by andrew.larsen on 10/31/2016.
  */
-public class Skill {
+public class SkillDTO {
     private String skillId;
     private String description;
 
@@ -23,11 +23,11 @@ public class Skill {
         this.description = description;
     }
 
-    public Skill(String skillId, String description) {
+    public SkillDTO(String skillId, String description) {
         this.skillId = skillId;
         this.description = description;
     }
 
-    public Skill() {
+    public SkillDTO() {
     }
 }

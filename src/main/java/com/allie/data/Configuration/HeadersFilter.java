@@ -25,8 +25,6 @@ public class HeadersFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         //get the headers set them in the MDC
         //if no headers reject
-        //"x-allie-correlation-id : 354643a2sdf56465asdf"
-        //"x-allie-request-id : 42345a3s5d4ffwaertfg2"
         try {
             String corrId = ((HttpServletRequest) request).getHeader("x-allie-correlation-id");
             String reqId = ((HttpServletRequest) request).getHeader("x-allie-request-id");
