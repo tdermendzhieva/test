@@ -99,7 +99,7 @@ public class UserService {
         User user = factory.createUser(userRequestDTO);
         String bodyAllieId = user.getAllieId();
         //make sure user provided allieId is not null or empty
-        if((bodyAllieId != null && !bodyAllieId.trim().equals("")) && ObjectUtils.nullSafeEquals(bodyAllieId, allieId)) {
+        if(ObjectUtils.nullSafeEquals(bodyAllieId, allieId) && !bodyAllieId.trim().equals("")) {
             User tempUser = repository.findByAllieId(user.getAllieId());
             if(tempUser != null) {
                 user.setDbId(tempUser.getDbId());
@@ -108,7 +108,7 @@ public class UserService {
                 throw new MissingResourceException("No user found for allieId:" + user.getAllieId(), User.class.getName(), user.getAllieId());
             }
         } else {
-            throw new IllegalArgumentException(!ObjectUtils.nullSafeEquals(bodyAllieId, allieId) ? "mismatched allieIds" : "missing required field allieId");
+            throw new IllegalArgumentException("Bad Request");
         }
     }
 }
