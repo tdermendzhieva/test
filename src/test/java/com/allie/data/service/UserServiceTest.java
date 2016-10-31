@@ -2,6 +2,7 @@ package com.allie.data.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.fail;
 import static org.mockito.BDDMockito.given;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.MissingResourceException;
 
 import com.mongodb.MongoException;
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,11 +46,17 @@ public class UserServiceTest {
     UserService service;
 
 
-    @Test
-    public void testInsertUser(){
-        UserRequestDTO userRequestDTO = new UserRequestDTO();
-        User user = new User();
-        UserResponseDTO userResponseDTO = new UserResponseDTO();
+
+    UserRequestDTO userRequestDTO;
+    User user;
+    UserResponseDTO userResponseDTO;
+
+    @Before
+    public void setUp() {
+
+        userRequestDTO = new UserRequestDTO();
+        user = new User();
+        userResponseDTO = new UserResponseDTO();
 
         Map<String, Address> addresses = new HashMap<>();
         Map<String, String> norms = new HashMap<>();
@@ -105,6 +113,10 @@ public class UserServiceTest {
         userResponseDTO.setLastName("last");
         userResponseDTO.setFirstName("first");
         userResponseDTO.setEnrolledSkills(skills);
+    }
+
+    @Test
+    public void testInsertUser(){
 
         given(factory.createUser(userRequestDTO)).willReturn(user);
         given(repository.insert(user)).willReturn(user);
@@ -130,6 +142,50 @@ public class UserServiceTest {
         }
         assertThat("should not get this far", true, equalTo(false));
     }
+
+
+    @Test
+    public void testUpdateUser(){
+
+        given(factory.createUser(userRequestDTO)).willReturn(user);
+        given(repository.findByAllieId(user.getAllieId())).willReturn(user);
+        given(repository.save(user)).willReturn(user);
+        given(factory.createUserResponseDTO(user)).willReturn(userResponseDTO);
+
+        assertThat(service.updateUser(userRequestDTO), equalTo(userResponseDTO));
+
+    }
+
+    @Test
+    public void testUpdateUserNoAllieId() {
+        userRequestDTO = new UserRequestDTO();
+
+        given(factory.createUser(userRequestDTO)).willReturn(new User());
+
+        try{
+            service.updateUser(userRequestDTO);
+        } catch (Exception e) {
+            assertThat(e.getClass(), equalTo(IllegalArgumentException.class));
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void testUpdateUserNotFound() {
+        given(factory.createUser(userRequestDTO)).willReturn(user);
+        given(repository.findByAllieId(user.getAllieId())).willReturn(null);
+
+        try{
+            service.updateUser(userRequestDTO);
+        } catch (Exception e) {
+            assertThat(e.getClass(), equalTo(MissingResourceException.class));
+            return;
+        }
+        fail();
+
+    }
+
 
 
     @Test

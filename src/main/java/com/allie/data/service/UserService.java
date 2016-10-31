@@ -28,6 +28,11 @@ public class UserService {
         this.repository = repository;
     }
 
+    /**
+     * inserts a user
+     * @param userRequestDTO the user to insert
+     * @return returns the newly created user
+     */
     public UserResponseDTO insertUser(UserRequestDTO userRequestDTO) {
         User user = factory.createUser(userRequestDTO);
         if(user.getAllieId() != null) {
@@ -39,6 +44,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Selects a user based on allieId
+     * @param allieId the id of the user to retrieve
+     * @return returns the user whose allieId matches the input
+     */
     public UserResponseDTO selectUser(String allieId) {
         User tempUser;
         if(allieId != null && !allieId.trim().isEmpty()) {
@@ -55,10 +65,10 @@ public class UserService {
     }
 
     /**
-     * gets all users based on a format, curretly the only suported format is 'list' (case insensitive)
+     * Gets all users based on a format, currently the only supported format is 'list' (case insensitive)
      * throws exceptions for: invalid format, no users found, db exception
      * @param format currently must be 'list'
-     * @return
+     * @return returns all User Ids in the requested format
      */
     public List<String> getAllUserIds(String format) {
         if(format.toLowerCase().equals("list")) {
@@ -75,6 +85,27 @@ public class UserService {
         } else {
             logger.error("get all users requires a valid format");
             throw new IllegalArgumentException("Get all users requires a valid format");
+        }
+    }
+
+    /**
+     * Updates the user with the given allieId to match the input user.
+     * All ommitted fields set to null.
+     * @param userRequestDTO The user to update.
+     * @return returns the updated user response object
+     */
+    public UserResponseDTO updateUser(UserRequestDTO userRequestDTO) {
+        User user = factory.createUser(userRequestDTO);
+        if(user.getAllieId() != null && !user.getAllieId().trim().isEmpty()) {
+            User tempUser = repository.findByAllieId(user.getAllieId());
+            if(tempUser != null) {
+                user.setDbId(tempUser.getDbId());
+                return factory.createUserResponseDTO(repository.save(user));
+            } else {
+                throw new MissingResourceException("No user found for allieId:" + user.getAllieId(), User.class.getName(), user.getAllieId());
+            }
+        } else {
+            throw new IllegalArgumentException("missing required field allieId");
         }
     }
 }

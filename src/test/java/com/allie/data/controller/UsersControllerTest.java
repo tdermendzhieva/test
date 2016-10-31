@@ -4,6 +4,7 @@ import com.allie.data.dto.UserRequestDTO;
 import com.allie.data.dto.UserResponseDTO;
 import com.allie.data.jpa.model.User;
 import com.allie.data.service.UserService;
+import com.mongodb.MongoException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -24,6 +25,7 @@ import static com.allie.data.util.TestUtil.asJsonString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.hamcrest.CoreMatchers.is;
@@ -198,4 +200,72 @@ public class UsersControllerTest {
 
     }
 
+    @Test
+    public void testUpdateUserIsOk() throws Exception{
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("test");
+
+        given(this.service.updateUser(userRequestDTO)).willReturn(userResponseDTO);
+
+        this.mvc.perform(put("/allie-data/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userRequestDTO))
+                .header("x-allie-request-id", "request-id")
+                .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("allieId", is("test")));
+    }
+
+    @Test
+    public void testUpdateUserIsNotFound() throws Exception{
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("test");
+
+        given(this.service.updateUser(userRequestDTO)).willThrow(new MissingResourceException("","",""));
+
+        this.mvc.perform(put("/allie-data/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userRequestDTO))
+                .header("x-allie-request-id", "request-id")
+                .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testUpdateUserIsBadRequest() throws Exception{
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("test");
+
+        given(this.service.updateUser(userRequestDTO)).willThrow(new IllegalArgumentException());
+
+        this.mvc.perform(put("/allie-data/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userRequestDTO))
+                .header("x-allie-request-id", "request-id")
+                .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testUpdateUserIsServiceUnavailable() throws Exception{
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("test");
+
+        given(this.service.updateUser(userRequestDTO)).willThrow(new MongoException(""));
+
+        this.mvc.perform(put("/allie-data/v1/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userRequestDTO))
+                .header("x-allie-request-id", "request-id")
+                .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isServiceUnavailable());
+    }
 }

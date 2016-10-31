@@ -2,6 +2,7 @@ package com.allie.data.controller;
 
 import com.allie.data.dto.UserRequestDTO;
 import com.allie.data.dto.UserResponseDTO;
+import com.allie.data.jpa.model.User;
 import com.allie.data.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -101,5 +102,23 @@ public class UsersController {
                                                       @RequestHeader(value="x-allie-correlation-id") String correlationId,
                                                       @RequestHeader(value="x-allie-request-id") String requestId) {
         return service.getAllUserIds(format);
+    }
+
+    @ApiOperation(value = "Persistence service call to update a user.",
+            notes = "The service will update the user, selected by allieId, in backend persistence structure.  If the request is successful, a 202 (Ok) HttpStatus will " +
+                    "be returned, with the updated user in the body, an allieId is required to select a user to update, if an allieId is not provided "+
+                    "a 400 (bad request) will be returned, if no user is found for the given allieId a 404 (not found) will be returned")
+    @ApiResponses( value = {
+            @ApiResponse(code = 202, message = "The service successfully updated the resource"),
+            @ApiResponse(code = 400, message = "No allieId was provided or the request was malformed to the point that no information can be stored"),
+            @ApiResponse(code = 404, message = "No user found for given allieId"),
+            @ApiResponse(code = 500, message = "There was an unspecified error")
+    })
+    @RequestMapping(value = "/users", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponseDTO updateUser(@RequestBody UserRequestDTO user,
+                                      @RequestHeader(value = "x-allie-request-id") String requestId,
+                                      @RequestHeader(value = "x-allie-correlation-id") String correlationId) {
+        return service.updateUser(user);
     }
 }
