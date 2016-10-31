@@ -7,6 +7,7 @@ import com.allie.data.jpa.model.User;
 import com.allie.data.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -108,7 +109,7 @@ public class UserService {
                 throw new MissingResourceException("No user found for allieId:" + user.getAllieId(), User.class.getName(), user.getAllieId());
             }
         } else {
-            throw new IllegalArgumentException("Bad Request");
+            throw new IllegalArgumentException(HttpStatus.BAD_REQUEST.getReasonPhrase());
         }
     }
 }
