@@ -30,7 +30,7 @@ public class AllieSkillController {
      * @return
      */
     @ApiOperation(value = "Persistence service call to retrieve Allie Skills",
-            notes = "The service will get all Allie Kills")
+            notes = "The service will retrieve all allie skills from a master list contained in backend persistence")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Skills were successfully retrieved"),
             @ApiResponse(code = 400, message = "The request was malformed to the point that no information can be stored"),
