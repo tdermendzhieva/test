@@ -235,7 +235,7 @@ public class EndToEndUserAllieDataTest {
     }
     @Test
     public void testUpdateUser404ResponseCode() {
-        userRequestDTO.setAllieId("updatedAllieId");
+        userRequestDTO.setAllieId(allieId);
         userRequestDTO.setLastName("updatedLastName");
 
         //Create a valid request
@@ -244,7 +244,7 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
-        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/"+allieId, HttpMethod.PUT, entity, UserResponseDTO.class);
+        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/" + allieId, HttpMethod.PUT, entity, UserResponseDTO.class);
         assertThat("return 404 not found", resp.getStatusCode()== HttpStatus.NOT_FOUND);
 
     }
@@ -265,11 +265,11 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
-        this.testRestTemplate.put("/allie-data/v1/users"+allieId, entity);
+        this.testRestTemplate.put("/allie-data/v1/users/%20", entity);
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(1));
-        assertThat(users.get(0).getAllieId(), equalTo("allieId"));
+        assertThat(users.get(0).getAllieId(), equalTo(allieId));
         assertThat(users.get(0).getLastName(), equalTo("last"));
     }
     @Test
@@ -297,7 +297,7 @@ public class EndToEndUserAllieDataTest {
         repository.insert(user);
 
         userRequestDTO = new UserRequestDTO();
-        userRequestDTO.setAllieId("allieId");
+        userRequestDTO.setAllieId(allieId);
 
 
         //Create a valid request
@@ -306,7 +306,7 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
-        this.testRestTemplate.put("/allie-data/v1/users"+allieId, entity);
+        this.testRestTemplate.put("/allie-data/v1/users/" + allieId, entity);
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(1));
