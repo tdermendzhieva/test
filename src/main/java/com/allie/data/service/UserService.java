@@ -7,7 +7,9 @@ import com.allie.data.jpa.model.User;
 import com.allie.data.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,9 +96,11 @@ public class UserService {
      * @param userRequestDTO The user to update.
      * @return returns the updated user response object
      */
-    public UserResponseDTO updateUser(UserRequestDTO userRequestDTO) {
+    public UserResponseDTO updateUser(String allieId, UserRequestDTO userRequestDTO) {
         User user = factory.createUser(userRequestDTO);
-        if(user.getAllieId() != null && !user.getAllieId().trim().isEmpty()) {
+        String bodyAllieId = user.getAllieId();
+        //make sure user provided allieId is not null or empty
+        if(ObjectUtils.nullSafeEquals(bodyAllieId, allieId) && !bodyAllieId.trim().equals("")) {
             User tempUser = repository.findByAllieId(user.getAllieId());
             if(tempUser != null) {
                 user.setDbId(tempUser.getDbId());
@@ -105,7 +109,7 @@ public class UserService {
                 throw new MissingResourceException("No user found for allieId:" + user.getAllieId(), User.class.getName(), user.getAllieId());
             }
         } else {
-            throw new IllegalArgumentException("missing required field allieId");
+            throw new IllegalArgumentException(HttpStatus.BAD_REQUEST.getReasonPhrase());
         }
     }
 }

@@ -2,7 +2,6 @@ package com.allie.data.controller;
 
 import com.allie.data.dto.UserRequestDTO;
 import com.allie.data.dto.UserResponseDTO;
-import com.allie.data.jpa.model.User;
 import com.allie.data.service.UserService;
 import com.mongodb.MongoException;
 import org.junit.Test;
@@ -15,20 +14,17 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.ResourceAccessException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
 
 import static com.allie.data.util.TestUtil.asJsonString;
+import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.hamcrest.CoreMatchers.is;
 /**
  * Created by jacob.headlee on 10/20/2016.
  */
@@ -36,13 +32,14 @@ import static org.hamcrest.CoreMatchers.is;
 @WebMvcTest(UsersController.class)
 public class UsersControllerTest {
     @Autowired
-    MockMvc mvc;
+    private MockMvc mvc;
 
     @MockBean
-    UserService service;
+    private UserService service;
 
-    UserRequestDTO userRequestDTO;
-    UserResponseDTO userResponseDTO;
+    private UserRequestDTO userRequestDTO;
+    private UserResponseDTO userResponseDTO;
+    private String allieId = "TESTALLIEID";
 
     @Test
     public void testPostUserNoHeadersReturnsBadRequest ()throws Exception {
@@ -207,9 +204,9 @@ public class UsersControllerTest {
         userRequestDTO = new UserRequestDTO();
         userRequestDTO.setAllieId("test");
 
-        given(this.service.updateUser(userRequestDTO)).willReturn(userResponseDTO);
+        given(this.service.updateUser(allieId, userRequestDTO)).willReturn(userResponseDTO);
 
-        this.mvc.perform(put("/allie-data/v1/users")
+        this.mvc.perform(put("/allie-data/v1/users/"+allieId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userRequestDTO))
                 .header("x-allie-request-id", "request-id")
@@ -225,9 +222,9 @@ public class UsersControllerTest {
         userRequestDTO = new UserRequestDTO();
         userRequestDTO.setAllieId("test");
 
-        given(this.service.updateUser(userRequestDTO)).willThrow(new MissingResourceException("","",""));
+        given(this.service.updateUser(allieId, userRequestDTO)).willThrow(new MissingResourceException("", "", ""));
 
-        this.mvc.perform(put("/allie-data/v1/users")
+        this.mvc.perform(put("/allie-data/v1/users/"+allieId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userRequestDTO))
                 .header("x-allie-request-id", "request-id")
@@ -242,9 +239,9 @@ public class UsersControllerTest {
         userRequestDTO = new UserRequestDTO();
         userRequestDTO.setAllieId("test");
 
-        given(this.service.updateUser(userRequestDTO)).willThrow(new IllegalArgumentException());
+        given(this.service.updateUser(allieId, userRequestDTO)).willThrow(new IllegalArgumentException());
 
-        this.mvc.perform(put("/allie-data/v1/users")
+        this.mvc.perform(put("/allie-data/v1/users/"+allieId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userRequestDTO))
                 .header("x-allie-request-id", "request-id")
@@ -259,9 +256,9 @@ public class UsersControllerTest {
         userRequestDTO = new UserRequestDTO();
         userRequestDTO.setAllieId("test");
 
-        given(this.service.updateUser(userRequestDTO)).willThrow(new MongoException(""));
+        given(this.service.updateUser(allieId, userRequestDTO)).willThrow(new MongoException(""));
 
-        this.mvc.perform(put("/allie-data/v1/users")
+        this.mvc.perform(put("/allie-data/v1/users/"+allieId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userRequestDTO))
                 .header("x-allie-request-id", "request-id")
