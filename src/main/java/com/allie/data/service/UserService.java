@@ -31,13 +31,8 @@ public class UserService {
     public UserResponseDTO insertUser(UserRequestDTO userRequestDTO) {
         User user = factory.createUser(userRequestDTO);
         if(user.getAllieId() != null) {
-            try {
-                User tempUser = repository.insert(user);
-                return factory.createUserResponseDTO(tempUser);
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-                throw e;
-            }
+            User tempUser = repository.insert(user);
+            return factory.createUserResponseDTO(tempUser);
         } else {
             logger.error("User missing required field, received:" + userRequestDTO);
             throw new IllegalArgumentException("User must have an allieId");
@@ -47,12 +42,7 @@ public class UserService {
     public UserResponseDTO selectUser(String allieId) {
         User tempUser;
         if(allieId != null && !allieId.trim().isEmpty()) {
-            try {
-                tempUser = repository.findByAllieId(allieId);
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-                throw e;
-            }
+            tempUser = repository.findByAllieId(allieId);
         } else {
             logger.error("Get user requires an allieId");
             throw new IllegalArgumentException("Get user requires an allieId");
@@ -72,20 +62,15 @@ public class UserService {
      */
     public List<String> getAllUserIds(String format) {
         if(format.toLowerCase().equals("list")) {
-            try {
-                List<User> users = repository.findAllAllieIds();
-                List<String> ids = new ArrayList<>();
-                if(users.size() > 0) {
-                    for (User user : users) {
-                        ids.add(user.getAllieId());
-                    }
-                    return ids;
-                } else {
-                    throw new MissingResourceException("No users found", User.class.getName(), "");
+            List<User> users = repository.findAllAllieIds();
+            List<String> ids = new ArrayList<>();
+            if(users.size() > 0) {
+                for (User user : users) {
+                    ids.add(user.getAllieId());
                 }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-                throw e;
+                return ids;
+            } else {
+                throw new MissingResourceException("No users found", User.class.getName(), "");
             }
         } else {
             logger.error("get all users requires a valid format");

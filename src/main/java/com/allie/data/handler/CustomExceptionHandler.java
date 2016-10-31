@@ -2,6 +2,8 @@ package com.allie.data.handler;
 
 import com.allie.data.dto.Error;
 import com.mongodb.MongoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,15 @@ import java.util.MissingResourceException;
  */
 @ControllerAdvice
 public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
+    private static final Logger logger = LoggerFactory.getLogger(CustomExceptionHandler.class);
+
     public static final String DEFAULT_ERROR_VIEW = "error";
 
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
     @ExceptionHandler({DataIntegrityViolationException.class, DuplicateKeyException.class})
     public ResponseEntity<com.allie.data.dto.Error> handleConflict(Exception e) {
+        logger.error("Error handling request: CONFLICT " + e.getMessage());
+
         Error error = new Error();
         error.setError(HttpStatus.CONFLICT.getReasonPhrase());
         error.setMessage(e.getMessage());
@@ -37,6 +43,8 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
     @ResponseStatus(HttpStatus.BAD_REQUEST) //400
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<com.allie.data.dto.Error> handleBadRequest(Exception e) {
+        logger.error("Error handling request: BAD REQUEST " + e.getMessage());
+
         Error error = new Error();
         error.setError(HttpStatus.BAD_REQUEST.getReasonPhrase());
         error.setMessage(e.getMessage());
@@ -51,6 +59,8 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
     @ResponseStatus(HttpStatus.NOT_FOUND) //404
     @ExceptionHandler(MissingResourceException.class)
     public ResponseEntity<com.allie.data.dto.Error> handleNotFound(Exception e) {
+        logger.error("Error handling request: NOT FOUND " + e.getMessage());
+
         Error error = new Error();
         error.setError(HttpStatus.NOT_FOUND.getReasonPhrase());
         error.setMessage(e.getMessage());
@@ -63,6 +73,8 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE) //503
     @ExceptionHandler(MongoException.class)
     public ResponseEntity<com.allie.data.dto.Error> handleMongoException(Exception e) {
+        logger.error("Error handling request: SERVICE UNAVAILABLE " + e.getMessage());
+
         Error error = new Error();
         error.setError(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase());
         error.setMessage(e.getMessage());
