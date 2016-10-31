@@ -48,14 +48,8 @@ public class LocationService {
             }
         }
 
-        List<LocationTelemetry> toReturn;
-        try {
-            //batch insert
-            toReturn = repository.insert(locationTelemetries);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw e;
-        }
+        List<LocationTelemetry> toReturn = repository.insert(locationTelemetries);
+
         //logging
         int initialSize = userLocationDTOs.size();
         int finalSize = toReturn.size();
