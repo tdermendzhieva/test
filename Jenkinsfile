@@ -35,6 +35,7 @@ node {
         }
     finally{
           def statusMessage = (err) ? "Error : " + err : "Success"
+          junit 'build/test-results/*.xml'
     	  stage 'Send Status Email'
                    mail body: statusMessage + "\r\n\r\n" + env.BUILD_URL,
                    from: 'nobody@nowhere',
