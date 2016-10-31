@@ -4,6 +4,8 @@ import com.allie.data.dto.SkillDTO;
 import com.allie.data.factory.SkillFactory;
 import com.allie.data.jpa.model.AllieSkill;
 import com.allie.data.repository.AllieSkillsRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.MissingResourceException;
  */
 @Component
 public class AllieSkillService {
+    private static final Logger logger = LoggerFactory.getLogger(LocationService.class);
 
     private AllieSkillsRepository repository;
     private SkillFactory skillFactory;
@@ -33,13 +36,16 @@ public class AllieSkillService {
         List<AllieSkill> skills = repository.findAll();
         //if no skills are found, throw exception for exception handler to handle appropriately
         if(skills.isEmpty()){
+            logger.warn("No skills found");
             throw new MissingResourceException("No skills found" , SkillDTO.class.getName(), "");
         }
         //create response object
         List<SkillDTO> skillDTOs = new ArrayList<>();
+        logger.debug("Adding " + skills.size() + " skills");
         for(AllieSkill skill : skills){
             skillDTOs.add(skillFactory.createSkill(skill));
         }
+        logger.debug("Added " + skillDTOs.size() +  " skills for response");
         return skillDTOs;
     }
 }
