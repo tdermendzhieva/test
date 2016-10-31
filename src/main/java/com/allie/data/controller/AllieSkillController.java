@@ -32,9 +32,11 @@ public class AllieSkillController {
     @ApiOperation(value = "Persistence service call to retrieve Allie Skills",
             notes = "The service will get all Allie Kills")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "The skills were successfully retrieved"),
-            @ApiResponse(code = 404, message = "No events found for the given allieId and date"),
-            @ApiResponse(code = 400, message = "Required allieId was null or empty")
+            @ApiResponse(code = 200, message = "Skills were successfully retrieved"),
+            @ApiResponse(code = 400, message = "The request was malformed to the point that no information can be stored"),
+            @ApiResponse(code = 404, message = "No allie skills were found"),
+            @ApiResponse(code = 500, message = "There was an unspecified server error."),
+            @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
     @RequestMapping(value = "/skills", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
