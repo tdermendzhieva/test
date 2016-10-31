@@ -2,7 +2,6 @@ package com.allie.data.controller;
 
 import com.allie.data.dto.UserRequestDTO;
 import com.allie.data.dto.UserResponseDTO;
-import com.allie.data.jpa.model.User;
 import com.allie.data.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -91,7 +90,7 @@ public class UsersController {
             notes="the format value 'list' (case insensitive) will retrieve a list of all Allie Ids, " +
                     "currently all other values for format will return a 400 (bad request)")
     @ApiResponses(value = {
-            @ApiResponse(code = 202, message = "The service found the users and is returning them in the requested format"),
+            @ApiResponse(code = 200, message = "The service found the users and is returning them in the requested format"),
             @ApiResponse(code = 400, message="The requested format is invalid"),
             @ApiResponse(code = 404, message = "No users found"),
             @ApiResponse(code = 500, message = "There was an unspecified error")
@@ -105,7 +104,7 @@ public class UsersController {
     }
 
     @ApiOperation(value = "Persistence service call to update a user.",
-            notes = "The service will update the user, selected by allieId, in backend persistence structure.  If the request is successful, a 202 (Ok) HttpStatus will " +
+            notes = "The service will update the user, selected by allieId, in backend persistence structure.  If the request is successful, a 200 (Ok) HttpStatus will " +
                     "be returned, with the updated user in the body, an allieId is required to select a user to update, if an allieId is not provided "+
                     "a 400 (bad request) will be returned, if no user is found for the given allieId a 404 (not found) will be returned")
     @ApiResponses( value = {
