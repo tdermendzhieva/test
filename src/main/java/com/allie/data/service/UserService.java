@@ -37,7 +37,7 @@ public class UserService {
      */
     public UserResponseDTO insertUser(UserRequestDTO userRequestDTO) {
         User user = factory.createUser(userRequestDTO);
-        if(user.getAllieId() != null) {
+        if(user.getAllieId() != null && !user.getAllieId().trim().isEmpty()) {
             User tempUser = repository.insert(user);
             return factory.createUserResponseDTO(tempUser);
         } else {
