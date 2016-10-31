@@ -8,6 +8,7 @@ import com.allie.data.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,9 +95,15 @@ public class UserService {
      * @param userRequestDTO The user to update.
      * @return returns the updated user response object
      */
-    public UserResponseDTO updateUser(UserRequestDTO userRequestDTO) {
+    public UserResponseDTO updateUser(String allieId, UserRequestDTO userRequestDTO) {
         User user = factory.createUser(userRequestDTO);
-        if(user.getAllieId() != null && !user.getAllieId().trim().isEmpty()) {
+        String bodyAllieId = user.getAllieId();
+        //make sure user provided allieId is not null or empty
+        if(bodyAllieId != null && !bodyAllieId.trim().equals("")) {
+            //next, make sure they are equal
+            if(!ObjectUtils.nullSafeEquals(bodyAllieId, allieId)){
+                throw new IllegalArgumentException("mismatched allieIds");
+            }
             User tempUser = repository.findByAllieId(user.getAllieId());
             if(tempUser != null) {
                 user.setDbId(tempUser.getDbId());

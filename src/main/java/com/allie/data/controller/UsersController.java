@@ -117,11 +117,12 @@ public class UsersController {
             @ApiResponse(code = 500, message = "There was an unspecified error"),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
-    @RequestMapping(value = "/users", method = RequestMethod.PUT)
+    @RequestMapping(value = "/users/{allieId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public UserResponseDTO updateUser(@RequestBody UserRequestDTO user,
+    public UserResponseDTO updateUser(@PathVariable String allieId,
+                                      @RequestBody UserRequestDTO user,
                                       @RequestHeader(value = "x-allie-request-id") String requestId,
                                       @RequestHeader(value = "x-allie-correlation-id") String correlationId) {
-        return service.updateUser(user);
+        return service.updateUser(allieId,user);
     }
 }

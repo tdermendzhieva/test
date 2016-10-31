@@ -36,15 +36,16 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class EndToEndUserAllieDataTest {
 
     @Autowired
-    TestRestTemplate testRestTemplate;
+    private TestRestTemplate testRestTemplate;
 
     @Autowired
-    MongoTemplate template;
+    private MongoTemplate template;
 
     @Autowired
-    UserRepository repository;
+    private UserRepository repository;
 
-    UserRequestDTO userRequestDTO;
+    private UserRequestDTO userRequestDTO;
+    private String allieId = "TESTALLIEID";
 
     @Before
     public void buildUserRequestDto() {
@@ -72,7 +73,7 @@ public class EndToEndUserAllieDataTest {
         }
 
         userRequestDTO = new UserRequestDTO();
-        userRequestDTO.setAllieId("allieId");
+        userRequestDTO.setAllieId(allieId);
         userRequestDTO.setAlliePhoneNumber("alliePhoneNumber");
         userRequestDTO.setPushToken("pushToken");
         userRequestDTO.setNorms(norms);
@@ -182,7 +183,7 @@ public class EndToEndUserAllieDataTest {
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(2));
-        assertThat(users.get(0).getAllieId(), equalTo("allieId"));
+        assertThat(users.get(0).getAllieId(), equalTo(allieId));
         assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userRequestDTO.getAddresses().get("address3").getCity()));
         assertThat(users.get(1).getAllieId(), equalTo(userRequestDTO.getAllieId()));
         assertThat(users.get(1).getAddresses().get("address3").getCity(), equalTo(userRequestDTO.getAddresses().get("address3").getCity()));
@@ -204,8 +205,7 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
-        this.testRestTemplate.put("/allie-data/v1/users", entity);
-        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/", HttpMethod.PUT, entity, UserResponseDTO.class);
+        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/"+allieId, HttpMethod.PUT, entity, UserResponseDTO.class);
         assertThat("return 200 ok", resp.getStatusCode()== HttpStatus.OK);
 
     }
@@ -230,7 +230,7 @@ public class EndToEndUserAllieDataTest {
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(1));
-        assertThat(users.get(0).getAllieId(), equalTo("allieId"));
+        assertThat(users.get(0).getAllieId(), equalTo(allieId));
         assertThat(users.get(0).getLastName(), equalTo("last"));
     }
     @Test
@@ -244,8 +244,7 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
-        this.testRestTemplate.put("/allie-data/v1/users", entity);
-        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/", HttpMethod.PUT, entity, UserResponseDTO.class);
+        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/"+allieId, HttpMethod.PUT, entity, UserResponseDTO.class);
         assertThat("return 404 not found", resp.getStatusCode()== HttpStatus.NOT_FOUND);
 
     }
@@ -266,7 +265,7 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
-        this.testRestTemplate.put("/allie-data/v1/users", entity);
+        this.testRestTemplate.put("/allie-data/v1/users"+allieId, entity);
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(1));
@@ -286,9 +285,8 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
-        this.testRestTemplate.put("/allie-data/v1/users", entity);
 
-        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/", HttpMethod.PUT, entity, UserResponseDTO.class);
+        ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/"+allieId, HttpMethod.PUT, entity, UserResponseDTO.class);
         assertThat("response code is 400", resp.getStatusCode() == HttpStatus.BAD_REQUEST);
     }
     @Test
@@ -308,11 +306,11 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-request-id", "req-id");
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
-        this.testRestTemplate.put("/allie-data/v1/users", entity);
+        this.testRestTemplate.put("/allie-data/v1/users"+allieId, entity);
 
         List<User> users =  repository.findAll();
         assertThat(users.size(), equalTo(1));
-        assertThat(users.get(0).getAllieId(), equalTo("allieId"));
+        assertThat(users.get(0).getAllieId(), equalTo(allieId));
         assertThat(users.get(0).getLastName(), equalTo(null));
     }
 

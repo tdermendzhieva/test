@@ -1,16 +1,13 @@
 package com.allie.data.service;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.fail;
-import static org.mockito.BDDMockito.given;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.MissingResourceException;
-
+import com.allie.data.dto.MeetingDTO;
+import com.allie.data.dto.UserRequestDTO;
+import com.allie.data.dto.UserResponseDTO;
+import com.allie.data.factory.UserFactory;
+import com.allie.data.jpa.model.Address;
+import com.allie.data.jpa.model.Meeting;
+import com.allie.data.jpa.model.User;
+import com.allie.data.repository.UserRepository;
 import com.mongodb.MongoException;
 import org.joda.time.DateTime;
 import org.junit.Before;
@@ -22,14 +19,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.allie.data.dto.MeetingDTO;
-import com.allie.data.dto.UserRequestDTO;
-import com.allie.data.dto.UserResponseDTO;
-import com.allie.data.factory.UserFactory;
-import com.allie.data.jpa.model.Address;
-import com.allie.data.jpa.model.Meeting;
-import com.allie.data.jpa.model.User;
-import com.allie.data.repository.UserRepository;
+import java.util.*;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.fail;
+import static org.mockito.BDDMockito.given;
 
 /**
  * Created by jacob.headlee on 10/20/2016.
@@ -39,17 +34,17 @@ import com.allie.data.repository.UserRepository;
 @SpringBootTest
 public class UserServiceTest {
     @MockBean
-    UserFactory factory;
+    private UserFactory factory;
     @MockBean
-    UserRepository repository;
+    private UserRepository repository;
     @Autowired
-    UserService service;
+    private UserService service;
 
 
-
-    UserRequestDTO userRequestDTO;
-    User user;
-    UserResponseDTO userResponseDTO;
+    private String allieId = "TESTALLIEID";
+    private UserRequestDTO userRequestDTO;
+    private User user;
+    private UserResponseDTO userResponseDTO;
 
     @Before
     public void setUp() {
@@ -152,7 +147,7 @@ public class UserServiceTest {
         given(repository.save(user)).willReturn(user);
         given(factory.createUserResponseDTO(user)).willReturn(userResponseDTO);
 
-        assertThat(service.updateUser(userRequestDTO), equalTo(userResponseDTO));
+        assertThat(service.updateUser(user.getAllieId(), userRequestDTO), equalTo(userResponseDTO));
 
     }
 
@@ -163,7 +158,7 @@ public class UserServiceTest {
         given(factory.createUser(userRequestDTO)).willReturn(new User());
 
         try{
-            service.updateUser(userRequestDTO);
+            service.updateUser(user.getAllieId(), userRequestDTO);
         } catch (Exception e) {
             assertThat(e.getClass(), equalTo(IllegalArgumentException.class));
             return;
@@ -172,12 +167,27 @@ public class UserServiceTest {
     }
 
     @Test
+    public void testUpdateUserAllieIdsDoNotMatch() {
+        given(factory.createUser(userRequestDTO)).willReturn(user);
+        given(repository.findByAllieId(user.getAllieId())).willReturn(user);
+        given(repository.save(user)).willReturn(user);
+        given(factory.createUserResponseDTO(user)).willReturn(userResponseDTO);
+
+        try{
+            service.updateUser("DOESNOTMATCH", userRequestDTO);
+        } catch (Exception e) {
+            assertThat(e.getClass(), equalTo(IllegalArgumentException.class));
+            return;
+        }
+        fail();
+    }
+    @Test
     public void testUpdateUserNotFound() {
         given(factory.createUser(userRequestDTO)).willReturn(user);
         given(repository.findByAllieId(user.getAllieId())).willReturn(null);
 
         try{
-            service.updateUser(userRequestDTO);
+            service.updateUser(user.getAllieId(), userRequestDTO);
         } catch (Exception e) {
             assertThat(e.getClass(), equalTo(MissingResourceException.class));
             return;
