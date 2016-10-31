@@ -190,6 +190,102 @@ public class EndToEndUserAllieDataTest {
     }
 
     @Test
+    public void testUpdateUser() {
+        UserFactory factory = new UserFactory();
+        User user = factory.createUser(userRequestDTO);
+        repository.insert(user);
+
+        userRequestDTO.setLastName("updatedLastName");
+
+
+        //Create a valid request
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
+        this.testRestTemplate.put("/allie-data/v1/users", entity);
+
+        List<User> users =  repository.findAll();
+        assertThat(users.size(), equalTo(1));
+        assertThat(users.get(0).getAllieId(), equalTo(userRequestDTO.getAllieId()));
+        assertThat(users.get(0).getLastName(), equalTo(userRequestDTO.getLastName()));
+    }
+
+    @Test
+    public void testUpdateNonExtantUser() {
+        UserFactory factory = new UserFactory();
+        User user = factory.createUser(userRequestDTO);
+        repository.insert(user);
+
+        userRequestDTO.setAllieId("updatedAllieId");
+        userRequestDTO.setLastName("updatedLastName");
+
+
+        //Create a valid request
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
+        this.testRestTemplate.put("/allie-data/v1/users", entity);
+
+        List<User> users =  repository.findAll();
+        assertThat(users.size(), equalTo(1));
+        assertThat(users.get(0).getAllieId(), equalTo("allieId"));
+        assertThat(users.get(0).getLastName(), equalTo("last"));
+    }
+
+    @Test
+    public void testUpdateUserNoAllieId() {
+        UserFactory factory = new UserFactory();
+        User user = factory.createUser(userRequestDTO);
+        repository.insert(user);
+
+        userRequestDTO.setAllieId(null);
+        userRequestDTO.setLastName("updatedLastName");
+
+
+        //Create a valid request
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
+        this.testRestTemplate.put("/allie-data/v1/users", entity);
+
+        List<User> users =  repository.findAll();
+        assertThat(users.size(), equalTo(1));
+        assertThat(users.get(0).getAllieId(), equalTo("allieId"));
+        assertThat(users.get(0).getLastName(), equalTo("last"));
+    }
+
+    @Test
+    public void testUpdateUserNullsUnspecifiedFields() {
+
+        UserFactory factory = new UserFactory();
+        User user = factory.createUser(userRequestDTO);
+        repository.insert(user);
+
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("allieId");
+
+
+        //Create a valid request
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
+        this.testRestTemplate.put("/allie-data/v1/users", entity);
+
+        List<User> users =  repository.findAll();
+        assertThat(users.size(), equalTo(1));
+        assertThat(users.get(0).getAllieId(), equalTo("allieId"));
+        assertThat(users.get(0).getLastName(), equalTo(null));
+    }
+
+    @Test
     public void testGet1User() {
 
         UserFactory factory = new UserFactory();
