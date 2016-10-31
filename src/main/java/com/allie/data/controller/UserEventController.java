@@ -36,7 +36,8 @@ public class UserEventController {
     @ApiResponses(value = {
             @ApiResponse(code = 202, message = "The service successfully received the request"),
             @ApiResponse(code = 400, message = "The request was malformed to the point that no information can be stored"),
-            @ApiResponse(code = 500, message = "There was an unspecified server error.")
+            @ApiResponse(code = 500, message = "There was an unspecified server error."),
+            @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
     @RequestMapping(value="/events", method= RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
@@ -59,7 +60,9 @@ public class UserEventController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The events were successfully retrieved"),
             @ApiResponse(code = 404, message = "No events found for the given allieId and date"),
-            @ApiResponse(code = 400, message = "Required allieId was null or empty")
+            @ApiResponse(code = 400, message = "Required allieId was null or empty"),
+            @ApiResponse(code = 500, message = "There was an unspecified server error."),
+            @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
     @RequestMapping(value = "users/{allieId}/events", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
