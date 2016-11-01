@@ -165,7 +165,7 @@ public class UsersControllerTest {
         list.add("id0");
         given(this.service.getAllUserIds(Mockito.anyString())).willReturn(list);
 
-        this.mvc.perform(get("/allie-data/v1/users/?format=list")
+        this.mvc.perform(get("/allie-data/v1/users?format=list")
             .header("x-allie-request-id", "request-id")
             .header("x-allie-correlation-id", "correlation-id"))
                 .andExpect(status().isOk())
@@ -178,7 +178,7 @@ public class UsersControllerTest {
         list.add("id0");
         given(this.service.getAllUserIds(Mockito.anyString())).willThrow(new IllegalArgumentException(""));
 
-        this.mvc.perform(get("/allie-data/v1/users/?format=asddfasd")
+        this.mvc.perform(get("/allie-data/v1/users?format=asddfasd")
                 .header("x-allie-request-id", "request-id")
                 .header("x-allie-correlation-id", "correlation-id"))
                 .andExpect(status().isBadRequest());
@@ -190,7 +190,7 @@ public class UsersControllerTest {
         list.add("id0");
         given(this.service.getAllUserIds(Mockito.anyString())).willThrow(new MissingResourceException("","",""));
 
-        this.mvc.perform(get("/allie-data/v1/users/?format=list")
+        this.mvc.perform(get("/allie-data/v1/users?format=list")
                 .header("x-allie-request-id", "request-id")
                 .header("x-allie-correlation-id", "correlation-id"))
                 .andExpect(status().isNotFound());

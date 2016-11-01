@@ -399,7 +399,7 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<Object> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<String[]> resp = this.testRestTemplate.exchange("/allie-data/v1/users/?format=list", HttpMethod.GET, entity, String[].class);
+        ResponseEntity<String[]> resp = this.testRestTemplate.exchange("/allie-data/v1/users?format=list", HttpMethod.GET, entity, String[].class);
         String[] ids = resp.getBody();
         assertThat(resp.getStatusCode(), equalTo(HttpStatus.OK));
         assertThat(ids.length, equalTo(10));
@@ -415,7 +415,7 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<Object> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users/?format=list", HttpMethod.GET, entity, Object.class);
+        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users?format=list", HttpMethod.GET, entity, Object.class);
         assertThat(resp.getStatusCode(), equalTo(HttpStatus.NOT_FOUND));
     }
 
@@ -428,7 +428,7 @@ public class EndToEndUserAllieDataTest {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<Object> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users/?format=asdf", HttpMethod.GET, entity, Object.class);
+        ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users?format=asdf", HttpMethod.GET, entity, Object.class);
         assertThat(resp.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
     }
 }

@@ -98,7 +98,7 @@ public class UsersController {
             @ApiResponse(code = 500, message = "There was an unspecified error"),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
-    @RequestMapping(value = "/users/", method = RequestMethod.GET)
+    @RequestMapping(value = "/users", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public List<?> getAllUsers(@RequestParam(value = "format") String format,
                                                       @RequestHeader(value="x-allie-correlation-id") String correlationId,
