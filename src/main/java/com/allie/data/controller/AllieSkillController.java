@@ -8,10 +8,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,7 +37,8 @@ public class AllieSkillController {
     })
     @RequestMapping(value = "/skills", method = RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public List<SkillDTO> getAllieSkills(){
+    public List<SkillDTO> getAllieSkills(@RequestHeader(name = "x-allie-request-id") String requestId,
+                                         @RequestHeader(name = "x-allie-correlation-id") String correlationId){
 
         return service.getSkills();
     }
