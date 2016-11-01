@@ -48,7 +48,7 @@ public class MovementsController {
                                       @RequestHeader(name = "x-allie-correlation-id") String correlationId) {
         Thread thread = new Thread(() -> service.insertMovements(userMovements));
         thread.setName("insert-movement");
-        thread.run();
+        thread.start();
     }
 }
 
