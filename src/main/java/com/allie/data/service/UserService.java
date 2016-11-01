@@ -7,7 +7,6 @@ import com.allie.data.jpa.model.User;
 import com.allie.data.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -37,8 +36,9 @@ public class UserService {
      */
     public UserResponseDTO insertUser(UserRequestDTO userRequestDTO) {
         User user = factory.createUser(userRequestDTO);
-        if(user.getAllieId() != null && !user.getAllieId().trim().isEmpty()) {
+        if(user.getAllieId() != null) {
             User tempUser = repository.insert(user);
+            logger.debug("inserted user");
             return factory.createUserResponseDTO(tempUser);
         } else {
             logger.error("User missing required field, received:" + userRequestDTO);
@@ -56,12 +56,14 @@ public class UserService {
         if(allieId != null && !allieId.trim().isEmpty()) {
             tempUser = repository.findByAllieId(allieId);
         } else {
-            logger.error("Get user requires an allieId");
+            logger.info("Get user requires an allieId");
             throw new IllegalArgumentException("Get user requires an allieId");
         }
         if (tempUser != null) {
+            logger.debug("found user");
             return factory.createUserResponseDTO(tempUser);
         } else {
+            logger.debug("User not found for allieid " + allieId);
             throw new MissingResourceException("No user found for allieId " + allieId, User.class.getName(), allieId);
         }
     }
@@ -77,11 +79,13 @@ public class UserService {
             List<User> users = repository.findAllAllieIds();
             List<String> ids = new ArrayList<>();
             if(users.size() > 0) {
+                logger.debug("found " + users.size() + " users");
                 for (User user : users) {
                     ids.add(user.getAllieId());
                 }
                 return ids;
             } else {
+                logger.info("no users found");
                 throw new MissingResourceException("No users found", User.class.getName(), "");
             }
         } else {
@@ -100,16 +104,24 @@ public class UserService {
         User user = factory.createUser(userRequestDTO);
         String bodyAllieId = user.getAllieId();
         //make sure user provided allieId is not null or empty
-        if(ObjectUtils.nullSafeEquals(bodyAllieId, allieId) && !bodyAllieId.trim().equals("")) {
+        if(bodyAllieId != null && !bodyAllieId.trim().equals("")) {
+            //next, make sure they are equal
+            if(!ObjectUtils.nullSafeEquals(bodyAllieId, allieId)){
+                logger.info("allieids are not equal");
+                throw new IllegalArgumentException("mismatched allieIds");
+            }
             User tempUser = repository.findByAllieId(user.getAllieId());
             if(tempUser != null) {
                 user.setDbId(tempUser.getDbId());
+                logger.debug("updating user");
                 return factory.createUserResponseDTO(repository.save(user));
             } else {
+                logger.info("user not found " + user.getAllieId());
                 throw new MissingResourceException("No user found for allieId:" + user.getAllieId(), User.class.getName(), user.getAllieId());
             }
         } else {
-            throw new IllegalArgumentException(HttpStatus.BAD_REQUEST.getReasonPhrase());
+            logger.info("missing required fields");
+            throw new IllegalArgumentException("missing required field allieId");
         }
     }
 }
