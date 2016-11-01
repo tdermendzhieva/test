@@ -22,12 +22,11 @@ import java.util.MissingResourceException;
 public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
     private static final Logger logger = LoggerFactory.getLogger(CustomExceptionHandler.class);
 
-    public static final String DEFAULT_ERROR_VIEW = "error";
 
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
     @ExceptionHandler({DataIntegrityViolationException.class, DuplicateKeyException.class})
     public ResponseEntity<com.allie.data.dto.Error> handleConflict(Exception e) {
-        logger.error("Error handling request: CONFLICT " + e.getMessage());
+        logger.error("Error handling request: CONFLICT ", e);
 
         Error error = new Error();
         error.setError(HttpStatus.CONFLICT.getReasonPhrase());
@@ -43,7 +42,7 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
     @ResponseStatus(HttpStatus.BAD_REQUEST) //400
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<com.allie.data.dto.Error> handleBadRequest(Exception e) {
-        logger.error("Error handling request: BAD REQUEST " + e.getMessage());
+        logger.error("Error handling request: BAD REQUEST ", e);
 
         Error error = new Error();
         error.setError(HttpStatus.BAD_REQUEST.getReasonPhrase());
@@ -59,7 +58,7 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
     @ResponseStatus(HttpStatus.NOT_FOUND) //404
     @ExceptionHandler(MissingResourceException.class)
     public ResponseEntity<com.allie.data.dto.Error> handleNotFound(Exception e) {
-        logger.error("Error handling request: NOT FOUND " + e.getMessage());
+        logger.error("Error handling request: NOT FOUND ", e);
 
         Error error = new Error();
         error.setError(HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -70,11 +69,10 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
 
         return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
     }
-
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE) //503
     @ExceptionHandler(MongoException.class)
     public ResponseEntity<com.allie.data.dto.Error> handleMongoException(Exception e) {
-        logger.error("Error handling request: SERVICE UNAVAILABLE " + e.getMessage());
+        logger.error("Error handling request: SERVICE UNAVAILABLE ", e);
 
         Error error = new Error();
         error.setError(HttpStatus.SERVICE_UNAVAILABLE.getReasonPhrase());
