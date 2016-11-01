@@ -84,4 +84,16 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
         return new ResponseEntity<Error>(error, HttpStatus.SERVICE_UNAVAILABLE);
     }
 
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity handleException(Exception e) {
+        logger.error("Error handling request: EXCEPTION ", e);
+        Error error = new Error();
+        error.setError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        error.setMessage(e.getMessage());
+        error.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        error.setTimestamp(System.currentTimeMillis());
+        error.setPath("/");
+        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

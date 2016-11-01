@@ -265,4 +265,20 @@ public class UsersControllerTest {
                 .header("x-allie-correlation-id", "correlation-id"))
                 .andExpect(status().isServiceUnavailable());
     }
+    @Test
+    public void testUpdateUserIsRunTimeException() throws Exception{
+        userResponseDTO = new UserResponseDTO();
+        userResponseDTO.setAllieId("test");
+        userRequestDTO = new UserRequestDTO();
+        userRequestDTO.setAllieId("test");
+
+        given(this.service.updateUser(allieId, userRequestDTO)).willThrow(new RuntimeException(""));
+
+        this.mvc.perform(put("/allie-data/v1/users/"+allieId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userRequestDTO))
+                .header("x-allie-request-id", "request-id")
+                .header("x-allie-correlation-id", "correlation-id"))
+                .andExpect(status().isInternalServerError());
+    }
 }
