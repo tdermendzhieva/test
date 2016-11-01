@@ -49,4 +49,13 @@ public class UserEvent{
         this.id = id;
     }
 
+    @Override
+    public String toString() {
+        return "UserEvent{" +
+                "id='" + id + '\'' +
+                ", allieId='" + allieId + '\'' +
+                ", eventReceivedTimestamp=" + eventReceivedTimestamp +
+                ", neuraJson=" + neuraJson +
+                '}';
+    }
 }

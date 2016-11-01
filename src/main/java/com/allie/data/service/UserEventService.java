@@ -43,7 +43,7 @@ public class UserEventService {
                         && userEvent.getEventReceivedTimestamp() != null
                 ) {
         } else {
-            logger.error("fields not provided " + userEvent);
+            logger.info("fields not provided {}", userEvent);
             throw new IllegalArgumentException("Missing required field");
 
         }
