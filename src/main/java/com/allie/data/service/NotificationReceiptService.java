@@ -30,6 +30,7 @@ public class NotificationReceiptService {
         NotificationReceipt notificationReceipt = factory.createNotificationReceipt(notificationReceiptDTO);
         //make sure we have an allie Id
         if(notificationReceipt.getAllieId() != null && !notificationReceipt.getAllieId().trim().isEmpty()) {
+            logger.debug("inserting receipt");
             return repository.insert(notificationReceipt);
         } else {
             logger.debug("request was missing required allieId: " + notificationReceiptDTO);
