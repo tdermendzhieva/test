@@ -70,6 +70,7 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
 
         return new ResponseEntity<Error>(error, HttpStatus.NOT_FOUND);
     }
+
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE) //503
     @ExceptionHandler(MongoException.class)
     public ResponseEntity<com.allie.data.dto.Error> handleMongoException(Exception e) {
