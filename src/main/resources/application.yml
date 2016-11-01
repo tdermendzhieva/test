@@ -41,9 +41,8 @@ spring:
 logging:
   file: /allie/logs/allie-data.log
   level:
-    guru.springframework.controllers: DEBUG
-    org.hibernate: DEBUG
-    org.springframework.web: DEBUG
+    guru.springframework.controllers: INFO
+    org.springframework.web: INFO
   pattern:
     file: "%d %-5level [%thread] %logger [correlation-id:%X{correlation-id}] [request-id:%X{request-id}]: %msg%n"
 server:
