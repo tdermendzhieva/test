@@ -7,6 +7,7 @@ import com.allie.data.jpa.model.User;
 import com.allie.data.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
@@ -104,24 +105,17 @@ public class UserService {
         User user = factory.createUser(userRequestDTO);
         String bodyAllieId = user.getAllieId();
         //make sure user provided allieId is not null or empty
-        if(bodyAllieId != null && !bodyAllieId.trim().equals("")) {
-            //next, make sure they are equal
-            if(!ObjectUtils.nullSafeEquals(bodyAllieId, allieId)){
-                logger.info("allieids are not equal");
-                throw new IllegalArgumentException("mismatched allieIds");
-            }
+        if(ObjectUtils.nullSafeEquals(bodyAllieId, allieId) && !bodyAllieId.trim().equals("")) {
             User tempUser = repository.findByAllieId(user.getAllieId());
             if(tempUser != null) {
                 user.setDbId(tempUser.getDbId());
                 logger.debug("updating user");
                 return factory.createUserResponseDTO(repository.save(user));
             } else {
-                logger.info("user not found " + user.getAllieId());
                 throw new MissingResourceException("No user found for allieId:" + user.getAllieId(), User.class.getName(), user.getAllieId());
             }
         } else {
-            logger.info("missing required fields");
-            throw new IllegalArgumentException("missing required field allieId");
+            throw new IllegalArgumentException(HttpStatus.BAD_REQUEST.getReasonPhrase());
         }
     }
 }
