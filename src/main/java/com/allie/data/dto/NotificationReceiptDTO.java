@@ -11,6 +11,18 @@ public class NotificationReceiptDTO {
     private String type;
     private String userSelectedOption;
 
+    @Override
+    public String toString() {
+        return "NotificationReceiptDTO{" +
+                "trackingNumber='" + trackingNumber + '\'' +
+                ", allieId='" + allieId + '\'' +
+                ", messageClass='" + messageClass + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                ", type='" + type + '\'' +
+                ", userSelectedOption='" + userSelectedOption + '\'' +
+                '}';
+    }
+
     public void setTrackingNumber(String trackingNumber) {this.trackingNumber = trackingNumber;}
     public String getTrackingNumber() {return this.trackingNumber;}
 
