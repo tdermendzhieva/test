@@ -273,7 +273,7 @@ public class EndToEndUserAllieDataTest {
         assertThat(users.get(0).getLastName(), equalTo("last"));
     }
     @Test
-    public void testUpdateUserNoAllieId400ResponseCode() {
+    public void testUpdateUserNoAllieId422ResponseCode() {
 
         userRequestDTO.setAllieId(null);
         userRequestDTO.setLastName("updatedLastName");
@@ -287,7 +287,7 @@ public class EndToEndUserAllieDataTest {
         HttpEntity<UserRequestDTO> entity = new HttpEntity<>(userRequestDTO, headers);
 
         ResponseEntity<UserResponseDTO> resp = this.testRestTemplate.exchange("/allie-data/v1/users/"+allieId, HttpMethod.PUT, entity, UserResponseDTO.class);
-        assertThat("response code is 400", resp.getStatusCode() == HttpStatus.BAD_REQUEST);
+        assertThat("response code is 400", resp.getStatusCode() == HttpStatus.UNPROCESSABLE_ENTITY);
     }
     @Test
     public void testUpdateUserNullsUnspecifiedFields() {
@@ -420,7 +420,7 @@ public class EndToEndUserAllieDataTest {
     }
 
     @Test
-    public void testGetAllAllieIdsBadFormatReturns400() {
+    public void testGetAllAllieIdsBadFormatReturns422() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -429,6 +429,6 @@ public class EndToEndUserAllieDataTest {
         HttpEntity<Object> entity = new HttpEntity<>(null, headers);
 
         ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users?format=asdf", HttpMethod.GET, entity, Object.class);
-        assertThat(resp.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+        assertThat(resp.getStatusCode(), equalTo(HttpStatus.UNPROCESSABLE_ENTITY));
     }
 }

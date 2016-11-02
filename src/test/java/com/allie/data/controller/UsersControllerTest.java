@@ -110,7 +110,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testPostUserReturnsBadRequest() throws Exception{
+    public void testPostUserReturnsUnprocessable() throws Exception{
         userResponseDTO = new UserResponseDTO();
         userResponseDTO.setPushToken("");
         userRequestDTO = new UserRequestDTO();
@@ -123,7 +123,7 @@ public class UsersControllerTest {
                 .content(asJsonString(userRequestDTO))
                 .header("x-allie-request-id", "request-id")
                 .header("x-allie-correlation-id", "correlation-id"))
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -140,13 +140,13 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testGetUserReturnsBadRequest() throws Exception{
+    public void testGetUserReturnsUnprocessable() throws Exception{
         given(this.service.selectUser(" ")).willThrow(new IllegalArgumentException());
 
         this.mvc.perform(get("/allie-data/v1/users/ ")
             .header("x-allie-request-id", "request-id")
             .header("x-allie-correlation-id", "correlation-id"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -173,7 +173,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testGetAllAllieIdsIsBadRequest() throws Exception{
+    public void testGetAllAllieIdsIsUnprocessable() throws Exception{
         List<String> list = new ArrayList<>();
         list.add("id0");
         given(this.service.getAllUserIds(Mockito.anyString())).willThrow(new IllegalArgumentException(""));
@@ -181,7 +181,7 @@ public class UsersControllerTest {
         this.mvc.perform(get("/allie-data/v1/users?format=asddfasd")
                 .header("x-allie-request-id", "request-id")
                 .header("x-allie-correlation-id", "correlation-id"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
@@ -233,7 +233,7 @@ public class UsersControllerTest {
     }
 
     @Test
-    public void testUpdateUserIsBadRequest() throws Exception{
+    public void testUpdateUserIsUnprocessable() throws Exception{
         userResponseDTO = new UserResponseDTO();
         userResponseDTO.setAllieId("test");
         userRequestDTO = new UserRequestDTO();
@@ -246,7 +246,7 @@ public class UsersControllerTest {
                 .content(asJsonString(userRequestDTO))
                 .header("x-allie-request-id", "request-id")
                 .header("x-allie-correlation-id", "correlation-id"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test

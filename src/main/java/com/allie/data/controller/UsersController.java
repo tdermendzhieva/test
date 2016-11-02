@@ -41,6 +41,7 @@ public class UsersController {
             @ApiResponse(code = 201, message = "The service successfully persisted the user"),
             @ApiResponse(code = 400, message = "No allieId was provided or the request was malformed to the point that no information can be stored"),
             @ApiResponse(code = 409, message = "A user with the given allieId already exists"),
+            @ApiResponse(code = 422, message = "The request was well-formed, however, could not be processed due to semantic errors"),
             @ApiResponse(code = 500, message = "There was an unspecified server error."),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
@@ -68,6 +69,7 @@ public class UsersController {
             @ApiResponse(code = 200, message = "The service found the user, the user is in the body"),
             @ApiResponse(code = 400, message = "Given allieId was null or empty"),
             @ApiResponse(code = 404, message = "No user found for given allieId"),
+            @ApiResponse(code = 422, message = "The request was well-formed, however, could not be processed due to semantic errors"),
             @ApiResponse(code = 500, message = "There was an unspecified server error."),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
@@ -95,6 +97,7 @@ public class UsersController {
             @ApiResponse(code = 200, message = "The service found the users and is returning them in the requested format"),
             @ApiResponse(code = 400, message="The requested format is invalid"),
             @ApiResponse(code = 404, message = "No users found"),
+            @ApiResponse(code = 422, message = "The request was well-formed, however, could not be processed due to semantic errors"),
             @ApiResponse(code = 500, message = "There was an unspecified error"),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
@@ -114,6 +117,7 @@ public class UsersController {
             @ApiResponse(code = 200, message = "The service successfully updated the resource"),
             @ApiResponse(code = 400, message = "No allieId was provided, the allieId in the url didn't match the allieId in the body, or the request was malformed to the point that no information can be stored"),
             @ApiResponse(code = 404, message = "No user found for given allieId"),
+            @ApiResponse(code = 422, message = "The request was well-formed, however, could not be processed due to semantic errors"),
             @ApiResponse(code = 500, message = "There was an unspecified error"),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })

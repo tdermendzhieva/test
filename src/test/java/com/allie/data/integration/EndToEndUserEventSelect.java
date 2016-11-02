@@ -79,7 +79,7 @@ public class EndToEndUserEventSelect {
     }
 
     @Test
-    public void testGetUserEventsReturns400() {
+    public void testGetUserEventsReturns422() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -89,7 +89,7 @@ public class EndToEndUserEventSelect {
 
         ResponseEntity<Object> resp = this.testRestTemplate.exchange("/allie-data/v1/users/ /events?received_date=2020-10-20", HttpMethod.GET, entity, Object.class);
 
-        assertThat(resp.getStatusCode().value(), equalTo(400));
+        assertThat(resp.getStatusCode().value(), equalTo(422));
 
     }
 

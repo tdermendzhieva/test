@@ -64,7 +64,7 @@ public class UserEventControllerTest {
                 .andExpect(status().isServiceUnavailable());
     }
     @Test
-    public void testCreateUserThrowsIllegalExceptionReturns400() throws Exception {
+    public void testCreateUserThrowsIllegalExceptionReturns422() throws Exception {
         given(this.service.insertEvent(Mockito.anyObject()))
                 .willThrow(new IllegalArgumentException("TEST"));
         this.mvc.perform(post("/allie-data/v1/events")
@@ -72,7 +72,7 @@ public class UserEventControllerTest {
                 .header("x-allie-correlation-id", "corr-id")
                 .header("x-allie-request-id", "req-id")
                 .content(new ObjectMapper().writeValueAsString(userEventDTO)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
 
@@ -105,13 +105,13 @@ public class UserEventControllerTest {
     }
 
     @Test
-    public void testGetUserReturns400() throws Exception{
+    public void testGetUserReturns422() throws Exception{
         given(this.service.selectEvents("test", "blah"))
                 .willThrow(new IllegalArgumentException());
         this.mvc.perform(get("/allie-data/v1/users/test/events?received_date=blah")
                 .header("x-allie-correlation-id", "corr-id")
                 .header("x-allie-request-id", "req-id"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test
