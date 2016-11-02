@@ -61,6 +61,7 @@ public class UserEventController {
             @ApiResponse(code = 200, message = "The events were successfully retrieved"),
             @ApiResponse(code = 404, message = "No events found for the given allieId and date"),
             @ApiResponse(code = 400, message = "Required allieId was null or empty"),
+            @ApiResponse(code = 422, message = "The request was well-formed, however, could not be processed due to semantic errors"),
             @ApiResponse(code = 500, message = "There was an unspecified server error."),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })

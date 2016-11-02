@@ -115,7 +115,7 @@ public class UserService {
                 throw new MissingResourceException("No user found for allieId:" + user.getAllieId(), User.class.getName(), user.getAllieId());
             }
         } else {
-            throw new IllegalArgumentException(HttpStatus.BAD_REQUEST.getReasonPhrase());
+            throw new IllegalArgumentException(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase());
         }
     }
 }

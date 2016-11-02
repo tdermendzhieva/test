@@ -70,10 +70,10 @@ public class EndToEndUserEventInsertAllieDataTest {
 
     }
     @Test
-    public void testPostBadRequestNoJson() throws IOException {
+    public void testPostUnprocessableNoJson() throws IOException {
         badRequest = createEventDTONoJson();
         ResponseEntity responseEntity = sendRequest(badRequest);
-        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.BAD_REQUEST.value()));
+        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.UNPROCESSABLE_ENTITY.value()));
         //now make sure entry is in db
         List<UserEvent> userEvent = repository.findAll();
         //make sure there's only one inserted
@@ -81,10 +81,10 @@ public class EndToEndUserEventInsertAllieDataTest {
 
     }
     @Test
-    public void testPostBadRequestNoAllieId() throws IOException {
+    public void testPostUnprocessableNoAllieId() throws IOException {
         badRequest = createEventDTONoAllieId();
         ResponseEntity responseEntity = sendRequest(badRequest);
-        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.BAD_REQUEST.value()));
+        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.UNPROCESSABLE_ENTITY.value()));
         //now make sure entry is in db
         List<UserEvent> userEvent = repository.findAll();
         //make sure there's only one inserted
@@ -103,11 +103,11 @@ public class EndToEndUserEventInsertAllieDataTest {
 
     }
     @Test
-    public void testPostBadRequestInvalidFormatTimestamp() throws IOException {
+    public void testPostUnprocessableInvalidFormatTimestamp() throws IOException {
         badRequest = createEventDTONoTimestamp();
         badRequest.setEventReceivedTimestamp("2015/10/10");
         ResponseEntity responseEntity = sendRequest(badRequest);
-        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.BAD_REQUEST.value()));
+        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.UNPROCESSABLE_ENTITY.value()));
         //now make sure entry is in db
         List<UserEvent> userEvent = repository.findAll();
         //make sure there's only one inserted
@@ -115,11 +115,11 @@ public class EndToEndUserEventInsertAllieDataTest {
 
     }
     @Test
-    public void testPostBadRequestInvalidTimestamp() throws IOException {
+    public void testPostUnprocessableInvalidTimestamp() throws IOException {
         badRequest = createEventDTONoTimestamp();
         badRequest.setEventReceivedTimestamp("20-54-23T18:25:43.511Z");
         ResponseEntity responseEntity = sendRequest(badRequest);
-        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.BAD_REQUEST.value()));
+        assertThat(responseEntity.getStatusCode().value(), equalTo(HttpStatus.UNPROCESSABLE_ENTITY.value()));
         //now make sure entry is in db
         List<UserEvent> userEvent = repository.findAll();
         //make sure there's only one inserted

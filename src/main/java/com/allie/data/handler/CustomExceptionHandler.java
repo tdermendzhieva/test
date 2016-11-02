@@ -39,20 +39,20 @@ public class CustomExceptionHandler  extends ResponseEntityExceptionHandler{
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST) //400
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY) //422
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<com.allie.data.dto.Error> handleBadRequest(Exception e) {
         logger.error("Error handling request: BAD REQUEST ", e);
 
         Error error = new Error();
-        error.setError(HttpStatus.BAD_REQUEST.getReasonPhrase());
+        error.setError(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase());
         error.setMessage(e.getMessage());
-        error.setStatus(HttpStatus.BAD_REQUEST.value());
+        error.setStatus(HttpStatus.UNPROCESSABLE_ENTITY.value());
         error.setTimestamp(System.currentTimeMillis());
         error.setPath("/");
 
 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND) //404

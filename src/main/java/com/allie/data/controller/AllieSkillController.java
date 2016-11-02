@@ -32,6 +32,7 @@ public class AllieSkillController {
             @ApiResponse(code = 200, message = "Skills were successfully retrieved"),
             @ApiResponse(code = 400, message = "The request was malformed to the point that no information can be stored"),
             @ApiResponse(code = 404, message = "No allie skills were found"),
+            @ApiResponse(code = 422, message = "The request was well-formed, however, could not be processed due to semantic errors"),
             @ApiResponse(code = 500, message = "There was an unspecified server error."),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
