@@ -33,6 +33,7 @@ public class User {
     public DateTime createdTimeStamp;
     public DateTime updatedTimeStamp;
     public String nickname;
+    public String neuraUserAccessToken;
 
     public String getDbId() {return this.dbId;}
     public void setDbId(String dbId) {this.dbId = dbId;}
@@ -72,4 +73,7 @@ public class User {
 
     public String getNickname() {return this.nickname;}
     public void setNickname(String nickname) {this.nickname = nickname;}
+
+    public String getNeuraUserAccessToken() {return this.neuraUserAccessToken;}
+    public void setNeuraUserAccessToken(String neuraUserAccessToken) {this.neuraUserAccessToken = neuraUserAccessToken;}
 }
