@@ -70,6 +70,11 @@ public class UserRequestDTO {
 				return false;
 		} else if (!addresses.equals(other.addresses))
 			return false;
+		if (neuraUserAccessToken == null) {
+			if (other.neuraUserAccessToken != null)
+				return false;
+		} else if (!neuraUserAccessToken.equals(other.neuraUserAccessToken))
+			return false;
 		if (allieId == null) {
 			if (other.allieId != null)
 				return false;
@@ -132,6 +137,7 @@ public class UserRequestDTO {
 		result = prime * result + ((nickname == null) ? 0 : nickname.hashCode());
 		result = prime * result + ((norms == null) ? 0 : norms.hashCode());
 		result = prime * result + ((pushToken == null) ? 0 : pushToken.hashCode());
+		result = prime * result + ((neuraUserAccessToken == null) ? 0 : neuraUserAccessToken.hashCode());
 		return result;
 	}
 
