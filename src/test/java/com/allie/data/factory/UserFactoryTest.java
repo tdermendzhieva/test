@@ -80,6 +80,8 @@ public class UserFactoryTest {
         user.setMeetings(meetings);
         dto.setNickname("nickname");
         user.setNickname("nickname");
+        dto.setNeuraUserAccessToken("accessToken");
+        user.setNeuraUserAccessToken("accessToken");
 
         user.setCreatedTimeStamp(new DateTime("2010-10-10T10:10:10.101Z"));
         user.setUpdatedTimeStamp(new DateTime("2010-10-10T10:10:10.101Z"));
@@ -170,6 +172,13 @@ public class UserFactoryTest {
         assertThat(user.getNickname(), equalTo("nickname"));
     }
 
+    @Test
+    public void testCreateUserNeuraUserAccessToken(){
+        User user = uf.createUser(dto);
+
+        assertThat(user.getNeuraUserAccessToken(), equalTo("accessToken"));
+    }
+
 
     @Test
     public void testCreateUserResponseDTOAllieId(){
@@ -250,5 +259,12 @@ public class UserFactoryTest {
         UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
 
         assertThat(userResponseDTO.getNickname(), equalTo("nickname"));
+    }
+
+    @Test
+    public void testCreateUserResponseDTONeuraUserAccessToken(){
+        UserResponseDTO userResponseDTO = uf.createUserResponseDTO(user);
+
+        assertThat(userResponseDTO.getNeuraUserAccessToken(), equalTo("accessToken"));
     }
 }

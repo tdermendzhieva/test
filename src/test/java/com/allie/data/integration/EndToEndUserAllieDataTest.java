@@ -83,6 +83,7 @@ public class EndToEndUserAllieDataTest {
         userRequestDTO.setEnrolledSkills(skills);
         userRequestDTO.setLastName("last");
         userRequestDTO.setNickname("nick");
+        userRequestDTO.setNeuraUserAccessToken("accessToken");
     }
 
     @After
@@ -130,7 +131,7 @@ public class EndToEndUserAllieDataTest {
         assertThat(users.size(), equalTo(1));
         assertThat(users.get(0).getAllieId(), equalTo(userRequestDTO.getAllieId()));
         assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userRequestDTO.getAddresses().get("address3").getCity()));
-
+        assertThat(users.get(0).getNeuraUserAccessToken(), equalTo(userRequestDTO.getNeuraUserAccessToken()));
     }
 
     @Test
@@ -187,7 +188,7 @@ public class EndToEndUserAllieDataTest {
         assertThat(users.get(0).getAddresses().get("address3").getCity(), equalTo(userRequestDTO.getAddresses().get("address3").getCity()));
         assertThat(users.get(1).getAllieId(), equalTo(userRequestDTO.getAllieId()));
         assertThat(users.get(1).getAddresses().get("address3").getCity(), equalTo(userRequestDTO.getAddresses().get("address3").getCity()));
-
+        assertThat(users.get(1).getNeuraUserAccessToken(), equalTo(userRequestDTO.getNeuraUserAccessToken()));
     }
 
     @Test
@@ -334,7 +335,7 @@ public class EndToEndUserAllieDataTest {
         assertThat(newUser.getAllieId(), equalTo(user.getAllieId()));
         assertThat(newUser.getNickname(), equalTo(user.getNickname()));
         assertThat(newUser.getAddresses().get("address5").getCity(), equalTo(user.getAddresses().get("address5").getCity()));
-
+        assertThat(newUser.getNeuraUserAccessToken(), equalTo(user.getNeuraUserAccessToken()));
     }
 
     @Test

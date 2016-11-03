@@ -25,6 +25,7 @@ public class UserFactory {
         user.setFirstName(userRequestDTO.getFirstName());
         user.setLastName(userRequestDTO.getLastName());
         user.setNickname(userRequestDTO.getNickname());
+        user.setNeuraUserAccessToken(userRequestDTO.getNeuraUserAccessToken());
         Map<String, Meeting> meetings = new HashMap<String, Meeting>();
         if(userRequestDTO.getMeetings() != null) {
             for (Map.Entry<String, MeetingDTO> entry : userRequestDTO.getMeetings().entrySet()) {
@@ -62,6 +63,7 @@ public class UserFactory {
         userResponseDTO.setAlliePhoneNumber(user.getAlliePhoneNumber());
         userResponseDTO.setDbId(user.getDbId());
         userResponseDTO.setPushToken(user.getPushToken());
+        userResponseDTO.setNeuraUserAccessToken(user.getNeuraUserAccessToken());
 
         userResponseDTO.setNickname(user.getNickname());
         userResponseDTO.setFirstName(user.getFirstName());
