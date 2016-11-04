@@ -16,4 +16,13 @@ public class BrowserHistoryDTO {
 
     public String getTimestamp() {return this.timestamp;}
     public void setTimestamp(String timestamp) {this.timestamp = timestamp;}
+
+    @Override
+    public String toString() {
+        return "BrowserHistoryDTO{" +
+                "allieId='" + allieId + '\'' +
+                ", url='" + url + '\'' +
+                ", timestamp='" + timestamp + '\'' +
+                '}';
+    }
 }

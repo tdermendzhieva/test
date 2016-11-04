@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/allie-data/v1")
-@Api(value = "browserHistory", description = "endpoint to store a user's browser history")
+@Api(value = "browserHistories", description = "endpoint to store a user's browser history")
 public class BrowserHistoryController {
     @Autowired
     BrowserHistoryService service;
@@ -31,7 +31,7 @@ public class BrowserHistoryController {
             @ApiResponse(code = 500, message = "There was an unspecified server error."),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
-    @RequestMapping(value="/browserHistory", method= RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value="/browserHistories", method= RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void postBrowserHistory(@RequestBody BrowserHistoryDTO browserHistory,
                                    @RequestHeader("x-allie-correlation-id") String correlationId,

@@ -26,4 +26,37 @@ public class BrowserHistory {
 
     public DateTime getTimestamp() {return this.timestamp;}
     public void setTimestamp(DateTime timestamp) {this.timestamp = timestamp;}
+
+    @Override
+    public String toString() {
+        return "BrowserHistory{" +
+                "dbId='" + dbId + '\'' +
+                ", allieId='" + allieId + '\'' +
+                ", url='" + url + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BrowserHistory that = (BrowserHistory) o;
+
+        if (getDbId() != null ? !getDbId().equals(that.getDbId()) : that.getDbId() != null) return false;
+        if (getAllieId() != null ? !getAllieId().equals(that.getAllieId()) : that.getAllieId() != null) return false;
+        if (getUrl() != null ? !getUrl().equals(that.getUrl()) : that.getUrl() != null) return false;
+        return getTimestamp() != null ? getTimestamp().equals(that.getTimestamp()) : that.getTimestamp() == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getDbId() != null ? getDbId().hashCode() : 0;
+        result = 31 * result + (getAllieId() != null ? getAllieId().hashCode() : 0);
+        result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+        result = 31 * result + (getTimestamp() != null ? getTimestamp().hashCode() : 0);
+        return result;
+    }
 }
