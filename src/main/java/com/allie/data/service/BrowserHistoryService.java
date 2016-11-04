@@ -37,9 +37,11 @@ public class BrowserHistoryService {
         if(browserHistory.getAllieId() != null && !browserHistory.getAllieId().isEmpty()) {
             toReturn = repository.insert(browserHistory);
         } else {
+            //the data is useless to us without a user to attach it to
             logger.debug("missing required field allieId");
             throw new IllegalArgumentException("missing required field allieId");
         }
+        //if we don't get a dbId it didn't properly insert
         if(toReturn.getDbId() == null) {
             logger.debug("Insert browser history failed for browserHistoryDTO {0}", browserHistoryDTO);
             throw new MongoException("failed to insert browser history");

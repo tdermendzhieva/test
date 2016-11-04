@@ -20,6 +20,7 @@ public class BrowserHistoryFactory {
         BrowserHistory browserHistory = new BrowserHistory();
         browserHistory.setAllieId(browserHistoryDTO.getAllieId());
         browserHistory.setUrl(browserHistoryDTO.getUrl());
+        //create a joda time DateTime from the timestamp string
         browserHistory.setTimestamp(new DateTime(browserHistoryDTO.getTimestamp()));
         return browserHistory;
     }
