@@ -10,6 +10,12 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class BrowserHistoryFactory {
+
+    /**
+     * Generates a BrowserHistory object from a BrowserHistoryDTO
+     * @param browserHistoryDTO the dto to transform
+     * @return BrowserHistory transformed from browserHistoryDTO
+     */
     public BrowserHistory createBrowserHistory(BrowserHistoryDTO browserHistoryDTO) {
         BrowserHistory browserHistory = new BrowserHistory();
         browserHistory.setAllieId(browserHistoryDTO.getAllieId());

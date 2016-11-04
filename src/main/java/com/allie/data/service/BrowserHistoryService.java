@@ -24,6 +24,13 @@ public class BrowserHistoryService {
         this.factory = factory;
     }
 
+    /**
+     * transforms then inserts browser history data into the mongo db
+     * @param browserHistoryDTO the browser history information to persist
+     * @return the persisted browser history information
+     * @throws IllegalArgumentException when an allieId is not supplied, as this field is mandatory
+     * @throws MongoException when the insert to mongo fails and a dbId is not returned
+     */
     public BrowserHistory insertBrowserHistory(BrowserHistoryDTO browserHistoryDTO) {
         BrowserHistory browserHistory = factory.createBrowserHistory(browserHistoryDTO);
         BrowserHistory toReturn;

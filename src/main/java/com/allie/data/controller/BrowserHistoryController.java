@@ -21,6 +21,12 @@ public class BrowserHistoryController {
     @Autowired
     BrowserHistoryService service;
 
+    /**
+     * Endpoint to capture and persist browser history data asynchronously
+     * @param browserHistory the information about the user and their browsing to store
+     * @param correlationId an id created by the generating system for cross-referencing the request
+     * @param requestId an id created by the requester to reference the request
+     */
     @ApiOperation(value = "Persistence service call to store an allie user's browser history.",
             notes = "The service will asynchronously store all data in backend persistence structure.  If the request successfully reaches the service, a 202 (accepted) HttpStatus will " +
                     "be returned")
@@ -36,7 +42,9 @@ public class BrowserHistoryController {
     public void postBrowserHistory(@RequestBody BrowserHistoryDTO browserHistory,
                                    @RequestHeader("x-allie-correlation-id") String correlationId,
                                    @RequestHeader("x-allie-request-id") String requestId) {
+        //Async call, spin up a new thread then return
         Thread thread = new Thread(() -> service.insertBrowserHistory(browserHistory));
+        //naming the thread for testability
         thread.setName("insert-browser-history");
         thread.start();
     }
