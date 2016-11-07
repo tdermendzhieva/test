@@ -5,4 +5,5 @@ package com.allie.data.constant;
  */
 public class ValidationMessage {
     public static final String ALLIEID_NOT_NULL =  "AllieId cannot be null";
+    public static final String URL_MAX_SIZE = "URL exceeds maximum allowable size";
 }

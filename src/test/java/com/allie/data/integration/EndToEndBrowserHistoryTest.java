@@ -1,8 +1,11 @@
 package com.allie.data.integration;
 
+import com.allie.data.constant.ValidationMessage;
 import com.allie.data.dto.BrowserHistoryDTO;
+import com.allie.data.dto.Error;
 import com.allie.data.jpa.model.BrowserHistory;
 import com.allie.data.repository.BrowserHistoryRepository;
+import com.allie.data.util.StringTestUtil;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -44,6 +47,7 @@ public class EndToEndBrowserHistoryTest {
     private String url;
     private String ts;
     private DateTime timeStamp;
+    private String maxLengthString;
 
     @Before
     public void setUp() {
@@ -61,6 +65,7 @@ public class EndToEndBrowserHistoryTest {
         bh.setAllieId(allieId);
         bh.setUrl(url);
         bh.setTimestamp(timeStamp);
+        maxLengthString = StringTestUtil.getStringOfLength(500);
 
     }
 
@@ -133,6 +138,67 @@ public class EndToEndBrowserHistoryTest {
 
         ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Object.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
+
+    }
+
+    @Test
+    public void testPostUrlIsMaxLengthAndIsSuccessful() throws Exception {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        //set request url
+        dto.setUrl(maxLengthString);
+
+        //create request
+        HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(dto, headers);
+
+        ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Object.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.ACCEPTED));
+
+        //wait on the thread that the post spins up
+        Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+        for (Thread thread: threadSet) {
+            if(thread.isAlive() && thread.getName().equals("insert-browser-history")) {
+                thread.join(5 * 1000);
+            }
+        }
+        //set response url
+        bh.setUrl(maxLengthString);
+
+        List<BrowserHistory> historyList = repository.findAll();
+        assertThat(historyList.size(), equalTo(1));
+        historyList.get(0).setDbId(null);
+        assertThat(historyList.get(0), equalTo(bh));
+    }
+
+    @Test
+    public void testPostBrowserHistoryUrlExceedsLengthThrows422() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        maxLengthString += "1";
+        dto.setUrl(maxLengthString);
+        HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(dto, headers);
+
+        ResponseEntity<com.allie.data.dto.Error> response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Error.class);
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.UNPROCESSABLE_ENTITY));
+
+    }
+    @Test
+    public void testPostBrowserHistoryUrlExceedsLengthReturnsProperError() throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.add("x-allie-request-id", "req-id");
+        headers.add("x-allie-correlation-id", "corr-id");
+        maxLengthString += "1";
+        dto.setUrl(maxLengthString);
+        HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(dto, headers);
+
+        ResponseEntity<com.allie.data.dto.Error> response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Error.class);
+        assertThat(response.getBody().getMessage(), equalTo(ValidationMessage.URL_MAX_SIZE));
 
     }
 }

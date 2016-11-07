@@ -3,6 +3,7 @@ package com.allie.data.dto;
 import com.allie.data.constant.ValidationMessage;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Created by jacob.headlee on 11/4/2016.
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 public class BrowserHistoryDTO {
     @NotNull(message = ValidationMessage.ALLIEID_NOT_NULL)
     private String allieId;
+    @Size(max = 500, message = ValidationMessage.URL_MAX_SIZE)
     private String url;
     private String timestamp;
 

@@ -2,6 +2,7 @@ package com.allie.data.controller;
 
 import com.allie.data.dto.BrowserHistoryDTO;
 import com.allie.data.service.BrowserHistoryService;
+import com.allie.data.util.StringTestUtil;
 import com.allie.data.validation.ValidationService;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,16 +26,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BrowserHistoryController.class)
 public class BrowserHistoryControllerTest {
     @Autowired
-    MockMvc mvc;
+    private MockMvc mvc;
 
     @MockBean
-    BrowserHistoryService service;
+    private BrowserHistoryService service;
     @MockBean
-    ValidationService validationService;
+    private ValidationService validationService;
 
-    String requestId;
-    String correlationId;
-    BrowserHistoryDTO browserHistoryDTO;
+    private String requestId;
+    private String correlationId;
+    private BrowserHistoryDTO browserHistoryDTO;
+    private String urlStringMax;
 
     @Before
     public void setUp() {
@@ -43,6 +45,8 @@ public class BrowserHistoryControllerTest {
         browserHistoryDTO = new BrowserHistoryDTO();
         browserHistoryDTO.setAllieId("allieId");
         browserHistoryDTO.setTimestamp("2016-11-04T09:01:48.483Z");
+        urlStringMax = StringTestUtil.getStringOfLength(500);
+
     }
 
     @Test
@@ -65,8 +69,29 @@ public class BrowserHistoryControllerTest {
                 .andExpect(status().isBadRequest());
     }
     @Test
-    public void testPostBrowserHistoryReturns422() throws Exception{
+    public void testPostBrowserHistoryReturns422ForNullAllieId() throws Exception{
         browserHistoryDTO.setAllieId(null);
+        mvc.perform(post("/allie-data/v1/browserHistories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("x-allie-request-id", requestId)
+                .header("x-allie-correlation-id", correlationId)
+                .content(asJsonString(browserHistoryDTO)))
+                .andExpect(status().isUnprocessableEntity());
+    }
+    @Test
+    public void testPostBrowserHistoryReturns202ForMaxLengthString() throws Exception{
+        browserHistoryDTO.setUrl(urlStringMax);
+        mvc.perform(post("/allie-data/v1/browserHistories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("x-allie-request-id", requestId)
+                .header("x-allie-correlation-id", correlationId)
+                .content(asJsonString(browserHistoryDTO)))
+                .andExpect(status().isAccepted());
+    }
+    @Test
+    public void testPostBrowserHistoryReturns422ForExceededMaxUrlLength() throws Exception{
+        String maxLengthExceeded = urlStringMax + "1";
+        browserHistoryDTO.setUrl(maxLengthExceeded);
         mvc.perform(post("/allie-data/v1/browserHistories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("x-allie-request-id", requestId)
