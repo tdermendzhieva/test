@@ -2,7 +2,6 @@ package com.allie.data.integration;
 
 import com.allie.data.dto.BrowserHistoryDTO;
 import com.allie.data.jpa.model.BrowserHistory;
-import com.allie.data.repository.AllieSkillsRepository;
 import com.allie.data.repository.BrowserHistoryRepository;
 import org.joda.time.DateTime;
 import org.junit.After;
@@ -110,7 +109,7 @@ public class EndToEndBrowserHistoryTest {
         HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(dto, headers);
 
         ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Object.class);
-        assertThat(response.getStatusCode(), equalTo(HttpStatus.ACCEPTED));
+        assertThat(response.getStatusCode(), equalTo(HttpStatus.UNPROCESSABLE_ENTITY));
 
         //wait on the thread that the post spins up
         Set<Thread> threadSet = Thread.getAllStackTraces().keySet();

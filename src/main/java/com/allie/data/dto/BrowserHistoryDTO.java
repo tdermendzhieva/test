@@ -1,9 +1,14 @@
 package com.allie.data.dto;
 
+import com.allie.data.constant.ValidationMessage;
+
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by jacob.headlee on 11/4/2016.
  */
 public class BrowserHistoryDTO {
+    @NotNull(message = ValidationMessage.ALLIEID_NOT_NULL)
     private String allieId;
     private String url;
     private String timestamp;

@@ -2,6 +2,7 @@ package com.allie.data.controller;
 
 import com.allie.data.dto.BrowserHistoryDTO;
 import com.allie.data.service.BrowserHistoryService;
+import com.allie.data.validation.ValidationService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +29,8 @@ public class BrowserHistoryControllerTest {
 
     @MockBean
     BrowserHistoryService service;
+    @MockBean
+    ValidationService validationService;
 
     String requestId;
     String correlationId;
@@ -60,5 +63,15 @@ public class BrowserHistoryControllerTest {
                 .header("x-allie-correlation-id", correlationId)
                 .content(asJsonString(null)))
                 .andExpect(status().isBadRequest());
+    }
+    @Test
+    public void testPostBrowserHistoryReturns422() throws Exception{
+        browserHistoryDTO.setAllieId(null);
+        mvc.perform(post("/allie-data/v1/browserHistories")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("x-allie-request-id", requestId)
+                .header("x-allie-correlation-id", correlationId)
+                .content(asJsonString(browserHistoryDTO)))
+                .andExpect(status().isUnprocessableEntity());
     }
 }

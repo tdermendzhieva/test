@@ -8,7 +8,6 @@ import com.mongodb.MongoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResourceAccessException;
 
 /**
  * Created by jacob.headlee on 11/4/2016.
@@ -34,15 +33,9 @@ public class BrowserHistoryService {
     public BrowserHistory insertBrowserHistory(BrowserHistoryDTO browserHistoryDTO) {
         BrowserHistory browserHistory = factory.createBrowserHistory(browserHistoryDTO);
         BrowserHistory toReturn;
-        if(browserHistory.getAllieId() != null && !browserHistory.getAllieId().isEmpty()) {
-            toReturn = repository.insert(browserHistory);
-        } else {
-            //the data is useless to us without a user to attach it to
-            logger.debug("missing required field allieId");
-            throw new IllegalArgumentException("missing required field allieId");
-        }
+        toReturn = repository.insert(browserHistory);
         //if we don't get a dbId it didn't properly insert
-        if(toReturn.getDbId() == null) {
+        if (toReturn.getDbId() == null) {
             logger.debug("Insert browser history failed for browserHistoryDTO {0}", browserHistoryDTO);
             throw new MongoException("failed to insert browser history");
         }

@@ -65,21 +65,6 @@ public class BrowserHistoryServiceTest {
     }
 
     @Test
-    public void testInsertNoAllieId() {
-        browserHistoryDTO.setAllieId(null);
-        browserHistory.setAllieId(null);
-        given(repository.insert(Matchers.any(BrowserHistory.class))).willReturn(browserHistory);
-        given(factory.createBrowserHistory(Mockito.anyObject())).willReturn(browserHistory);
-        try {
-            service.insertBrowserHistory(browserHistoryDTO);
-        } catch (Exception e) {
-            assertThat(e.getClass(), equalTo(IllegalArgumentException.class));
-            return;
-        }
-        fail();
-    }
-
-    @Test
     public void testInsertFailed() {
         given(repository.insert(Matchers.any(BrowserHistory.class))).willReturn(new BrowserHistory());
         given(factory.createBrowserHistory(Mockito.anyObject())).willReturn(browserHistory);
