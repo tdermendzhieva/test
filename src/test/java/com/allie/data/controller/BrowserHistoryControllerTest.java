@@ -51,7 +51,7 @@ public class BrowserHistoryControllerTest {
 
     @Test
     public void testPostBrowserHistoryReturns202() throws Exception{
-        mvc.perform(post("/allie-data/v1/browserHistories")
+        mvc.perform(post("/allie-data/v1/browserHistoryRecords")
             .contentType(MediaType.APPLICATION_JSON)
             .header("x-allie-request-id", requestId)
             .header("x-allie-correlation-id", correlationId)
@@ -61,7 +61,7 @@ public class BrowserHistoryControllerTest {
 
     @Test
     public void testPostBrowserHistoryReturns400() throws Exception{
-        mvc.perform(post("/allie-data/v1/browserHistories")
+        mvc.perform(post("/allie-data/v1/browserHistoryRecords")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("x-allie-request-id", requestId)
                 .header("x-allie-correlation-id", correlationId)
@@ -71,7 +71,7 @@ public class BrowserHistoryControllerTest {
     @Test
     public void testPostBrowserHistoryReturns422ForNullAllieId() throws Exception{
         browserHistoryDTO.setAllieId(null);
-        mvc.perform(post("/allie-data/v1/browserHistories")
+        mvc.perform(post("/allie-data/v1/browserHistoryRecords")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("x-allie-request-id", requestId)
                 .header("x-allie-correlation-id", correlationId)
@@ -81,7 +81,7 @@ public class BrowserHistoryControllerTest {
     @Test
     public void testPostBrowserHistoryReturns202ForMaxLengthString() throws Exception{
         browserHistoryDTO.setUrl(urlStringMax);
-        mvc.perform(post("/allie-data/v1/browserHistories")
+        mvc.perform(post("/allie-data/v1/browserHistoryRecords")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("x-allie-request-id", requestId)
                 .header("x-allie-correlation-id", correlationId)
@@ -92,7 +92,7 @@ public class BrowserHistoryControllerTest {
     public void testPostBrowserHistoryReturns422ForExceededMaxUrlLength() throws Exception{
         String maxLengthExceeded = urlStringMax + "1";
         browserHistoryDTO.setUrl(maxLengthExceeded);
-        mvc.perform(post("/allie-data/v1/browserHistories")
+        mvc.perform(post("/allie-data/v1/browserHistoryRecords")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("x-allie-request-id", requestId)
                 .header("x-allie-correlation-id", correlationId)

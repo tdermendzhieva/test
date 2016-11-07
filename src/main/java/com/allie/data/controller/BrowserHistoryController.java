@@ -21,7 +21,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/allie-data/v1")
-@Api(value = "browserHistories", description = "endpoint to store a user's browser history")
+@Api(value = "browserHistoryRecords", description = "endpoint to store a user's browser history")
 public class BrowserHistoryController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -45,7 +45,7 @@ public class BrowserHistoryController {
             @ApiResponse(code = 500, message = "There was an unspecified server error."),
             @ApiResponse(code = 503, message = "There was an issue connecting to a downstream system")
     })
-    @RequestMapping(value="/browserHistories", method= RequestMethod.POST, consumes = "application/json")
+    @RequestMapping(value="/browserHistoryRecords", method= RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void postBrowserHistory(@RequestHeader("x-allie-correlation-id") String correlationId,
                                    @RequestHeader("x-allie-request-id") String requestId,
