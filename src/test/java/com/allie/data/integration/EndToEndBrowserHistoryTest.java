@@ -87,7 +87,7 @@ public class EndToEndBrowserHistoryTest {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(dto, headers);
 
-        ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Object.class);
+        ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistoryRecords", entity, Object.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.ACCEPTED));
 
         //wait on the thread that the post spins up
@@ -113,7 +113,7 @@ public class EndToEndBrowserHistoryTest {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(dto, headers);
 
-        ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Object.class);
+        ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistoryRecords", entity, Object.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.UNPROCESSABLE_ENTITY));
 
         //wait on the thread that the post spins up
@@ -136,7 +136,7 @@ public class EndToEndBrowserHistoryTest {
         headers.add("x-allie-correlation-id", "corr-id");
         HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(null, headers);
 
-        ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Object.class);
+        ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistoryRecords", entity, Object.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.BAD_REQUEST));
 
     }
@@ -154,7 +154,7 @@ public class EndToEndBrowserHistoryTest {
         //create request
         HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(dto, headers);
 
-        ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Object.class);
+        ResponseEntity response = restTemplate.postForEntity("/allie-data/v1/browserHistoryRecords", entity, Object.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.ACCEPTED));
 
         //wait on the thread that the post spins up
@@ -183,7 +183,7 @@ public class EndToEndBrowserHistoryTest {
         dto.setUrl(maxLengthString);
         HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(dto, headers);
 
-        ResponseEntity<com.allie.data.dto.Error> response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Error.class);
+        ResponseEntity<com.allie.data.dto.Error> response = restTemplate.postForEntity("/allie-data/v1/browserHistoryRecords", entity, Error.class);
         assertThat(response.getStatusCode(), equalTo(HttpStatus.UNPROCESSABLE_ENTITY));
 
     }
@@ -197,7 +197,7 @@ public class EndToEndBrowserHistoryTest {
         dto.setUrl(maxLengthString);
         HttpEntity<BrowserHistoryDTO> entity = new HttpEntity<>(dto, headers);
 
-        ResponseEntity<com.allie.data.dto.Error> response = restTemplate.postForEntity("/allie-data/v1/browserHistories", entity, Error.class);
+        ResponseEntity<com.allie.data.dto.Error> response = restTemplate.postForEntity("/allie-data/v1/browserHistoryRecords", entity, Error.class);
         assertThat(response.getBody().getMessage(), equalTo(ValidationMessage.URL_MAX_SIZE));
 
     }
