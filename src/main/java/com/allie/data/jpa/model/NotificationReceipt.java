@@ -17,7 +17,7 @@ public class NotificationReceipt {
     private String trackingNumber;
     private String messageClass;
     private String type;
-    private String userSelecteOptions;
+    private String userSelectedOptions;
     private DateTime timestamp;
 
     public String getDbId() {return this.dbId;}
@@ -35,8 +35,8 @@ public class NotificationReceipt {
     public String getType() {return this.type;}
     public void setType(String type) {this.type = type;}
 
-    public String getUserSelectedOptions() {return this.userSelecteOptions;}
-    public void setUserSelectedOptions(String userSelecteOptions) {this.userSelecteOptions = userSelecteOptions;}
+    public String getUserSelectedOptions() {return this.userSelectedOptions;}
+    public void setUserSelectedOptions(String userSelecteOptions) {this.userSelectedOptions = userSelecteOptions;}
 
     public DateTime getTimestamp() {return this.timestamp;}
     public void setTimestamp(DateTime timestamp) {this.timestamp = timestamp;}
