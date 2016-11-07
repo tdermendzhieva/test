@@ -25,17 +25,18 @@ public class ValidationService {
      */
     public String getValidationErrors(BindingResult bindingResult) {
         StringBuilder stringBuilder = new StringBuilder();
-        int size = bindingResult.getAllErrors().size();
-        int current = 1;
+        boolean first = true;
         for (ObjectError error : bindingResult.getAllErrors()) {
             if (error instanceof FieldError) {
                 FieldError fieldError = (FieldError) error;
 
-                stringBuilder.append(messageSource.getMessage(fieldError, null));
-                if(current < size){
+                if(first) {
+                    stringBuilder.append(messageSource.getMessage(fieldError, null));
+                    first = false;
+                } else {
                     stringBuilder.append(", ");
+                    stringBuilder.append(messageSource.getMessage(fieldError, null));
                 }
-                current++;
             }
 
         }
