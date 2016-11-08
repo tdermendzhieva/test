@@ -64,7 +64,7 @@ public class NotificationReceiptControllerTest {
         notificationReceipt.setTimestamp(new DateTime(timestamp));
         notificationReceipt.setTrackingNumber(trackingNumber);
         notificationReceipt.setType(type);
-        notificationReceipt.setUserSelectedOptions(userSelectedOption);
+        notificationReceipt.setUserSelectedOption(userSelectedOption);
     }
 
 

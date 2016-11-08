@@ -14,11 +14,12 @@ public class NotificationReceiptFactory {
         NotificationReceipt notificationReceipt = new NotificationReceipt();
 
         notificationReceipt.setAllieId(notificationReceiptDTO.getAllieId());
-        notificationReceipt.setUserSelectedOptions(notificationReceiptDTO.getUserSelectedOption());
+        notificationReceipt.setUserSelectedOption(notificationReceiptDTO.getUserSelectedOption());
         notificationReceipt.setType(notificationReceiptDTO.getType());
         notificationReceipt.setMessageClass(notificationReceiptDTO.getMessageClass());
         notificationReceipt.setTrackingNumber(notificationReceiptDTO.getTrackingNumber());
         notificationReceipt.setTimestamp(new DateTime(notificationReceiptDTO.getTimestamp()));
+        notificationReceipt.setUserEnteredOption(notificationReceiptDTO.getUserEnteredOption());
 
         return notificationReceipt;
     }
