@@ -10,6 +10,7 @@ public class NotificationReceiptDTO {
     private String timestamp;
     private String type;
     private String userSelectedOption;
+    private String userEnteredOption;
 
     @Override
     public String toString() {
@@ -20,6 +21,7 @@ public class NotificationReceiptDTO {
                 ", timestamp='" + timestamp + '\'' +
                 ", type='" + type + '\'' +
                 ", userSelectedOption='" + userSelectedOption + '\'' +
+                ", userEnteredOption='" + userEnteredOption + '\'' +
                 '}';
     }
 
@@ -40,5 +42,8 @@ public class NotificationReceiptDTO {
 
     public void setUserSelectedOption(String userSelectedOption) {this.userSelectedOption = userSelectedOption;}
     public String getUserSelectedOption() {return this.userSelectedOption;}
+
+    public void setUserEnteredOption(String userEnteredOption) {this.userEnteredOption = userEnteredOption;}
+    public String getUserEnteredOption() {return this.userEnteredOption;}
 
 }

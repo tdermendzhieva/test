@@ -49,6 +49,7 @@ public class EndToEndNotificationReceiptTest {
     String trackingNumber;
     String messageClass;
     String userSelectedOption;
+    String userEnteredOption;
     DateTime dt;
 
     @Before
@@ -62,6 +63,7 @@ public class EndToEndNotificationReceiptTest {
         type = "SOME_TYPE";
         trackingNumber = "tracking#######";
         userSelectedOption = "sure, why not?";
+        userEnteredOption = "I like donuts";
         messageClass = "MESSAGE_CLASS";
         dt = new DateTime(timeStamp);
 
@@ -73,12 +75,13 @@ public class EndToEndNotificationReceiptTest {
         good.setTrackingNumber(trackingNumber);
         good.setUserSelectedOption(userSelectedOption);
         good.setMessageClass(messageClass);
+        good.setUserEnteredOption(userEnteredOption);
 
         notificationReceipt.setAllieId(allieId);
         notificationReceipt.setTimestamp(dt);
         notificationReceipt.setType(type);
         notificationReceipt.setTrackingNumber(trackingNumber);
-        notificationReceipt.setUserSelectedOptions(userSelectedOption);
+        notificationReceipt.setUserSelectedOption(userSelectedOption);
         notificationReceipt.setMessageClass(messageClass);
 
     }
@@ -114,6 +117,7 @@ public class EndToEndNotificationReceiptTest {
         assertThat(fromMongo.size(), equalTo(1));
         assertThat(fromMongo.get(0).getAllieId(), equalTo(allieId));
         assertThat(fromMongo.get(0).getMessageClass(), equalTo(messageClass));
+        assertThat(fromMongo.get(0).getUserEnteredOption(), equalTo(userEnteredOption));
     }
 
     @Test

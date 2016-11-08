@@ -65,7 +65,7 @@ public class NotificationReceiptFactoryTest {
     @Test
     public void testFactorySetsUserSelectedOption() {
         notificationReceipt = factory.createNotificationReceipt(notificationReceiptDTO);
-        assertThat(notificationReceipt.getUserSelectedOptions(), equalTo(userSelectedOption));
+        assertThat(notificationReceipt.getUserSelectedOption(), equalTo(userSelectedOption));
     }
 
     @Test
