@@ -31,7 +31,9 @@ if (System.env.APP_VERSION) {
 }
 jar {
     baseName = archivesBaseName
-    version = version + "-SNAPSHOT"
+    if(System.env.DEPLOYMENT_ENVIRONMENT == "DEV") {
+        version = version + "-SNAPSHOT"
+    }
     manifest {
         attributes 'Main-Class': 'com.allie.data.MongoConnectionWSConfiguration'
     }
@@ -83,7 +85,7 @@ dependencies {
 
 
 task zipAWSArchive(type: Zip) {
-    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}-SNAPSHOT"
+    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}"
     println artifactName
     def zip = artifactName + ".zip"
     def buildPath = 'build/libs/' + artifactName + ".jar";
@@ -103,7 +105,7 @@ task s3Upload(type: Exec, dependsOn: zipAWSArchive){
     //define location of s3 upload script
     def s3Upload="automation/s3upload.sh"
     //defined name of file to be uploaded
-    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}-SNAPSHOT.zip"
+    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}.zip"
     //define path of project where artifact is located
     def localDist = "dir/${artifactName}";
 
@@ -117,7 +119,7 @@ task deployToAWS(type:Exec) {
     // Defines the path into the project of the deploy.sh script
     def deploy = "automation/deploy.sh"
     // Defines the distribution name based on the jar section
-    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}-SNAPSHOT.zip"
+    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}.zip"
     // Deploys the given distribution to the test deployment group
     executable "bash"
     args "-c", "sh ${deploy} ${System.env.DEPLOYMENT_ENVIRONMENT} ${artifactName}"
