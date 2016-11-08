@@ -9,24 +9,42 @@ import com.allie.data.jpa.model.Address;
  * Created by jacob.headlee on 10/24/2016.
  */
 public class UserResponseDTO {
-    public UserResponseDTO() {}
 
-    public String dbId;
+    private String dbId;
+    private String allieId;
 
-    public String allieId;
+    private String alliePhoneNumber;
+    private String firstName;
+    private String lastName;
+    private String pushToken;
+    private Map<String, Address> addresses;
+    private Map<String, MeetingDTO> meetings;
+    private Map<String, String> norms;
+    private List<String> enrolledSkills;
+    private String createdTimeStamp;
+    private String updatedTimeStamp;
+    private String nickname;
+    private String neuraUserAccessToken;
 
-    public String alliePhoneNumber;
-    public String firstName;
-    public String lastName;
-    public String pushToken;
-    public Map<String, Address> addresses;
-    public Map<String, MeetingDTO> meetings;
-    public Map<String, String> norms;
-    public List<String> enrolledSkills;
-    public String createdTimeStamp;
-    public String updatedTimeStamp;
-    public String nickname;
-    public String neuraUserAccessToken;
+    @Override
+    public String toString() {
+        return "UserResponseDTO{" +
+                "dbId='" + dbId + '\'' +
+                ", allieId='" + allieId + '\'' +
+                ", alliePhoneNumber='" + alliePhoneNumber + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", pushToken='" + pushToken + '\'' +
+                ", addresses=" + addresses +
+                ", meetings=" + meetings +
+                ", norms=" + norms +
+                ", enrolledSkills=" + enrolledSkills +
+                ", createdTimeStamp='" + createdTimeStamp + '\'' +
+                ", updatedTimeStamp='" + updatedTimeStamp + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", neuraUserAccessToken='" + neuraUserAccessToken + '\'' +
+                '}';
+    }
 
     public String getDbId() {return this.dbId;}
     public void setDbId(String dbId) {this.dbId = dbId;}

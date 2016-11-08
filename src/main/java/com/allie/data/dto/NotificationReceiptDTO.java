@@ -4,6 +4,7 @@ package com.allie.data.dto;
  * Created by jacob.headlee on 11/1/2016.
  */
 public class NotificationReceiptDTO {
+
     private String trackingNumber;
     private String allieId;
     private String messageClass;

@@ -9,21 +9,37 @@ import java.util.Map;
  * Created by jacob.headlee on 10/20/2016.
  */
 public class UserRequestDTO {
-    public UserRequestDTO(){}
 
-    public String allieId;
-    public String alliePhoneNumber;
-    public String firstName;
-    public String lastName;
-    public String pushToken;
-    public Map<String, Address> addresses;
-    public Map<String, MeetingDTO> meetings;
-    public Map<String, String> norms;
-    public List<String> enrolledSkills;
-    public String nickname;
-	public String neuraUserAccessToken;
+    private String allieId;
+	private String alliePhoneNumber;
+	private String firstName;
+	private String lastName;
+	private String pushToken;
+	private Map<String, Address> addresses;
+	private Map<String, MeetingDTO> meetings;
+	private Map<String, String> norms;
+	private List<String> enrolledSkills;
+	private String nickname;
+	private String neuraUserAccessToken;
 
-    public String getAllieId() {return allieId;}
+	@Override
+	public String toString() {
+		return "UserRequestDTO{" +
+				"allieId='" + allieId + '\'' +
+				", alliePhoneNumber='" + alliePhoneNumber + '\'' +
+				", firstName='" + firstName + '\'' +
+				", lastName='" + lastName + '\'' +
+				", pushToken='" + pushToken + '\'' +
+				", addresses=" + addresses +
+				", meetings=" + meetings +
+				", norms=" + norms +
+				", enrolledSkills=" + enrolledSkills +
+				", nickname='" + nickname + '\'' +
+				", neuraUserAccessToken='" + neuraUserAccessToken + '\'' +
+				'}';
+	}
+
+	public String getAllieId() {return allieId;}
     public void setAllieId(String allieId) {this.allieId = allieId;}
 
     public String getAlliePhoneNumber() {return alliePhoneNumber;}
@@ -56,96 +72,48 @@ public class UserRequestDTO {
 	public String getNeuraUserAccessToken() {return neuraUserAccessToken;}
 	public void setNeuraUserAccessToken(String neuraUserAccessToken) {this.neuraUserAccessToken = neuraUserAccessToken;}
 
-    @Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		UserRequestDTO that = (UserRequestDTO) o;
+
+		if (getAllieId() != null ? !getAllieId().equals(that.getAllieId()) : that.getAllieId() != null) return false;
+		if (getAlliePhoneNumber() != null ? !getAlliePhoneNumber().equals(that.getAlliePhoneNumber()) : that.getAlliePhoneNumber() != null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (getFirstName() != null ? !getFirstName().equals(that.getFirstName()) : that.getFirstName() != null)
 			return false;
-		UserRequestDTO other = (UserRequestDTO) obj;
-		if (addresses == null) {
-			if (other.addresses != null)
-				return false;
-		} else if (!addresses.equals(other.addresses))
+		if (getLastName() != null ? !getLastName().equals(that.getLastName()) : that.getLastName() != null)
 			return false;
-		if (neuraUserAccessToken == null) {
-			if (other.neuraUserAccessToken != null)
-				return false;
-		} else if (!neuraUserAccessToken.equals(other.neuraUserAccessToken))
+		if (getPushToken() != null ? !getPushToken().equals(that.getPushToken()) : that.getPushToken() != null)
 			return false;
-		if (allieId == null) {
-			if (other.allieId != null)
-				return false;
-		} else if (!allieId.equals(other.allieId))
+		if (getAddresses() != null ? !getAddresses().equals(that.getAddresses()) : that.getAddresses() != null)
 			return false;
-		if (alliePhoneNumber == null) {
-			if (other.alliePhoneNumber != null)
-				return false;
-		} else if (!alliePhoneNumber.equals(other.alliePhoneNumber))
+		if (getMeetings() != null ? !getMeetings().equals(that.getMeetings()) : that.getMeetings() != null)
 			return false;
-		if (enrolledSkills == null) {
-			if (other.enrolledSkills != null)
-				return false;
-		} else if (!enrolledSkills.equals(other.enrolledSkills))
+		if (getNorms() != null ? !getNorms().equals(that.getNorms()) : that.getNorms() != null) return false;
+		if (getEnrolledSkills() != null ? !getEnrolledSkills().equals(that.getEnrolledSkills()) : that.getEnrolledSkills() != null)
 			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
+		if (getNickname() != null ? !getNickname().equals(that.getNickname()) : that.getNickname() != null)
 			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (meetings == null) {
-			if (other.meetings != null)
-				return false;
-		} else if (!meetings.equals(other.meetings))
-			return false;
-		if (nickname == null) {
-			if (other.nickname != null)
-				return false;
-		} else if (!nickname.equals(other.nickname))
-			return false;
-		if (norms == null) {
-			if (other.norms != null)
-				return false;
-		} else if (!norms.equals(other.norms))
-			return false;
-		if (pushToken == null) {
-			if (other.pushToken != null)
-				return false;
-		} else if (!pushToken.equals(other.pushToken))
-			return false;
-		return true;
+		return getNeuraUserAccessToken() != null ? getNeuraUserAccessToken().equals(that.getNeuraUserAccessToken()) : that.getNeuraUserAccessToken() == null;
+
 	}
 
-    @Override
+	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((addresses == null) ? 0 : addresses.hashCode());
-		result = prime * result + ((allieId == null) ? 0 : allieId.hashCode());
-		result = prime * result + ((alliePhoneNumber == null) ? 0 : alliePhoneNumber.hashCode());
-		result = prime * result + ((enrolledSkills == null) ? 0 : enrolledSkills.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((meetings == null) ? 0 : meetings.hashCode());
-		result = prime * result + ((nickname == null) ? 0 : nickname.hashCode());
-		result = prime * result + ((norms == null) ? 0 : norms.hashCode());
-		result = prime * result + ((pushToken == null) ? 0 : pushToken.hashCode());
-		result = prime * result + ((neuraUserAccessToken == null) ? 0 : neuraUserAccessToken.hashCode());
+		int result = getAllieId() != null ? getAllieId().hashCode() : 0;
+		result = 31 * result + (getAlliePhoneNumber() != null ? getAlliePhoneNumber().hashCode() : 0);
+		result = 31 * result + (getFirstName() != null ? getFirstName().hashCode() : 0);
+		result = 31 * result + (getLastName() != null ? getLastName().hashCode() : 0);
+		result = 31 * result + (getPushToken() != null ? getPushToken().hashCode() : 0);
+		result = 31 * result + (getAddresses() != null ? getAddresses().hashCode() : 0);
+		result = 31 * result + (getMeetings() != null ? getMeetings().hashCode() : 0);
+		result = 31 * result + (getNorms() != null ? getNorms().hashCode() : 0);
+		result = 31 * result + (getEnrolledSkills() != null ? getEnrolledSkills().hashCode() : 0);
+		result = 31 * result + (getNickname() != null ? getNickname().hashCode() : 0);
+		result = 31 * result + (getNeuraUserAccessToken() != null ? getNeuraUserAccessToken().hashCode() : 0);
 		return result;
-	}
-
-    @Override
-	public String toString() {
-		return "UserRequestDTO [allieId=" + allieId + ", alliePhoneNumber=" + alliePhoneNumber + ", firstName="
-				+ firstName + ", lastName=" + lastName + ", pushToken=" + pushToken + ", addresses=" + addresses
-				+ ", meetings=" + meetings + ", norms=" + norms + ", enrolledSkills=" + enrolledSkills + ", nickname="
-				+ nickname + "]";
 	}
 }

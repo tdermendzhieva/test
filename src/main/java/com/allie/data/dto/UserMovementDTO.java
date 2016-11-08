@@ -4,6 +4,7 @@ package com.allie.data.dto;
  * Created by jacob.headlee on 10/19/2016.
  */
 public class UserMovementDTO {
+
     private String timestamp;
     private Boolean hasMoved;
     private String allieId;
@@ -15,6 +16,15 @@ public class UserMovementDTO {
         this.allieId = allieId;
     }
 
+    @Override
+    public String toString() {
+        return "UserMovementDTO{" +
+                "timestamp='" + timestamp + '\'' +
+                ", hasMoved=" + hasMoved +
+                ", allieId='" + allieId + '\'' +
+                '}';
+    }
+
     public void setAllieId(String allieId) {this.allieId = allieId;}
     public String getAllieId() {return this.allieId;}
 
@@ -24,11 +34,6 @@ public class UserMovementDTO {
     public void setTimestamp(String timestamp) {this.timestamp = timestamp;}
     public String getTimestamp() {return timestamp;}
 
-    /**
-     * Generated equals method to compare the sub properties instead of property references
-     * @param o object to compare
-     * @return
-     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,10 +49,6 @@ public class UserMovementDTO {
 
     }
 
-    /**
-     * Generated hashCode method to use sub properties instead of property references
-     * @return
-     */
     @Override
     public int hashCode() {
         int result = getTimestamp() != null ? getTimestamp().hashCode() : 0;
