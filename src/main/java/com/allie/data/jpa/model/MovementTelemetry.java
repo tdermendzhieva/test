@@ -9,18 +9,29 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "MovementTelemetryRecords")
 public class MovementTelemetry {
+
     @Id
     public String dbId;
 
-    public DateTime timestamp;
-    public Boolean hasMoved;
-    public String allieId;
+    private DateTime timestamp;
+    private Boolean hasMoved;
+    private String allieId;
 
     public MovementTelemetry() {}
     public MovementTelemetry(DateTime timestamp, Boolean hasMoved, String allieId) {
         this.timestamp = timestamp;
         this.hasMoved = hasMoved;
         this.allieId = allieId;
+    }
+
+    @Override
+    public String toString() {
+        return "MovementTelemetry{" +
+                "dbId='" + dbId + '\'' +
+                ", timestamp=" + timestamp +
+                ", hasMoved=" + hasMoved +
+                ", allieId='" + allieId + '\'' +
+                '}';
     }
 
     public String getDbId() {return this.dbId;}

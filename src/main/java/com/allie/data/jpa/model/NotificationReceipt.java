@@ -21,6 +21,20 @@ public class NotificationReceipt {
     private String userEnteredOption;
     private DateTime timestamp;
 
+    @Override
+    public String toString() {
+        return "NotificationReceipt{" +
+                "dbId='" + dbId + '\'' +
+                ", allieId='" + allieId + '\'' +
+                ", trackingNumber='" + trackingNumber + '\'' +
+                ", messageClass='" + messageClass + '\'' +
+                ", type='" + type + '\'' +
+                ", userSelectedOption='" + userSelectedOption + '\'' +
+                ", userEnteredOption='" + userEnteredOption + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
+
     public String getDbId() {return this.dbId;}
     public void setDbId(String dbId) {this.dbId = dbId;}
 

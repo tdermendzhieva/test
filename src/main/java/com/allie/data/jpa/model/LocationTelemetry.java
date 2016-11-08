@@ -4,14 +4,17 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.joda.time.DateTime;
 
+import java.util.Arrays;
+
 @Document(collection="LocationTelemetryRecords")
 public class LocationTelemetry {
+
 	@Id
-	public String dbId;
+	private String dbId;
 	
-	public String allieId;
-	public double[] location;
-	public DateTime timestamp;
+	private String allieId;
+	private double[] location;
+	private DateTime timestamp;
 	
 	public LocationTelemetry() {}
 	
@@ -20,7 +23,17 @@ public class LocationTelemetry {
 		this.location = location;
 		this.timestamp = timestamp;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "LocationTelemetry{" +
+				"dbId='" + dbId + '\'' +
+				", allieId='" + allieId + '\'' +
+				", location=" + Arrays.toString(location) +
+				", timestamp=" + timestamp +
+				'}';
+	}
+
 	public String getDbId() {return dbId;}
 	public void setDbId(String DBId) {this.dbId = DBId;}
 	
@@ -32,13 +45,5 @@ public class LocationTelemetry {
 	
 	public DateTime getTimestamp() {return timestamp;}
 	public void setTimestamp(DateTime timestamp) {this.timestamp = timestamp;}
-	
-	
-	
-	@Override
-	public String toString() {
-		return String.format(
-				"LocationTelemetry[id='%s', allieId='%s', location='%s', timestamp='%s']",
-				dbId, allieId, location, timestamp);
-	}
+
 }

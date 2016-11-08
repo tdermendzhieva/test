@@ -14,10 +14,18 @@ public class AllieSkill {
     private String skillId;
     private String description;
 
+    @Override
+    public String toString() {
+        return "AllieSkill{" +
+                "dbId='" + dbId + '\'' +
+                ", skillId='" + skillId + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     public String getSkillId() {
         return skillId;
     }
-
     public void setSkillId(String skillId) {
         this.skillId = skillId;
     }
@@ -25,7 +33,6 @@ public class AllieSkill {
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -33,7 +40,6 @@ public class AllieSkill {
     public String getDbId() {
         return dbId;
     }
-
     public void setDbId(String dbId) {
         this.dbId = dbId;
     }

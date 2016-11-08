@@ -37,7 +37,7 @@ public class MovementService {
             mt = movementFactory.createMovementTelemetry(dto);
             if(
                     mt.getAllieId() != null
-                    && mt.hasMoved != null
+                    && mt.getHasMoved() != null
                     && mt.getTimestamp() != null
                     ) {
                 movementTelemetries.add(mt);

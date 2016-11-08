@@ -13,27 +13,48 @@ import java.util.Map;
  */
 @Document(collection = "Users")
 public class User {
-    public User() {}
 
     @Id
     public String dbId;
 
     //Indexed so we can't users with duplicate ids
     @Indexed(unique = true)
-    public String allieId;
+    private String allieId;
 
-    public String alliePhoneNumber;
-    public String firstName;
-    public String lastName;
-    public String pushToken;
-    public Map<String, Address> addresses;
-    public Map<String, Meeting> meetings;
-    public Map<String, String> norms;
-    public List<String> enrolledSkills;
-    public DateTime createdTimeStamp;
-    public DateTime updatedTimeStamp;
-    public String nickname;
-    public String neuraUserAccessToken;
+    private String alliePhoneNumber;
+    private String firstName;
+    private String lastName;
+    private String pushToken;
+    private Map<String, Address> addresses;
+    private Map<String, Meeting> meetings;
+    private Map<String, String> norms;
+    private List<String> enrolledSkills;
+    private DateTime createdTimeStamp;
+    private DateTime updatedTimeStamp;
+    private String nickname;
+    private String neuraUserAccessToken;
+
+    public User() {}
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "dbId='" + dbId + '\'' +
+                ", allieId='" + allieId + '\'' +
+                ", alliePhoneNumber='" + alliePhoneNumber + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", pushToken='" + pushToken + '\'' +
+                ", addresses=" + addresses +
+                ", meetings=" + meetings +
+                ", norms=" + norms +
+                ", enrolledSkills=" + enrolledSkills +
+                ", createdTimeStamp=" + createdTimeStamp +
+                ", updatedTimeStamp=" + updatedTimeStamp +
+                ", nickname='" + nickname + '\'' +
+                ", neuraUserAccessToken='" + neuraUserAccessToken + '\'' +
+                '}';
+    }
 
     public String getDbId() {return this.dbId;}
     public void setDbId(String dbId) {this.dbId = dbId;}

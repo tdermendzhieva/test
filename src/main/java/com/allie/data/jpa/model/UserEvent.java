@@ -17,38 +17,6 @@ public class UserEvent{
     private DateTime eventReceivedTimestamp;
     private DBObject neuraJson;
 
-    public String getAllieId() {
-        return allieId;
-    }
-
-    public void setAllieId(String allieId) {
-        this.allieId = allieId;
-    }
-
-    public DateTime getEventReceivedTimestamp() {
-        return eventReceivedTimestamp;
-    }
-
-    public void setEventReceivedTimestamp(DateTime eventReceivedTimestamp) {
-        this.eventReceivedTimestamp = eventReceivedTimestamp;
-    }
-
-    public DBObject getNeuraJson() {
-        return neuraJson;
-    }
-
-    public void setNeuraJson(DBObject neuraJson) {
-        this.neuraJson = neuraJson;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     @Override
     public String toString() {
         return "UserEvent{" +
@@ -58,4 +26,33 @@ public class UserEvent{
                 ", neuraJson=" + neuraJson +
                 '}';
     }
+
+    public String getAllieId() {
+        return allieId;
+    }
+    public void setAllieId(String allieId) {
+        this.allieId = allieId;
+    }
+
+    public DateTime getEventReceivedTimestamp() {
+        return eventReceivedTimestamp;
+    }
+    public void setEventReceivedTimestamp(DateTime eventReceivedTimestamp) {
+        this.eventReceivedTimestamp = eventReceivedTimestamp;
+    }
+
+    public DBObject getNeuraJson() {
+        return neuraJson;
+    }
+    public void setNeuraJson(DBObject neuraJson) {
+        this.neuraJson = neuraJson;
+    }
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

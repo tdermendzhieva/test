@@ -9,11 +9,22 @@ import org.springframework.data.mongodb.core.mapping.Document;
  */
 @Document(collection = "BrowserHistoryRecords")
 public class BrowserHistory {
+
     @Id
     private String dbId;
     private String allieId;
     private String url;
     private DateTime timestamp;
+
+    @Override
+    public String toString() {
+        return "BrowserHistory{" +
+                "dbId='" + dbId + '\'' +
+                ", allieId='" + allieId + '\'' +
+                ", url='" + url + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 
     public String getDbId() {return this.dbId;}
     public void setDbId(String dbId) {this.dbId = dbId;}
@@ -26,16 +37,6 @@ public class BrowserHistory {
 
     public DateTime getTimestamp() {return this.timestamp;}
     public void setTimestamp(DateTime timestamp) {this.timestamp = timestamp;}
-
-    @Override
-    public String toString() {
-        return "BrowserHistory{" +
-                "dbId='" + dbId + '\'' +
-                ", allieId='" + allieId + '\'' +
-                ", url='" + url + '\'' +
-                ", timestamp=" + timestamp +
-                '}';
-    }
 
     @Override
     public boolean equals(Object o) {

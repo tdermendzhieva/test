@@ -6,12 +6,18 @@ import org.joda.time.DateTime;
  * Created by jacob.headlee on 10/20/2016.
  */
 public class Meeting {
-    public Meeting() {};
 
-    public String title;
-    public DateTime dateTime;
+    private String title;
+    private DateTime dateTime;
 
-    
+    @Override
+    public String toString() {
+        return "Meeting{" +
+                "title='" + title + '\'' +
+                ", dateTime=" + dateTime +
+                '}';
+    }
+
     public String getTitle() {return title;}
 	public void setTitle(String title) {this.title = title;}
 	public DateTime getDateTime() {return this.dateTime;}
