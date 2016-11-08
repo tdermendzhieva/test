@@ -87,7 +87,7 @@ spring:
   profiles : TEST
   data:
     mongodb:
-      uri: mongodb://localhost:27017/test?connectTimeoutMS=10000&socketTimeoutMS=5000
+      uri: mongodb://ec2-54-212-206-253.us-west-2.compute.amazonaws.com:27017/ALLIE?connectTimeoutMS=10000&socketTimeoutMS=5000
   http:
     encoding:
       charset: UTF-8
