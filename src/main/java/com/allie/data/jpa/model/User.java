@@ -2,7 +2,6 @@ package com.allie.data.jpa.model;
 
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class User {
     public String dbId;
 
     //Indexed so we can't users with duplicate ids
-    @Indexed(unique = true)
+   // @Indexed(unique = true)
     public String allieId;
 
     public String alliePhoneNumber;
