@@ -21,7 +21,10 @@ import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -84,6 +87,10 @@ public class EndToEndUserAllieDataTest {
         userRequestDTO.setLastName("last");
         userRequestDTO.setNickname("nick");
         userRequestDTO.setNeuraUserAccessToken("accessToken");
+
+        Index index = new Index().on("allieId", Sort.Direction.ASC).unique();
+        template.indexOps(User.class).ensureIndex(index);
+        assertThat(template.getCollection("Users").getIndexInfo().size(), equalTo(2));
     }
 
     @After
@@ -92,10 +99,6 @@ public class EndToEndUserAllieDataTest {
         assertThat(template.getDb().getName(), equalTo("TEST"));
         //Drop the test db
         template.getDb().dropDatabase();
-        //make sure we have indexing
-        Index index = new Index().on("allieId", Sort.Direction.ASC).unique();
-        template.indexOps(User.class).ensureIndex(index);
-        assertThat(template.getCollection("Users").getIndexInfo().size(), equalTo(2));
     }
 
     @Test
@@ -389,7 +392,7 @@ public class EndToEndUserAllieDataTest {
             repository.insert(user);
         }
 
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         Class clazz = list.getClass();
 
 
