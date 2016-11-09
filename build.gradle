@@ -65,8 +65,7 @@ publishing {
 springBoot {
     executable = true
 }
-uploadArchives.dependsOn bootRepackage
-bootRepackage.dependsOn test
+
 compileJava.dependsOn(processResources)
 
 
@@ -119,7 +118,7 @@ task s3Upload(type: Exec, dependsOn: zipAWSArchive){
     //define location of s3 upload script
     def s3Upload="automation/s3upload.sh"
     //defined name of file to be uploaded
-    def artifactName = archivesBaseName + "-${version}"
+    def artifactName = archivesBaseName + "-${version}.zip"
     //define path of project where artifact is located
     def localDist = "dir/${artifactName}";
 
@@ -133,7 +132,7 @@ task deployToAWS(type:Exec) {
     // Defines the path into the project of the deploy.sh script
     def deploy = "automation/deploy.sh"
     // Defines the distribution name based on the jar section
-    def artifactName = archivesBaseName + "-${version}"
+    def artifactName = archivesBaseName + "-${version}.zip"
     // Deploys the given distribution to the test deployment group
     executable "bash"
     args "-c", "sh ${deploy} ${System.env.DEPLOYMENT_ENVIRONMENT} ${artifactName}"
