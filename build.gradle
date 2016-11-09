@@ -65,6 +65,10 @@ publishing {
 springBoot {
     executable = true
 }
+uploadArchives.dependsOn bootRepackage
+bootRepackage.dependsOn test
+compileJava.dependsOn(processResources)
+
 
 artifactory {
     contextUrl = 'http://ec2-52-88-59-224.us-west-2.compute.amazonaws.com:8081/artifactory'
@@ -94,8 +98,6 @@ artifactory {
     }
 
 }
-
-compileJava.dependsOn(processResources)
 
 task zipAWSArchive(type: Zip) {
     def artifactName = archivesBaseName + "-${version}"
