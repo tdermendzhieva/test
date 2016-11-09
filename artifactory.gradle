@@ -20,22 +20,3 @@ buildscript {
     }
 }
 
-artifactory {
-    contextUrl = 'http://ec2-52-88-59-224.us-west-2.compute.amazonaws.com:8081/artifactory'
-    resolve {
-        repository {
-            repoKey = 'libs-release'
-        }
-    }
-    publish {
-        repository {
-            repoKey = 'libs-release-local'
-            username = System.env.ARTIFACTORY_USER
-            password = System.env.ARTIFACTORY_PASSWORD
-        }
-        defaults {
-            publications 'main'
-        }
-    }
-
-}

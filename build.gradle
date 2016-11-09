@@ -26,14 +26,17 @@ group = 'com.allie.data'
 version = '1.0'
 archivesBaseName = 'allie-data'
 
+
 if (System.env.APP_VERSION) {
+
     version = "${System.env.APP_VERSION}"
+    if(System.env.DEPLOYMENT_ENVIRONMENT == "DEV"){
+        version = version + "-SNAPSHOT"
+    }
 }
 jar {
     baseName = archivesBaseName
-    if(System.env.DEPLOYMENT_ENVIRONMENT == "DEV") {
-        version = version + "-SNAPSHOT"
-    }
+    version = version
     manifest {
         attributes 'Main-Class': 'com.allie.data.MongoConnectionWSConfiguration'
     }
@@ -63,30 +66,39 @@ springBoot {
     executable = true
 }
 
+artifactory {
+    contextUrl = 'http://ec2-52-88-59-224.us-west-2.compute.amazonaws.com:8081/artifactory'
+    resolve {
+        repository {
+            repoKey = 'libs-release'
+        }
+    }
+    publish {
+        if(project.version.endsWith('-SNAPSHOT')) {
+            repository {
+                repoKey = 'libs-snapshot-local'
+                username = System.env.ARTIFACTORY_USER
+                password = System.env.ARTIFACTORY_PASSWORD
+            }
 
-compileJava.dependsOn(processResources)
-uploadArchives.dependsOn bootRepackage
-bootRepackage.dependsOn test
-
-
-
-dependencies {
-    compile(group: 'joda-time', name: 'joda-time', version: '2.8.1')
-    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
-   // compile('org.springframework.boot:spring-boot-starter-data-neo4j')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile ('io.springfox:springfox-swagger2:2.4.0')
-    compile ('io.springfox:springfox-swagger-ui:2.4.0')
-    compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.2.4.Final'
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-
+        } else {
+            repository {
+                repoKey = 'libs-release-local'
+                username = System.env.ARTIFACTORY_USER
+                password = System.env.ARTIFACTORY_PASSWORD
+            }
+        }
+        defaults {
+            publications 'main'
+        }
+    }
 
 }
 
+compileJava.dependsOn(processResources)
 
 task zipAWSArchive(type: Zip) {
-    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}"
-    println artifactName
+    def artifactName = archivesBaseName + "-${version}"
     def zip = artifactName + ".zip"
     def buildPath = 'build/libs/' + artifactName + ".jar";
     from('ci/') {
@@ -105,7 +117,7 @@ task s3Upload(type: Exec, dependsOn: zipAWSArchive){
     //define location of s3 upload script
     def s3Upload="automation/s3upload.sh"
     //defined name of file to be uploaded
-    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}.zip"
+    def artifactName = archivesBaseName + "-${version}"
     //define path of project where artifact is located
     def localDist = "dir/${artifactName}";
 
@@ -119,10 +131,24 @@ task deployToAWS(type:Exec) {
     // Defines the path into the project of the deploy.sh script
     def deploy = "automation/deploy.sh"
     // Defines the distribution name based on the jar section
-    def artifactName = archivesBaseName + "-${System.env.APP_VERSION}.zip"
+    def artifactName = archivesBaseName + "-${version}"
     // Deploys the given distribution to the test deployment group
     executable "bash"
     args "-c", "sh ${deploy} ${System.env.DEPLOYMENT_ENVIRONMENT} ${artifactName}"
 }
+
+dependencies {
+    compile(group: 'joda-time', name: 'joda-time', version: '2.8.1')
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb')
+    // compile('org.springframework.boot:spring-boot-starter-data-neo4j')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile ('io.springfox:springfox-swagger2:2.4.0')
+    compile ('io.springfox:springfox-swagger-ui:2.4.0')
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: '5.2.4.Final'
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+
+
+}
+
 
 
