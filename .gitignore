@@ -1,0 +1,6 @@
+*dev_app.log*
+.DS_Store
+
+.idea/
+.gradle/
+build/
